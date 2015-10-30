@@ -1,0 +1,13 @@
+Dameo considerations
+
+Multi-jumps zijn waarschijnlijk het beste als één move weer te geven.
+
+Need to model single moves, jumps and multi-jumps.
+
+1. How to represent moves?
+Begin met single moves. Which piece to which position?
+How to execute moves?
+Begin met simpele, legale non-jumping moves.
+
+2. How to generate moves?
+3. How to check whether moves are legal?
