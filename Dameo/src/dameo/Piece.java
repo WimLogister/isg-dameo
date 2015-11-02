@@ -17,6 +17,11 @@ public class Piece {
         this.col = col;
         this.color = color;
     }
+    
+    public void setCoords(int row, int col) {
+        this.row = row;
+        this.col = col;
+    }
 
     public void setCol(int col) {
         this.col = col;
@@ -36,7 +41,7 @@ public class Piece {
 
     @Override
     public String toString() {
-        return String.format("<%s,%s>", col,row);
+        return String.format("<%s,%s>", row,col);
     }
     
     
