@@ -1,9 +1,9 @@
-package dameo;
+package dameo.players;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
+import dameo.Constants;
+import dameo.move.Move;
+import dameo.Piece;
+import dameo.Util;
 import java.util.Set;
 
 /**
@@ -17,10 +17,10 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public Move selectMove(List<Move> moves) {
+    public Move selectMove(Set<Move> moves) {
         System.out.printf("Player %d, please enter a legal move: ", color);
         String s = Util.getConsoleInput();
-        return new Move(s);
+        return Move.generateMoveFromString(s);
     }
     
     

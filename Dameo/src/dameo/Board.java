@@ -10,7 +10,9 @@ import java.util.Set;
  */
 public class Board {
     
-    private int[][] board = new int[8][8];
+    private final int[][] board = new int[8][8];
+    private final Set<Piece> whitePieces;
+    private final Set<Piece> blackPieces;
 
     /**
      * Create new Dameo game board and set it up with parameter pieces.
@@ -18,14 +20,16 @@ public class Board {
      * @param blackPieceSet The set of black draughts pieces
      */
     public Board(Set<Piece> whitePieceSet, Set<Piece> blackPieceSet) {
-        setupBoard(whitePieceSet, blackPieceSet);
+        this.whitePieces = whitePieceSet;
+        this.blackPieces = blackPieceSet;
+        setupBoard();
     }
     
     /**
      * Initialize the Dameo game board.
      * Parameters are the white and black piece sets, respectively.
      */
-    private void setupBoard(Set<Piece> whitePieces, Set<Piece> blackPieces) {
+    private void setupBoard() {
         
         // Set up white pieces
         final int startingRanks = 3;
@@ -67,6 +71,10 @@ public class Board {
         }
     }
 
+    public int[][] getBoard() {
+        return board;
+    }
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

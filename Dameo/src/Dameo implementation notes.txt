@@ -11,3 +11,8 @@ Begin met simpele, legale non-jumping moves.
 
 2. How to generate moves?
 3. How to check whether moves are legal?
+
+
+TODO: try to implement single draughts moves
+TODO: implement random player
+TODO: implement human player

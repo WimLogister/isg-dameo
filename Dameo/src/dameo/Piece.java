@@ -30,6 +30,18 @@ public class Piece {
     public void setRow(int row) {
         this.row = row;
     }
+
+    public int getCol() {
+        return col;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public Constants.PlayerColors getColor() {
+        return color;
+    }
     
     public static Set<Piece> generatePieceSet(Constants.PlayerColors color, int size) {
         Set<Piece> pieceSet = new HashSet<>(size);

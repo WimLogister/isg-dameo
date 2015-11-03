@@ -14,6 +14,10 @@ public class Constants {
     public enum PlayerColors {
         WHITE(1), BLACK(2);
         private int value;
+
+        public int getValue() {
+            return value;
+        }
         
         private PlayerColors(int value) {
             this.value = value;

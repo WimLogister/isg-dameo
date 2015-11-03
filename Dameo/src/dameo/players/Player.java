@@ -1,5 +1,8 @@
-package dameo;
+package dameo.players;
 
+import dameo.Constants;
+import dameo.move.Move;
+import dameo.Piece;
 import java.util.List;
 import java.util.Set;
 
@@ -17,7 +20,7 @@ public abstract class Player {
         this.pieces = pieces;
     }
     
-    public abstract Move selectMove(List<Move> moves);
+    public abstract Move selectMove(Set<Move> moves);
     
     public static Player generatePlayer(Constants.PlayerTypes type, Constants.PlayerColors color, Set<Piece> pieceSet) {
         Player p = null;

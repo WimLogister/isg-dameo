@@ -1,5 +1,7 @@
 package dameo;
 
+import dameo.move.Move;
+import dameo.players.Player;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,6 +17,8 @@ public class GameEngine {
     
     private Player p1;
     private Player p2;
+    
+    private Player currentPlayer;
 
     public GameEngine() {
     }
@@ -29,9 +33,51 @@ public class GameEngine {
         Set<Piece> whitePieces = Piece.generatePieceSet(Constants.PlayerColors.WHITE,
                 Constants.PIECES_PER_PLAYER);
         
+        /*
+        Set up players and set p1 as current player
+        */
+        setupPlayers(whitePieces, blackPieces);
+        currentPlayer = p1;
         
         /*
-        Determine player types from console input
+        Initialize and set up the game board
+        */
+        board = new Board(whitePieces, blackPieces);
+        
+        
+    }
+    
+    /**
+     * Advance the game one turn.
+     */
+    private void next() {
+        
+        /*
+        Generate set of legal moves
+        */
+        Set<Move> legalMoves = generateLegalMoves(board);
+        
+        /*
+        Current player selects move
+        */
+        currentPlayer.selectMove(legalMoves);
+        
+        /*
+        Change player
+        */
+        if (currentPlayer == p1) {
+            currentPlayer = p2;
+        }
+        if (currentPlayer == p2) {
+            currentPlayer = p1;
+        }
+        
+    }
+    
+    private void setupPlayers(Set<Piece> whitePieces, Set<Piece> blackPieces) {
+        
+        /*
+        Determine player types from console input and set up players
         */
         int p1Type, p2Type;
         
@@ -47,44 +93,24 @@ public class GameEngine {
         p2 = Player.generatePlayer(Constants.PlayerTypes.getPlayerType(p2Type),
                 Constants.PlayerColors.BLACK, blackPieces);
         
-        /*
-        Initialize and set up the game board
-        */
-        
-        board = new Board(whitePieces, blackPieces);
-        
-        
-    }
-    
-    /**
-     * Advance the game one turn.
-     */
-    private void next() {
-        
-    }
-    
-    private void setupPlayers() {
-        
     }
     
     /**
      * Generate the list of legal moves in the current game state.
      * @return Hashset of legal moves in the current game state.
      */
-    private Set<Move> getLegalMoves() {
-        
+    public static Set<Move> generateLegalMoves(Board board) {
+        return null;
     }
     
     /**
      * Execute parameter move.
-     * This move has already been checked and verified to be legal.
+     * This move needs to have already been checked and verified to be legal.
      * @param move 
      */
     private void executeMove(Move move) {
         // Move piece
         
     }
-    
-    private static 
     
 }
