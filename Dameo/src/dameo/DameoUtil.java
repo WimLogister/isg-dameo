@@ -9,7 +9,7 @@ import java.util.Random;
  *
  * @author Wim
  */
-public class Util {
+public class DameoUtil {
     
     public static final Random rng = new Random();
     private static final BufferedReader br =
@@ -40,7 +40,7 @@ public class Util {
     
     public static void main(String[] args) {
         for (int i = 0; i < 25; i++) {
-            System.out.println(Util.getRandomIntFromTo(0, 5));
+            System.out.println(DameoUtil.getRandomIntFromTo(0, 5));
         }
     }
     

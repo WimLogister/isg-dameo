@@ -3,7 +3,7 @@ package dameo.players;
 import dameo.Constants;
 import dameo.move.Move;
 import dameo.Piece;
-import dameo.Util;
+import dameo.DameoUtil;
 import java.util.Set;
 
 /**
@@ -19,8 +19,8 @@ public class HumanPlayer extends Player {
     @Override
     public Move selectMove(Set<Move> moves) {
         System.out.printf("Player %d, please enter a legal move: ", color);
-        String s = Util.getConsoleInput();
-        return Move.generateMoveFromString(s);
+        String s = DameoUtil.getConsoleInput();
+        return null;
     }
     
     

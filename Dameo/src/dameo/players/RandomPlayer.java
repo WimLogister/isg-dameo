@@ -2,7 +2,7 @@ package dameo.players;
 
 import dameo.Constants;
 import dameo.Piece;
-import dameo.Util;
+import dameo.DameoUtil;
 import dameo.move.DummyMove;
 import dameo.move.Move;
 import java.util.HashSet;
@@ -26,7 +26,7 @@ public class RandomPlayer extends Player{
      */
     @Override
     public Move selectMove(Set<Move> moves) {
-        int r = Util.getRandomIntFromTo(0, moves.size());
+        int r = DameoUtil.getRandomIntFromTo(0, moves.size());
         int i = 0;
         Iterator<Move> it = moves.iterator();
         Move selectedMove = null;

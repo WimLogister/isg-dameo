@@ -12,15 +12,21 @@ public class Constants {
     public static final int PIECES_PER_PLAYER = 18;
     
     public enum PlayerColors {
-        WHITE(1), BLACK(2);
-        private int value;
+        WHITE(1, 1), BLACK(2, -1);
+        private final int value;
+        private final int forward;
 
         public int getValue() {
             return value;
         }
+
+        public int getForward() {
+            return forward;
+        }
         
-        private PlayerColors(int value) {
+        private PlayerColors(int value, int forward) {
             this.value = value;
+            this.forward = forward;
         }
     }
     

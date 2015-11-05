@@ -1,7 +1,7 @@
 package dameo.move;
 
 import dameo.Board;
-import dameo.Util;
+import dameo.DameoUtil;
 
 /**
  * Dummy class to test move framework.
@@ -17,7 +17,7 @@ public class DummyMove extends Move {
     }
     
     private void setupMove() {
-        move = String.format("%d", Util.getRandomIntFromTo(0, 512));
+        move = String.format("%d", DameoUtil.getRandomIntFromTo(0, 512));
     }
 
     @Override

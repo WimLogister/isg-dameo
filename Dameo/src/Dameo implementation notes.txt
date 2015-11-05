@@ -16,3 +16,7 @@ Begin met simpele, legale non-jumping moves.
 TODO: try to implement single draughts moves
 TODO: implement random player
 TODO: implement human player
+
+
+Points to optimize:
+Set increase in legalSingleMoveGeneration

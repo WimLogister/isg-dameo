@@ -14,7 +14,7 @@ public abstract class Player {
     
     protected final Constants.PlayerColors color;
     protected Set<Piece> pieces;
-
+    
     protected Player(Constants.PlayerColors color, Set<Piece> pieces) {
         this.color = color;
         this.pieces = pieces;
@@ -29,4 +29,14 @@ public abstract class Player {
         }
         return p;
     }
+
+    public Set<Piece> getPieces() {
+        return pieces;
+    }
+
+    public Constants.PlayerColors getColor() {
+        return color;
+    }
+    
+    
 }

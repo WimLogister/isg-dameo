@@ -1,10 +1,12 @@
 package dameo;
 
 import dameo.move.Move;
+import dameo.move.SingleMove;
 import dameo.players.Player;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -44,7 +46,6 @@ public class GameEngine {
         */
         board = new Board(whitePieces, blackPieces);
         
-        
     }
     
     /**
@@ -83,10 +84,10 @@ public class GameEngine {
         
         System.out.println("HUMAN = 1, AI = 2\n" +
                 "Please enter a player type for White player: ");
-        p1Type = Integer.parseInt(Util.getConsoleInput());
+        p1Type = Integer.parseInt(DameoUtil.getConsoleInput());
         
         System.out.println("Please enter a player type for Black player: ");
-        p2Type = Integer.parseInt(Util.getConsoleInput());
+        p2Type = Integer.parseInt(DameoUtil.getConsoleInput());
         
         p1 = Player.generatePlayer(Constants.PlayerTypes.getPlayerType(p1Type),
                 Constants.PlayerColors.WHITE, whitePieces);
@@ -103,6 +104,46 @@ public class GameEngine {
         return null;
     }
     
+    private Set<Move> generateLegalSingleMoves() {
+        Set<Move> moves = new HashSet<>();
+        
+        // Generate white's legal single moves
+        if (currentPlayer.getColor() == Constants.PlayerColors.WHITE) {
+            
+            for (Piece p : currentPlayer.getPieces()) {
+                
+                int y = p.getRow();
+                int x = p.getCol();
+                int forward = y + 1;
+                
+                // Check if don't move off the board if move forward
+                if (forward <= 7) {
+                    
+                    int left = x - 1;
+                    
+                    // Check if left doesn't move off the board
+                    if (left >= 0) {
+                        // Check if not occupied by other piece
+                        if (board.getBoard()[forward][left] == 0) {
+                            moves.add(new SingleMove(p, left, forward));
+                        }
+                    }
+                    
+                    int right = x + 1;
+                    
+                    // Check if right doesn't move off the board
+                    if (right <= 7) {
+                        // Check if not occupied by other piece
+                        if (board.getBoard()[forward][right] == 0) {
+                            moves.add(new SingleMove(p, right, forward));
+                        }
+                    }
+                }
+            }
+        }
+        return moves;
+    }
+    
     /**
      * Execute parameter move.
      * This move needs to have already been checked and verified to be legal.
@@ -111,6 +152,20 @@ public class GameEngine {
     private void executeMove(Move move) {
         // Move piece
         
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+    
+    
+    
+    public static void main(String[] args) {
+        GameEngine eng = new GameEngine();
+        eng.init();
+        System.out.println(eng.getBoard());
+        Set<Move> legalMoves = eng.generateLegalSingleMoves();
+        System.out.println(legalMoves.size());
     }
     
 }
