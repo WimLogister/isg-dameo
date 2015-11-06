@@ -21,6 +21,8 @@ public class GameEngine {
     private Player p2;
     
     private Player currentPlayer;
+    
+    private boolean end;
 
     public GameEngine() {
     }
@@ -56,23 +58,25 @@ public class GameEngine {
         /*
         Generate set of legal moves
         */
-        Set<Move> legalMoves = generateLegalMoves(board);
+        Set<Move> legalMoves = generateLegalSingleMoves();
         
         /*
         Current player selects move
         */
-        currentPlayer.selectMove(legalMoves);
+        Move m = currentPlayer.selectMove(legalMoves);
+        if (m == null) end = true;
+        else m.execute(board);
         
         /*
         Change player
         */
         if (currentPlayer == p1) {
+            System.out.println("Tried to change to p2");
             currentPlayer = p2;
         }
-        if (currentPlayer == p2) {
+        else if (currentPlayer == p2) {
             currentPlayer = p1;
         }
-        
     }
     
     private void setupPlayers(Set<Piece> whitePieces, Set<Piece> blackPieces) {
@@ -82,7 +86,7 @@ public class GameEngine {
         */
         int p1Type, p2Type;
         
-        System.out.println("HUMAN = 1, AI = 2\n" +
+        System.out.println("HUMAN = 1, AI = 2, RANDOM = 3\n" +
                 "Please enter a player type for White player: ");
         p1Type = Integer.parseInt(DameoUtil.getConsoleInput());
         
@@ -94,6 +98,17 @@ public class GameEngine {
         p2 = Player.generatePlayer(Constants.PlayerTypes.getPlayerType(p2Type),
                 Constants.PlayerColors.BLACK, blackPieces);
         
+    }
+    
+    /**
+     * Run an initialized game.
+     */
+    public void start() {
+        while (!end) {
+            System.out.println(board);
+            DameoUtil.getConsoleInput();
+            next();
+        }
     }
     
     /**
@@ -141,6 +156,38 @@ public class GameEngine {
                 }
             }
         }
+        else {
+            for (Piece p : currentPlayer.getPieces()) {
+                
+                int y = p.getRow();
+                int x = p.getCol();
+                int forward = y - 1;
+                
+                // Check if don't move off the board if move forward
+                if (forward >= 0) {
+                    
+                    int left = x + 1;
+                    
+                    // Check if left doesn't move off the board
+                    if (left <= 7) {
+                        // Check if not occupied by other piece
+                        if (board.getBoard()[forward][left] == 0) {
+                            moves.add(new SingleMove(p, left, forward));
+                        }
+                    }
+                    
+                    int right = x - 1;
+                    
+                    // Check if right doesn't move off the board
+                    if (right >= 0) {
+                        // Check if not occupied by other piece
+                        if (board.getBoard()[forward][right] == 0) {
+                            moves.add(new SingleMove(p, right, forward));
+                        }
+                    }
+                }
+            }
+        }
         return moves;
     }
     
@@ -163,9 +210,11 @@ public class GameEngine {
     public static void main(String[] args) {
         GameEngine eng = new GameEngine();
         eng.init();
+        eng.start();
         System.out.println(eng.getBoard());
         Set<Move> legalMoves = eng.generateLegalSingleMoves();
         System.out.println(legalMoves.size());
     }
+    
     
 }

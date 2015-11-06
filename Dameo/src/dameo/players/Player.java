@@ -27,6 +27,9 @@ public abstract class Player {
         if (type == Constants.PlayerTypes.HUMAN) {
             p = new HumanPlayer(color, pieceSet);
         }
+        if (type == Constants.PlayerTypes.RANDOM) {
+            p = new RandomPlayer(color, pieceSet);
+        }
         return p;
     }
 

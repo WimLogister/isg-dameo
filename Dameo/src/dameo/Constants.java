@@ -31,7 +31,7 @@ public class Constants {
     }
     
     public enum PlayerTypes {
-        HUMAN(1), AI(2);
+        HUMAN(1), AI(2), RANDOM(3);
         private int value;
 
         private PlayerTypes(int value) {
@@ -42,7 +42,10 @@ public class Constants {
             if (value == PlayerTypes.HUMAN.value) {
                 return HUMAN;
             }
-            else return AI;
+            if (value == PlayerTypes.AI.value) {
+                return AI;
+            }
+            else return RANDOM;
         }
     }
 }

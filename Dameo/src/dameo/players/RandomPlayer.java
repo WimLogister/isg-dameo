@@ -13,7 +13,7 @@ import java.util.Set;
  * A player that selects moves completely at random.
  * @author Wim
  */
-public class RandomPlayer extends Player{
+public class RandomPlayer extends Player {
 
     public RandomPlayer(Constants.PlayerColors color, Set<Piece> pieces) {
         super(color, pieces);
