@@ -141,7 +141,14 @@ public class GameEngine {
                         // Check if not occupied by other piece
                         if (board.getBoard()[forward][left] == 0) {
                             moves.add(new SingleMove(p, left, forward));
+                            // TODO: Check for multi-moves
                         }
+                    }
+                    
+                    // Check if straight ahead is not occupied
+                    if (board.getBoard()[forward][x] == 0) {
+                        moves.add(new SingleMove(p, x, forward));
+                        // TODO: check for multi-moves
                     }
                     
                     int right = x + 1;
@@ -151,6 +158,7 @@ public class GameEngine {
                         // Check if not occupied by other piece
                         if (board.getBoard()[forward][right] == 0) {
                             moves.add(new SingleMove(p, right, forward));
+                            // TODO: check for multi-moves
                         }
                     }
                 }
@@ -174,6 +182,11 @@ public class GameEngine {
                         if (board.getBoard()[forward][left] == 0) {
                             moves.add(new SingleMove(p, left, forward));
                         }
+                    }
+                    
+                    // Check if straight ahead is not occupied
+                    if (board.getBoard()[forward][x] == 0) {
+                        moves.add(new SingleMove(p, x, forward));
                     }
                     
                     int right = x - 1;
