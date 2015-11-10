@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public class GameEngine {
     
-    private Board board;
+    private int[][] board;
     
     private Player p1;
     private Player p2;
@@ -46,7 +46,7 @@ public class GameEngine {
         /*
         Initialize and set up the game board
         */
-        board = new Board(whitePieces, blackPieces);
+        board = Board.setupBoard(whitePieces, blackPieces);
         
     }
     
@@ -136,27 +136,34 @@ public class GameEngine {
                     
                     int left = x - 1;
                     
-                    // Check if left doesn't move off the board
+                    // Check legality left diagonal forward move
                     if (left >= 0) {
-                        // Check if not occupied by other piece
-                        if (board.getBoard()[forward][left] == 0) {
+                        // Check for single left diagonal forward move
+                        if (board[forward][left] == 0) {
                             moves.add(new SingleMove(p, left, forward));
-                            // TODO: Check for multi-moves
+                        }
+                        // Check for left diagonal capture
+                        else if (board[forward][left] == 2) {
+                            // Check if we don't end up jumping off the board and
+                            // square behind enemy piece is empty
+                            if (left - 1 >= 0 && board[forward+1][left-1] == 0) {
+                                moves.add(new )
+                            }
                         }
                     }
                     
-                    // Check if straight ahead is not occupied
-                    if (board.getBoard()[forward][x] == 0) {
+                    // Check legality single orthogonal forward move
+                    if (board[forward][x] == 0) {
                         moves.add(new SingleMove(p, x, forward));
                         // TODO: check for multi-moves
                     }
                     
                     int right = x + 1;
                     
-                    // Check if right doesn't move off the board
+                    // Check legality single right diagonal forward move
                     if (right <= 7) {
                         // Check if not occupied by other piece
-                        if (board.getBoard()[forward][right] == 0) {
+                        if (board[forward][right] == 0) {
                             moves.add(new SingleMove(p, right, forward));
                             // TODO: check for multi-moves
                         }
@@ -179,13 +186,13 @@ public class GameEngine {
                     // Check if left doesn't move off the board
                     if (left <= 7) {
                         // Check if not occupied by other piece
-                        if (board.getBoard()[forward][left] == 0) {
+                        if (board[forward][left] == 0) {
                             moves.add(new SingleMove(p, left, forward));
                         }
                     }
                     
                     // Check if straight ahead is not occupied
-                    if (board.getBoard()[forward][x] == 0) {
+                    if (board[forward][x] == 0) {
                         moves.add(new SingleMove(p, x, forward));
                     }
                     
@@ -194,7 +201,7 @@ public class GameEngine {
                     // Check if right doesn't move off the board
                     if (right >= 0) {
                         // Check if not occupied by other piece
-                        if (board.getBoard()[forward][right] == 0) {
+                        if (board[forward][right] == 0) {
                             moves.add(new SingleMove(p, right, forward));
                         }
                     }

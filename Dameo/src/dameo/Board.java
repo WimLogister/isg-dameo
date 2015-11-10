@@ -10,26 +10,15 @@ import java.util.Set;
  */
 public class Board {
     
-    private final int[][] board = new int[8][8];
-    private final Set<Piece> whitePieces;
-    private final Set<Piece> blackPieces;
-
     /**
-     * Create new Dameo game board and set it up with parameter pieces.
-     * @param whitePieceSet The set of white draughts pieces
-     * @param blackPieceSet The set of black draughts pieces
+     * Set up and return a new Dameo game board array.
+     * As a side effect, sets the coordinates of parameter pieces accordingly.
+     * @param whitePieceSet
+     * @param blackPieceSet
+     * @return 
      */
-    public Board(Set<Piece> whitePieceSet, Set<Piece> blackPieceSet) {
-        this.whitePieces = whitePieceSet;
-        this.blackPieces = blackPieceSet;
-        setupBoard();
-    }
-    
-    /**
-     * Initialize the Dameo game board.
-     * Parameters are the white and black piece sets, respectively.
-     */
-    private void setupBoard() {
+    public static int[][] setupBoard(Set<Piece> whitePieceSet, Set<Piece> blackPieceSet) {
+        final int[][] board = new int[8][8];
         
         // Set up white pieces
         final int startingRanks = 3;
@@ -45,7 +34,7 @@ public class Board {
         }
         
         k = 0;
-        Iterator<Piece> wit = whitePieces.iterator();
+        Iterator<Piece> wit = whitePieceSet.iterator();
         // Set white piece coordinates
         while (wit.hasNext()) {
             wit.next().setCoords(positions[k][0], positions[k++][1]);
@@ -64,19 +53,21 @@ public class Board {
         }
         
         k = 0;
-        Iterator<Piece> bit = blackPieces.iterator();
+        Iterator<Piece> bit = blackPieceSet.iterator();
         // Set black piece coordinates
         while (bit.hasNext()) {
             bit.next().setCoords(positions[k][0], positions[k++][1]);
         }
-    }
-
-    public int[][] getBoard() {
+        
         return board;
     }
     
-    @Override
-    public String toString() {
+    /**
+     * Returns a string representation of the parameter board array.
+     * @param board
+     * @return 
+     */
+    public static String getBoardString(int[][] board) {
         StringBuilder sb = new StringBuilder();
         for (int i=0; i < board.length; i++) {
             sb.append(Arrays.toString(board[i])).append("\n");
@@ -89,16 +80,8 @@ public class Board {
                 Constants.PlayerColors.WHITE, Constants.PIECES_PER_PLAYER);
         Set<Piece> blackPieces = Piece.generatePieceSet(
                 Constants.PlayerColors.WHITE, Constants.PIECES_PER_PLAYER);
-        Board b = new Board(whitePieces, blackPieces);
-        Iterator<Piece> it = whitePieces.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next());
-        }
-        it = blackPieces.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next());
-        }
-        System.out.println("\n" + b);
+        int[][] board = Board.setupBoard(whitePieces, blackPieces);
+        System.out.println("\n" + Board.getBoardString(board));
     }
     
 }

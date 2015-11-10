@@ -1,6 +1,5 @@
 package dameo.move;
 
-import dameo.Board;
 import dameo.Piece;
 
 /**
@@ -17,7 +16,7 @@ public abstract class Move {
         this.piece = piece;
     }
     
-    public abstract void execute(Board board);
+    public abstract void execute(int[][] board);
     
     public static void generateMoveFromString(String s) {
         
