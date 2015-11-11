@@ -12,21 +12,52 @@ public class Constants {
     public static final int PIECES_PER_PLAYER = 18;
     
     public enum PlayerColors {
-        WHITE(1, 1), BLACK(2, -1);
+        WHITE(1, 0, 7, 7, 0, 1, 2), BLACK(2, -7, 0, 0, -7, -1, 1);
         private final int value;
-        private final int forward;
+        private final int boardLeftEdge;
+        private final int boardRightEdge;
+        private final int boardTopEdge;
+        private final int boardBottomEdge;
+        private final int direction;
+        private final int opponent;
 
+        private PlayerColors(int value, int boardLeftEdge, int boardRightEdge,
+                int boardTopEdge, int boardBottomEdge, int direction, int opponent) {
+            this.value = value;
+            this.boardLeftEdge = boardLeftEdge;
+            this.boardRightEdge = boardRightEdge;
+            this.boardTopEdge = boardTopEdge;
+            this.boardBottomEdge = boardBottomEdge;
+            this.direction = direction;
+            this.opponent = opponent;
+        }
+        
         public int getValue() {
             return value;
         }
 
-        public int getForward() {
-            return forward;
+        public int getBoardBottomEdge() {
+            return boardBottomEdge;
         }
-        
-        private PlayerColors(int value, int forward) {
-            this.value = value;
-            this.forward = forward;
+
+        public int getBoardLeftEdge() {
+            return boardLeftEdge;
+        }
+
+        public int getBoardRightEdge() {
+            return boardRightEdge;
+        }
+
+        public int getBoardTopEdge() {
+            return boardTopEdge;
+        }
+
+        public int getDirection() {
+            return direction;
+        }
+
+        public int getOpponent() {
+            return opponent;
         }
     }
     
