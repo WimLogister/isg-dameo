@@ -13,8 +13,8 @@ Begin met simpele, legale non-jumping moves.
 3. How to check whether moves are legal?
 
 
-TODO: change capturing code in GameEngine, capturing now happens diagonally,
-but should be orthogonal. TODO: test single capturing move.
+TODO: check single (capturing) move generation. TIP: maybe we don't have to repeat everything
+for black player, maybe we can transpose the board instead?
 
 TODO: refactor single move generation to get rid of code duplication
 TODO: implement multi-moves
@@ -23,3 +23,5 @@ TODO: implement king promotion
 
 Points to optimize:
 Set increase in legalSingleMoveGeneration
+Keep players' pieces sorted by coordinates so I can do binary search when generating
+capture moves

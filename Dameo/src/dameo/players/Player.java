@@ -3,6 +3,7 @@ package dameo.players;
 import dameo.Constants;
 import dameo.move.Move;
 import dameo.Piece;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -56,17 +57,16 @@ public abstract class Player {
         return color;
     }
     
-    private class MovementConstraintChecker {
-        
-        private MovementConstraintChecker() {
-            
+    public Piece findPiece(int x, int y) {
+        Iterator<Piece> it = pieces.iterator();
+        Piece p = null;
+        while (it.hasNext()) {
+            Piece match = it.next();
+            if (match.getCol() == x && match.getRow() == y) {
+                p = match;
+            }
         }
-        
-        private boolean checkForward() {
-            
-        }
-        
+        return p;
     }
-    
     
 }
