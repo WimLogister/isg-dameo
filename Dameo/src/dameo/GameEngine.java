@@ -66,10 +66,7 @@ public class GameEngine {
         */
         Move m = currentPlayer.selectMove(legalMoves);
         if (m == null) end = true;
-        else {
-            m.execute(board);
-            
-        }
+        else m.execute(board);
         System.out.println(m);
         
         /*
@@ -93,16 +90,16 @@ public class GameEngine {
         */
         int p1Type, p2Type;
         
-        System.out.println("HUMAN = 1, AI = 2, RANDOM = 3\n" +
+        System.out.println("HUMAN = 1, AI = 2, RANDOM = 3, DEBUG = 4\n" +
                 "Please enter a player type for White player: ");
         p1Type = Integer.parseInt(DameoUtil.getConsoleInput());
         
         System.out.println("Please enter a player type for Black player: ");
         p2Type = Integer.parseInt(DameoUtil.getConsoleInput());
         
-        currentPlayer = Player.generatePlayer(Constants.PlayerTypes.getPlayerType(p1Type),
+        currentPlayer = Player.generatePlayer(p1Type,
                 Constants.PlayerColors.WHITE, whitePieces);
-        currentOpponent = Player.generatePlayer(Constants.PlayerTypes.getPlayerType(p2Type),
+        currentOpponent = Player.generatePlayer(p2Type,
                 Constants.PlayerColors.BLACK, blackPieces);
         
     }
@@ -176,7 +173,9 @@ public class GameEngine {
                         // Check if we don't end up jumping off the board and
                         // square behind enemy piece is empty
                         if (reconsForward + 1 <= color.getBoardTopEdge() && board[reconsForward+1][x] == 0) {
-                            moves.add(new SingleCaptureMove(x, reconsForward + 2, p, currentOpponent.findPiece(x, y)));
+                            // TODO: there's something wrong in the line below,
+                            // probably opponent's piece is not being found
+                            moves.add(new SingleCaptureMove(x, reconsForward + color.getValue(), p, currentOpponent.findPiece(x, y)));
                         }
                 }
 
@@ -195,7 +194,7 @@ public class GameEngine {
             if (left >= color.getBoardLeftEdge()) {
                     // Check for left orthogonal capturing move
                     if (left-1 >= color.getBoardLeftEdge() && board[y][reconsLeft] == color.getOpponent()) {
-                        moves.add(new SingleCaptureMove(reconsLeft-1, y, currentOpponent.findPiece(reconsLeft, y), p));
+                        moves.add(new SingleCaptureMove(reconsLeft-color.getValue(), y, currentOpponent.findPiece(reconsLeft, y), p));
                     }
             }
 
@@ -206,7 +205,7 @@ public class GameEngine {
             if (right <= color.getBoardRightEdge()) {
                 // Check for right orthogonal capturing move
                 if (right + 1 <= color.getBoardRightEdge() && board[y][reconsRight] == color.getOpponent()) {
-                    moves.add(new SingleCaptureMove(reconsRight+1, y, currentOpponent.findPiece(reconsRight, y), p));
+                    moves.add(new SingleCaptureMove(reconsRight+color.getValue(), y, currentOpponent.findPiece(reconsRight, y), p));
                 }
             }
         }

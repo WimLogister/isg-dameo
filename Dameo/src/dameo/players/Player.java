@@ -4,7 +4,6 @@ import dameo.Constants;
 import dameo.move.Move;
 import dameo.Piece;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,15 +29,27 @@ public abstract class Player {
      * @param pieceSet The set of pieces associated with this player
      * @return 
      */
-    public static Player generatePlayer(Constants.PlayerTypes type, Constants.PlayerColors color, Set<Piece> pieceSet) {
+    public static Player generatePlayer(int type, Constants.PlayerColors color, Set<Piece> pieceSet) {
         Player p = null;
-        if (type == Constants.PlayerTypes.HUMAN) {
+        if (type == PlayerTypes.HUMAN.value) {
             p = new HumanPlayer(color, pieceSet);
         }
-        if (type == Constants.PlayerTypes.RANDOM) {
+        if (type == PlayerTypes.RANDOM.value) {
             p = new RandomPlayer(color, pieceSet);
         }
+        if (type == PlayerTypes.DEBUG.value) {
+            p = new DebugPlayer(color, pieceSet);
+        }
         return p;
+    }
+    
+    public enum PlayerTypes {
+        HUMAN(1), AI(2), RANDOM(3), DEBUG(4);
+        private int value;
+
+        private PlayerTypes(int value) {
+            this.value = value;
+        }
     }
     
     /**

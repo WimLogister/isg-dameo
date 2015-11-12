@@ -1,6 +1,5 @@
 package dameo;
 
-import dameo.players.Player;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,16 +11,22 @@ public class Piece {
     
     private int row, col;
     private final Constants.PlayerColors color;
+    private final Set<Piece> pieceSet;
 
-    private Piece(int row, int col, Constants.PlayerColors color) {
+    private Piece(int row, int col, Constants.PlayerColors color, Set<Piece> pieceSet) {
         this.row = row;
         this.col = col;
         this.color = color;
+        this.pieceSet = pieceSet;
     }
     
     public void setCoords(int row, int col) {
         this.row = row;
         this.col = col;
+    }
+    
+    public void removeFromSet() {
+        pieceSet.remove(this);
     }
 
     public void setCol(int col) {
@@ -47,7 +52,7 @@ public class Piece {
     public static Set<Piece> generatePieceSet(Constants.PlayerColors color, int size) {
         Set<Piece> pieceSet = new HashSet<>(size);
         for (int i = 0; i < size; i++)  {
-            pieceSet.add(new Piece(0, 0, color));
+            pieceSet.add(new Piece(0, 0, color, pieceSet));
         }
         return pieceSet;
     }
@@ -56,9 +61,5 @@ public class Piece {
     public String toString() {
         return String.format("<%s,%s>", row,col);
     }
-    
-    
-    
-    
     
 }

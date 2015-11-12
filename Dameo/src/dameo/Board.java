@@ -69,8 +69,12 @@ public class Board {
      */
     public static String getBoardString(int[][] board) {
         StringBuilder sb = new StringBuilder();
-        for (int i=0; i < board.length; i++) {
-            sb.append(Arrays.toString(board[i])).append("\n");
+        for (int i=board.length-1; i >= 0; i--) {
+            sb.append(String.format("(%d) ",i+1)).append(Arrays.toString(board[i])).append("\n");
+        }
+        sb.append("    ");
+        for (int i = 0; i < board.length; i++) {
+            sb.append(String.format("(%d)",i+1));
         }
         return sb.toString();
     }

@@ -24,8 +24,6 @@ public abstract class Move {
     
     public abstract void execute(int[][] board);
     
-    public abstract void handleSideEffects(Player opponent);
-    
     public static void generateMoveFromString(String s) {
         
     }

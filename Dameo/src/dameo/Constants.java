@@ -61,22 +61,4 @@ public class Constants {
         }
     }
     
-    public enum PlayerTypes {
-        HUMAN(1), AI(2), RANDOM(3);
-        private int value;
-
-        private PlayerTypes(int value) {
-            this.value = value;
-        }
-        
-        public static PlayerTypes getPlayerType(int value) {
-            if (value == PlayerTypes.HUMAN.value) {
-                return HUMAN;
-            }
-            if (value == PlayerTypes.AI.value) {
-                return AI;
-            }
-            else return RANDOM;
-        }
-    }
 }
