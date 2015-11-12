@@ -4,6 +4,7 @@ import dameo.Board;
 import dameo.Constants;
 import dameo.DameoUtil;
 import dameo.Piece;
+import dameo.players.Player;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -12,12 +13,9 @@ import java.util.Set;
  * @author Wim
  */
 public class SingleMove extends Move {
-    private final int newX, newY;
 
     public SingleMove(Piece piece, int newX, int newY) {
-        super(piece);
-        this.newX = newX;
-        this.newY = newY;
+        super(piece, newX, newY);
     }
     
     public Piece getPiece() {
@@ -45,9 +43,12 @@ public class SingleMove extends Move {
     }
 
     @Override
+    public void handleSideEffects(Player opponent) {}
+
+    @Override
     public String toString() {
-        return String.format("From:<%d,%d>, To:<%d,%d>", piece.getCol()+1,
-                piece.getRow()+1, newX+1, newY+1);
+        return String.format("From:<%d,%d>, To:<%d,%d>", oldX+1,
+                oldY+1, newX+1, newY+1);
     }
     
     

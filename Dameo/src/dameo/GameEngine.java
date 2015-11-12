@@ -18,10 +18,8 @@ public class GameEngine {
     
     private int[][] board;
     
-    private Player p1;
-    private Player p2;
-    
     private Player currentPlayer;
+    private Player currentOpponent;
     
     private boolean end;
 
@@ -42,7 +40,6 @@ public class GameEngine {
         Set up players and set p1 as current player
         */
         setupPlayers(whitePieces, blackPieces);
-        currentPlayer = p1;
         
         /*
         Initialize and set up the game board
@@ -53,6 +50,9 @@ public class GameEngine {
     
     /**
      * Advance the game one turn.
+     * The set of legal moves for the current player is generated. Then, the
+     * current player is asked to select a move from this set. This move is then
+     * executed and it becomes the next player's turn.
      */
     private void next() {
         
@@ -66,20 +66,26 @@ public class GameEngine {
         */
         Move m = currentPlayer.selectMove(legalMoves);
         if (m == null) end = true;
-        else m.execute(board);
+        else {
+            m.execute(board);
+            
+        }
+        System.out.println(m);
         
         /*
         Change player
         */
-        if (currentPlayer == p1) {
-            System.out.println("Tried to change to p2");
-            currentPlayer = p2;
-        }
-        else if (currentPlayer == p2) {
-            currentPlayer = p1;
-        }
+        Player temp = currentPlayer;
+        currentPlayer = currentOpponent;
+        currentOpponent = temp;
     }
     
+    /**
+     * Determine player types from console input and set up players with appropriate
+     * colors and associate parameter piece sets with these players.
+     * @param whitePieces The piece set for the white player.
+     * @param blackPieces The piece set for the black player.
+     */
     private void setupPlayers(Set<Piece> whitePieces, Set<Piece> blackPieces) {
         
         /*
@@ -94,9 +100,9 @@ public class GameEngine {
         System.out.println("Please enter a player type for Black player: ");
         p2Type = Integer.parseInt(DameoUtil.getConsoleInput());
         
-        p1 = Player.generatePlayer(Constants.PlayerTypes.getPlayerType(p1Type),
+        currentPlayer = Player.generatePlayer(Constants.PlayerTypes.getPlayerType(p1Type),
                 Constants.PlayerColors.WHITE, whitePieces);
-        p2 = Player.generatePlayer(Constants.PlayerTypes.getPlayerType(p2Type),
+        currentOpponent = Player.generatePlayer(Constants.PlayerTypes.getPlayerType(p2Type),
                 Constants.PlayerColors.BLACK, blackPieces);
         
     }
@@ -106,7 +112,7 @@ public class GameEngine {
      */
     public void start() {
         while (!end) {
-            System.out.println(board);
+            System.out.println(Board.getBoardString(board));
             DameoUtil.getConsoleInput();
             next();
         }
@@ -170,7 +176,7 @@ public class GameEngine {
                         // Check if we don't end up jumping off the board and
                         // square behind enemy piece is empty
                         if (reconsForward + 1 <= color.getBoardTopEdge() && board[reconsForward+1][x] == 0) {
-                            moves.add(new SingleCaptureMove(x, reconsForward + 2, p, p2.findPiece(x, y)));
+                            moves.add(new SingleCaptureMove(x, reconsForward + 2, p, currentOpponent.findPiece(x, y)));
                         }
                 }
 
@@ -187,13 +193,9 @@ public class GameEngine {
             left orthogonal moves.
             */
             if (left >= color.getBoardLeftEdge()) {
-                // Check for simple left orthogonal move
-                    if (board[y][reconsLeft] == 0) {
-                        moves.add(new SingleMove(p, reconsLeft, y));
-                    }
                     // Check for left orthogonal capturing move
-                    else if (reconsLeft-1 >= color.getBoardLeftEdge() && board[y][reconsLeft] == color.getOpponent()) {
-                        moves.add(new SingleCaptureMove(reconsLeft-1, y, p2.findPiece(reconsLeft, y), p));
+                    if (left-1 >= color.getBoardLeftEdge() && board[y][reconsLeft] == color.getOpponent()) {
+                        moves.add(new SingleCaptureMove(reconsLeft-1, y, currentOpponent.findPiece(reconsLeft, y), p));
                     }
             }
 
@@ -202,40 +204,24 @@ public class GameEngine {
             right orthogonal moves.
             */
             if (right <= color.getBoardRightEdge()) {
-                // Check for simple right orthogonal move
-                if (board[y][reconsRight] == 0) {
-                    moves.add(new SingleMove(p, reconsRight, y));
-                }
                 // Check for right orthogonal capturing move
-                else if (right + 1 <= color.getBoardRightEdge() && board[y][reconsRight] == color.getOpponent()) {
-                    moves.add(new SingleCaptureMove(reconsRight+1, y, p2.findPiece(reconsRight, y), p));
+                if (right + 1 <= color.getBoardRightEdge() && board[y][reconsRight] == color.getOpponent()) {
+                    moves.add(new SingleCaptureMove(reconsRight+1, y, currentOpponent.findPiece(reconsRight, y), p));
                 }
             }
         }
         return moves;
     }
     
-    /**
-     * Execute parameter move.
-     * This move needs to have already been checked and verified to be legal.
-     * @param move 
-     */
-    private void executeMove(Move move) {
-        // Move piece
-        
-    }
-
-    public Board getBoard() {
+    public int[][] getBoard() {
         return board;
     }
-    
-    
+
     
     public static void main(String[] args) {
         GameEngine eng = new GameEngine();
         eng.init();
         eng.start();
-        System.out.println(eng.getBoard());
         Set<Move> legalMoves = eng.generateLegalSingleMoves();
         System.out.println(legalMoves.size());
     }

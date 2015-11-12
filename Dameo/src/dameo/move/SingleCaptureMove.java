@@ -2,6 +2,7 @@ package dameo.move;
 
 import dameo.Board;
 import dameo.Piece;
+import dameo.players.Player;
 
 /**
  *
@@ -9,13 +10,10 @@ import dameo.Piece;
  */
 public class SingleCaptureMove extends Move {
     
-    private final int newX, newY;
     private final Piece capturedPiece;
 
     public SingleCaptureMove(int newX, int newY, Piece capturedPiece, Piece piece) {
-        super(piece);
-        this.newX = newX;
-        this.newY = newY;
+        super(piece, newX, newY);
         this.capturedPiece = capturedPiece;
     }
 
@@ -28,9 +26,19 @@ public class SingleCaptureMove extends Move {
         
         // Update capturing piece's information
         piece.setCoords(newY, newX);
-        
-        // Update captured piece's information
-        capturedPiece.getPlayer().removePiece(piece);
     }
+
+    @Override
+    public String toString() {
+        return String.format("From:<%d,%d>, To:<%d,%d>, Capturing:<%d,%d>", piece.getCol()+1,
+                piece.getRow()+1, newX+1, newY+1, capturedPiece.getCol(), capturedPiece.getRow());
+    }
+
+    @Override
+    public void handleSideEffects(Player opponent) {
+        opponent.removePiece(capturedPiece);
+    }
+    
+    
     
 }

@@ -12,7 +12,6 @@ public class Piece {
     
     private int row, col;
     private final Constants.PlayerColors color;
-    private final Player player;
 
     private Piece(int row, int col, Constants.PlayerColors color) {
         this.row = row;
@@ -43,10 +42,6 @@ public class Piece {
 
     public Constants.PlayerColors getColor() {
         return color;
-    }
-
-    public Player getPlayer() {
-        return player;
     }
     
     public static Set<Piece> generatePieceSet(Constants.PlayerColors color, int size) {

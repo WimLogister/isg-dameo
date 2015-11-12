@@ -76,10 +76,8 @@ public class Board {
     }
     
     public static void main(String[] args) {
-        Set<Piece> whitePieces = Piece.generatePieceSet(
-                Constants.PlayerColors.WHITE, Constants.PIECES_PER_PLAYER);
-        Set<Piece> blackPieces = Piece.generatePieceSet(
-                Constants.PlayerColors.WHITE, Constants.PIECES_PER_PLAYER);
+        Set<Piece> whitePieces = Piece.generatePieceSet(Constants.PlayerColors.WHITE, Constants.PIECES_PER_PLAYER);
+        Set<Piece> blackPieces = Piece.generatePieceSet(Constants.PlayerColors.WHITE, Constants.PIECES_PER_PLAYER);
         int[][] board = Board.setupBoard(whitePieces, blackPieces);
         System.out.println("\n" + Board.getBoardString(board));
     }
