@@ -31,7 +31,7 @@ public class SingleMove extends Move {
     }
 
     @Override
-    public State execute(State state) {
+    public void execute(State state) {
         
         // Remove piece from previous position on board
         state.getBoard()[piece.getRow()][piece.getCol()] = 0;

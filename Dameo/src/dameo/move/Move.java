@@ -22,12 +22,8 @@ public abstract class Move {
         this.oldY = piece.getRow();
     }
     
-    public abstract State execute(State state);
+    public abstract void execute(State state);
     
-    public static void generateMoveFromString(String s) {
-        
-    }
-
     @Override
     public String toString() {
         return super.toString(); //To change body of generated methods, choose Tools | Templates.

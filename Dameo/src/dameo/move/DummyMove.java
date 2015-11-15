@@ -24,7 +24,7 @@ public class DummyMove extends Move {
     }
 
     @Override
-    public State execute(dameo.gametree.State state) {
+    public void execute(dameo.gametree.State state) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

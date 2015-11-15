@@ -24,6 +24,8 @@ public class HumanPlayer extends Player {
         return null;
     }
     
-    
+    public static void generateMoveFromString(String s) {
+        
+    }
     
 }

@@ -124,10 +124,6 @@ public class GameEngine {
         }
     }
     
-    public static State successor(State s, Move m) {
-        
-    }
-    
     public static int[][] copyBoard(int[][] board) {
         int[][] newBoard = new int[8][];
         for (int i = 0; i < board.length; i++) {

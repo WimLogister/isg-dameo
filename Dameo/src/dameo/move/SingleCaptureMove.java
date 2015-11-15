@@ -21,7 +21,7 @@ public class SingleCaptureMove extends Move {
     }
 
     @Override
-    public State execute(dameo.gametree.State state) {
+    public void execute(dameo.gametree.State state) {
         // Remove capturing piece from previous position on board
         state[piece.getRow()][piece.getCol()] = 0;
         // Put capturing piece on new position on board
