@@ -1,6 +1,7 @@
 package dameo.move;
 
 import dameo.Piece;
+import dameo.gametree.State;
 
 /**
  *
@@ -20,16 +21,16 @@ public class SingleCaptureMove extends Move {
     }
 
     @Override
-    public void execute(int[][] board) {
+    public State execute(dameo.gametree.State state) {
         // Remove capturing piece from previous position on board
-        board[piece.getRow()][piece.getCol()] = 0;
+        state[piece.getRow()][piece.getCol()] = 0;
         // Put capturing piece on new position on board
-        board[newY][newX] = piece.getColor().getValue();
+        state[newY][newX] = piece.getColor().getValue();
         // Update capturing piece's local information
         piece.setCoords(newY, newX);
         
         // Remove captured piece from board
-        board[capturedPiece.getRow()][capturedPiece.getCol()] = 0;
+        state[capturedPiece.getRow()][capturedPiece.getCol()] = 0;
         // Remove captured piece from opponent's piece set
         capturedPiece.removeFromSet();
     }

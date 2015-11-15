@@ -4,7 +4,7 @@ import dameo.Board;
 import dameo.Constants;
 import dameo.DameoUtil;
 import dameo.Piece;
-import dameo.players.Player;
+import dameo.gametree.State;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -31,12 +31,12 @@ public class SingleMove extends Move {
     }
 
     @Override
-    public void execute(int[][] board) {
+    public State execute(State state) {
         
         // Remove piece from previous position on board
-        board[piece.getRow()][piece.getCol()] = 0;
+        state.getBoard()[piece.getRow()][piece.getCol()] = 0;
         // Put piece on new position on board
-        board[newY][newX] = piece.getColor().getValue();
+        state.getBoard()[newY][newX] = piece.getColor().getValue();
         
         // Update piece information
         piece.setCoords(newY, newX);

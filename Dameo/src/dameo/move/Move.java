@@ -1,7 +1,7 @@
 package dameo.move;
 
 import dameo.Piece;
-import dameo.players.Player;
+import dameo.gametree.State;
 
 /**
  * A move stores information about how the game board changes.
@@ -22,7 +22,7 @@ public abstract class Move {
         this.oldY = piece.getRow();
     }
     
-    public abstract void execute(int[][] board);
+    public abstract State execute(State state);
     
     public static void generateMoveFromString(String s) {
         

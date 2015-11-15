@@ -25,6 +25,9 @@ public class NegaMax implements AIStrategy {
             return eval.evaluatePosition(s);
         }
         else {
+            for (Move m : moves) {
+                int value = -alphaBeta(s, depth, alpha, beta)
+            }
         }
         return score;
     }

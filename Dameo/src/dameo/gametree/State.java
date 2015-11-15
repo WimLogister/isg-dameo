@@ -1,7 +1,9 @@
 package dameo.gametree;
 
+import dameo.GameEngine;
 import dameo.Piece;
 import dameo.players.Player;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -13,10 +15,32 @@ public class State {
     private Set<Piece> opponentPieces;
     private int[][] board;
 
+    /**
+     * Regular constructor for State encapsulating a particular game state.
+     * @param currentPlayerPieces
+     * @param opponentPieces
+     * @param board 
+     */
     public State(Set<Piece> currentPlayerPieces, Set<Piece> opponentPieces, int[][] board) {
         this.currentPlayerPieces = currentPlayerPieces;
         this.opponentPieces = opponentPieces;
         this.board = board;
+    }
+    
+    /**
+     * Copy constructor for an instance of a State encapsulating a particular game state.
+     * @param oldState The state that is to be copied.
+     */
+    public State(State oldState) {
+        this.currentPlayerPieces = new HashSet<>(oldState.currentPlayerPieces.size());
+        for (Piece p : oldState.currentPlayerPieces) {
+           Piece.copyIntoSet(p, this.currentPlayerPieces);
+        }
+        this.opponentPieces = new HashSet<>(oldState.opponentPieces.size());
+        for (Piece p : oldState.opponentPieces) {
+            Piece.copyIntoSet(p, this.opponentPieces);
+        }
+        this.board = GameEngine.copyBoard(board);
     }
 
     public Set<Piece> getCurrentPlayerPieces() {
@@ -30,5 +54,5 @@ public class State {
     public int[][] getBoard() {
         return board;
     }
-    
+
 }

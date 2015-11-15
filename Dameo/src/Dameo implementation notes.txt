@@ -1,7 +1,9 @@
 Dameo considerations
 
-TODO: check if new move generation code works: new way of finding pieces, etc.
 TODO: implement successor function
+TODO: check if new move generation code works: new way of finding pieces,
+    using states, etc.
+    
 TODO: implement multi-moves
 TODO: implement king promotion
 

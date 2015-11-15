@@ -3,6 +3,7 @@ package dameo.move;
 import dameo.Board;
 import dameo.DameoUtil;
 import dameo.Piece;
+import dameo.gametree.State;
 
 /**
  * Dummy class to test move framework.
@@ -23,7 +24,7 @@ public class DummyMove extends Move {
     }
 
     @Override
-    public void execute(int[][] board) {
+    public State execute(dameo.gametree.State state) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

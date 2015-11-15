@@ -15,6 +15,7 @@ import java.util.Set;
 public class GameEngine {
     
     private int[][] board;
+    private State currentState;
     
     private Player currentPlayer;
     private Player currentOpponent;
@@ -50,6 +51,8 @@ public class GameEngine {
         Initialize and set up the game board
         */
         board = Board.setupBoard(whitePieces, blackPieces);
+        
+        currentState = new State(whitePieces, blackPieces, board);
         
     }
     

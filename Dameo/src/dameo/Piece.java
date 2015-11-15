@@ -20,7 +20,7 @@ public class Piece {
         this.color = color;
         this.pieceSet = pieceSet;
     }
-    
+
     public static Piece findPiece(Set<Piece> pieceSet, int x, int y) {
         Iterator<Piece> it = pieceSet.iterator();
         Piece p = null;
@@ -75,12 +75,6 @@ public class Piece {
         return new Piece(row, col, color, pieceSet);
     }
     
-    
-    
-    public static Piece copyPiece(Piece origPiece) {
-        return new Piece(origPiece.getRow(), origPiece., Constants.PlayerColors.WHITE, null)
-    }
-
     public Constants.PlayerColors getColor() {
         return color;
     }
