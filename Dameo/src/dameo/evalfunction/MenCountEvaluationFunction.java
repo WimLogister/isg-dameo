@@ -1,6 +1,6 @@
 package dameo.evalfunction;
 
-import dameo.players.Player;
+import dameo.gametree.State;
 
 /**
  *
@@ -9,8 +9,8 @@ import dameo.players.Player;
 public class MenCountEvaluationFunction extends EvaluationFunction {
 
     @Override
-    double evaluatePosition(int[][] board, Player currentPlayer) {
-        return currentPlayer.getPieces().size();
+    public int evaluatePosition(State s) {
+        return s.getCurrentPlayer().getPieces().size();
     }
     
 }

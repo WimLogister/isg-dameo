@@ -1,6 +1,7 @@
 package dameo;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -11,13 +12,29 @@ public class Piece {
     
     private int row, col;
     private final Constants.PlayerColors color;
-    private final Set<Piece> pieceSet;
+    private Set<Piece> pieceSet;
 
     private Piece(int row, int col, Constants.PlayerColors color, Set<Piece> pieceSet) {
         this.row = row;
         this.col = col;
         this.color = color;
         this.pieceSet = pieceSet;
+    }
+    
+    public static Piece findPiece(Set<Piece> pieceSet, int x, int y) {
+        Iterator<Piece> it = pieceSet.iterator();
+        Piece p = null;
+        while (it.hasNext()) {
+            Piece match = it.next();
+            if (match.getCol() == x && match.getRow() == y) {
+                p = match;
+            }
+        }
+        return p;
+    }
+    
+    public static Piece copyIntoSet(Piece origPiece, Set<Piece> newSet) {
+        return new Piece(origPiece.getRow(), origPiece.getCol(), origPiece.getColor(), newSet);
     }
     
     public void setCoords(int row, int col) {
@@ -43,6 +60,25 @@ public class Piece {
 
     public int getRow() {
         return row;
+    }
+    
+    public static Set<Piece> copyPieceSet(Set<Piece> origPieceSet) throws CloneNotSupportedException {
+        Set<Piece> newPieceSet = new HashSet<>(origPieceSet.size());
+        for (Piece p : origPieceSet) {
+            Piece.copyIntoSet(p, newPieceSet);
+        }
+        return newPieceSet;
+    }
+
+    @Override
+    protected Piece clone() throws CloneNotSupportedException {
+        return new Piece(row, col, color, pieceSet);
+    }
+    
+    
+    
+    public static Piece copyPiece(Piece origPiece) {
+        return new Piece(origPiece.getRow(), origPiece., Constants.PlayerColors.WHITE, null)
     }
 
     public Constants.PlayerColors getColor() {

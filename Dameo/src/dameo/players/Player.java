@@ -3,6 +3,7 @@ package dameo.players;
 import dameo.Constants;
 import dameo.move.Move;
 import dameo.Piece;
+import dameo.gametree.State;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ public abstract class Player {
         this.pieces = pieces;
     }
     
-    public abstract Move selectMove(Set<Move> moves);
+    public abstract Move selectMove(State s);
     
     /**
      * Static factory method for creating players based on passed parameters.

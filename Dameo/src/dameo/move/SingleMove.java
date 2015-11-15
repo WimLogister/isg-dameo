@@ -42,8 +42,6 @@ public class SingleMove extends Move {
         piece.setCoords(newY, newX);
     }
 
-    @Override
-    public void handleSideEffects(Player opponent) {}
 
     @Override
     public String toString() {

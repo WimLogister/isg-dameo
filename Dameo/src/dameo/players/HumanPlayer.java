@@ -4,6 +4,7 @@ import dameo.Constants;
 import dameo.move.Move;
 import dameo.Piece;
 import dameo.DameoUtil;
+import dameo.gametree.State;
 import java.util.Set;
 
 /**
@@ -17,9 +18,9 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public Move selectMove(Set<Move> moves) {
+    public Move selectMove(State s) {
         System.out.printf("Player %d, please enter a legal move: ", color);
-        String s = DameoUtil.getConsoleInput();
+        String str = DameoUtil.getConsoleInput();
         return null;
     }
     

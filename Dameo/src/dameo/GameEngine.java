@@ -1,5 +1,6 @@
 package dameo;
 
+import dameo.gametree.State;
 import dameo.move.Move;
 import dameo.move.SingleCaptureMove;
 import dameo.move.SingleMove;
@@ -18,9 +19,16 @@ public class GameEngine {
     private Player currentPlayer;
     private Player currentOpponent;
     
+    private static boolean singletonExisting;
     private boolean end;
 
-    public GameEngine() {
+    private GameEngine() {
+        init();
+    }
+    
+    public static GameEngine createEngine() {
+        if (!singletonExisting) return new GameEngine();
+        else return null;
     }
     
     private void init() {
@@ -54,14 +62,9 @@ public class GameEngine {
     private void next() {
         
         /*
-        Generate set of legal moves
-        */
-        Set<Move> legalMoves = generateLegalSingleMoves();
-        
-        /*
         Current player selects move
         */
-        Move m = currentPlayer.selectMove(legalMoves);
+        Move m = currentPlayer.selectMove(new State(currentPlayer.getPieces(), currentOpponent.getPieces(), board));
         if (m == null) {
             end = true;
             System.out.printf("%s player has no more legal moves.\n", currentPlayer.getColor());
@@ -118,21 +121,35 @@ public class GameEngine {
         }
     }
     
+    public static State successor(State s, Move m) {
+        
+    }
+    
+    public static int[][] copyBoard(int[][] board) {
+        int[][] newBoard = new int[8][];
+        for (int i = 0; i < board.length; i++) {
+            newBoard[i] = board[i].clone();
+        }
+        return newBoard;
+    }
+    
     /**
      * Generate the list of legal moves in the current game state.
      * @return Hashset of legal moves in the current game state.
      */
-    public static Set<Move> generateLegalMoves(Board board) {
-        return null;
-    }
-    
-    private Set<Move> generateLegalSingleMoves() {
+    public static Set<Move> generateLegalMoves(State state) {
+        
+        Set<Piece> currentPlayerPieceSet = state.getCurrentPlayerPieces();
+        Set<Piece> opponentPieceSet = state.getOpponentPieces();
+        
+        int[][] board = state.getBoard();
+        
         Set<Move> moves = new HashSet<>();
         
-        Constants.PlayerColors color = currentPlayer.getColor();
+        Constants.PlayerColors color = currentPlayerPieceSet.iterator().next().getColor();
         int dir = color.getDirection();
         
-        for (Piece p : currentPlayer.getPieces()) {
+        for (Piece p : currentPlayerPieceSet) {
 
             final int y = p.getRow();
             final int x = p.getCol();
@@ -176,7 +193,7 @@ public class GameEngine {
                         // Check if we don't end up jumping off the board and
                         // square behind enemy piece is empty
                         if (relativeForward + 1 <= color.getBoardTopEdge() && board[absoluteForward+dir][x] == 0) {
-                            Piece opPiece = currentOpponent.findPiece(x, absoluteForward);
+                            Piece opPiece = Piece.findPiece(opponentPieceSet, x, absoluteForward);
                         moves.add(new SingleCaptureMove(x, absoluteForward + dir, p, opPiece));
                         }
                 }
@@ -196,7 +213,7 @@ public class GameEngine {
             if (relativeLeft >= color.getBoardLeftEdge()) {
                     // Check for left orthogonal capturing move
                     if (relativeLeft-1 >= color.getBoardLeftEdge() && board[y][absoluteLeft] == color.getOpponent()) {
-                        Piece opPiece = currentOpponent.findPiece(absoluteLeft, y);
+                        Piece opPiece = Piece.findPiece(opponentPieceSet, absoluteLeft, y);
                         moves.add(new SingleCaptureMove(absoluteLeft-dir, y, p, opPiece));
                     }
             }
@@ -208,7 +225,7 @@ public class GameEngine {
             if (relativeRight <= color.getBoardRightEdge()) {
                 // Check for right orthogonal capturing move
                 if (relativeRight + 1 <= color.getBoardRightEdge() && board[y][absoluteRight] == color.getOpponent()) {
-                    Piece opPiece = currentOpponent.findPiece(absoluteRight, y);
+                    Piece opPiece = Piece.findPiece(opponentPieceSet, absoluteRight, y);
                     moves.add(new SingleCaptureMove(absoluteRight+dir, y, p, opPiece));
                 }
             }
@@ -225,7 +242,7 @@ public class GameEngine {
         GameEngine eng = new GameEngine();
         eng.init();
         eng.start();
-        Set<Move> legalMoves = eng.generateLegalSingleMoves();
+        Set<Move> legalMoves = eng.generateLegalMoves(null, null, null);
         System.out.println(legalMoves.size());
     }
     

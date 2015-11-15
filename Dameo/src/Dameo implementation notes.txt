@@ -1,10 +1,15 @@
 Dameo considerations
 
+TODO: check if new move generation code works: new way of finding pieces, etc.
+TODO: implement successor function
 TODO: implement multi-moves
 TODO: implement king promotion
 
 
 Points to optimize:
+Creating new piece set in tree traversal: consider creating black and white pieces
+    for each position and have each player have a list with references to pieces
+    in this list instead of creating entirely new pieces for each node in the tree.
 Set increase in legalSingleMoveGeneration
 Keep players' pieces sorted by coordinates so I can do binary search when generating
-capture moves
+    capture moves

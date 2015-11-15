@@ -25,10 +25,10 @@ public class RandomPlayer extends Player {
      * @return A move selected randomly from parameter set of moves.
      */
     @Override
-    public Move selectMove(Set<Move> moves) {
-        int r = DameoUtil.getRandomIntFromTo(0, moves.size());
+    public Move selectMove(State s) {
+        int r = DameoUtil.getRandomIntFromTo(0, s.size());
         int i = 0;
-        Iterator<Move> it = moves.iterator();
+        Iterator<Move> it = s.iterator();
         Move selectedMove = null;
         while (it.hasNext() && i++ <= r) {
             selectedMove = it.next();

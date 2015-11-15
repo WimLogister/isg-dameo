@@ -1,6 +1,6 @@
 package dameo.evalfunction;
 
-import dameo.players.Player;
+import dameo.gametree.State;
 
 /**
  *
@@ -8,5 +8,5 @@ import dameo.players.Player;
  */
 public abstract class EvaluationFunction {
     
-    abstract double evaluatePosition(int[][] board, Player currentPlayer);
+    public abstract int evaluatePosition(State s);
 }
