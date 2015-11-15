@@ -1,7 +1,6 @@
 package dameo.move;
 
 import dameo.Piece;
-import dameo.players.Player;
 
 /**
  *
@@ -37,8 +36,8 @@ public class SingleCaptureMove extends Move {
 
     @Override
     public String toString() {
-        return String.format("From:<%d,%d>, To:<%d,%d>, Capturing:<%d,%d>", oldX,
-                oldY, newX+1, newY+1, cptOldX+1, cptOldY+1);
+        return String.format("From:<%d,%d>, To:<%d,%d>, Capturing:<%d,%d>", oldX+1,
+                oldY+1, newX+1, newY+1, cptOldX+1, cptOldY+1);
     }
 
 }

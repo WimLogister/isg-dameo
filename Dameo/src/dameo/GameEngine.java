@@ -4,9 +4,6 @@ import dameo.move.Move;
 import dameo.move.SingleCaptureMove;
 import dameo.move.SingleMove;
 import dameo.players.Player;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -65,9 +62,15 @@ public class GameEngine {
         Current player selects move
         */
         Move m = currentPlayer.selectMove(legalMoves);
-        if (m == null) end = true;
-        else m.execute(board);
-        System.out.println(m);
+        if (m == null) {
+            end = true;
+            System.out.printf("%s player has no more legal moves.\n", currentPlayer.getColor());
+            System.out.printf("%s player wins.", currentOpponent.getColor());
+        }
+        else {
+            m.execute(board);
+            System.out.println(m);
+        }
         
         /*
         Change player
@@ -135,19 +138,19 @@ public class GameEngine {
             final int x = p.getCol();
             final int checkX = dir*x;
             final int checkY = dir*y;
-            final int forward = checkY + 1;
-            final int left = checkX - 1;
-            final int right = checkX + 1;
+            final int relativeForward = checkY + 1;
+            final int relativeLeft = checkX - 1;
+            final int relativeRight = checkX + 1;
 
-            final int reconsForward = dir*forward;
-            final int reconsLeft = dir*left;
-            final int reconsRight = dir*right;
+            final int absoluteForward = dir*relativeForward;
+            final int absoluteLeft = dir*relativeLeft;
+            final int absoluteRight = dir*relativeRight;
 
             /*
             Check if don't move off the board if move forward. This is for
             forward and diagonal moves.
             */
-            if (forward <= color.getBoardTopEdge()) {
+            if (relativeForward <= color.getBoardTopEdge()) {
 
                 /*
                 So now we know that we don't move off the board by moving
@@ -155,35 +158,34 @@ public class GameEngine {
                 */
 
                 // Check if we don't move off the left side of the board
-                if (left >= color.getBoardLeftEdge()) {
+                if (relativeLeft >= color.getBoardLeftEdge()) {
                     // Check for single left diagonal forward move
-                    if (board[reconsForward][reconsLeft] == 0) {
-                        moves.add(new SingleMove(p, reconsLeft, reconsForward));
+                    if (board[absoluteForward][absoluteLeft] == 0) {
+                        moves.add(new SingleMove(p, absoluteLeft, absoluteForward));
                     }
 
                 }
                 // Check legality single orthogonal forward move
-                if (board[reconsForward][x] == 0) {
-                    moves.add(new SingleMove(p, x, reconsForward));
+                if (board[absoluteForward][x] == 0) {
+                    moves.add(new SingleMove(p, x, absoluteForward));
                     // TODO: check for multi-moves
                 }
 
                 // Check for forward capture
-                if (board[reconsForward][x] == color.getOpponent()) {
+                if (board[absoluteForward][x] == color.getOpponent()) {
                         // Check if we don't end up jumping off the board and
                         // square behind enemy piece is empty
-                        if (reconsForward + 1 <= color.getBoardTopEdge() && board[reconsForward+1][x] == 0) {
-                            // TODO: there's something wrong in the line below,
-                            // probably opponent's piece is not being found
-                            moves.add(new SingleCaptureMove(x, reconsForward + color.getValue(), p, currentOpponent.findPiece(x, y)));
+                        if (relativeForward + 1 <= color.getBoardTopEdge() && board[absoluteForward+dir][x] == 0) {
+                            Piece opPiece = currentOpponent.findPiece(x, absoluteForward);
+                        moves.add(new SingleCaptureMove(x, absoluteForward + dir, p, opPiece));
                         }
                 }
 
                 // Check legality single right diagonal forward move
-                if (right <= color.getBoardRightEdge()) {
+                if (relativeRight <= color.getBoardRightEdge()) {
                     // Check if not occupied by other piece
-                    if (board[reconsForward][reconsRight] == 0) {
-                        moves.add(new SingleMove(p, reconsRight, reconsForward));
+                    if (board[absoluteForward][absoluteRight] == 0) {
+                        moves.add(new SingleMove(p, absoluteRight, absoluteForward));
                     }
                 }
             }
@@ -191,10 +193,11 @@ public class GameEngine {
             Check if we don't move off the left side of the board. This is for
             left orthogonal moves.
             */
-            if (left >= color.getBoardLeftEdge()) {
+            if (relativeLeft >= color.getBoardLeftEdge()) {
                     // Check for left orthogonal capturing move
-                    if (left-1 >= color.getBoardLeftEdge() && board[y][reconsLeft] == color.getOpponent()) {
-                        moves.add(new SingleCaptureMove(reconsLeft-color.getValue(), y, currentOpponent.findPiece(reconsLeft, y), p));
+                    if (relativeLeft-1 >= color.getBoardLeftEdge() && board[y][absoluteLeft] == color.getOpponent()) {
+                        Piece opPiece = currentOpponent.findPiece(absoluteLeft, y);
+                        moves.add(new SingleCaptureMove(absoluteLeft-dir, y, p, opPiece));
                     }
             }
 
@@ -202,10 +205,11 @@ public class GameEngine {
             Check if we don't move off the right side of the board. This is for
             right orthogonal moves.
             */
-            if (right <= color.getBoardRightEdge()) {
+            if (relativeRight <= color.getBoardRightEdge()) {
                 // Check for right orthogonal capturing move
-                if (right + 1 <= color.getBoardRightEdge() && board[y][reconsRight] == color.getOpponent()) {
-                    moves.add(new SingleCaptureMove(reconsRight+color.getValue(), y, currentOpponent.findPiece(reconsRight, y), p));
+                if (relativeRight + 1 <= color.getBoardRightEdge() && board[y][absoluteRight] == color.getOpponent()) {
+                    Piece opPiece = currentOpponent.findPiece(absoluteRight, y);
+                    moves.add(new SingleCaptureMove(absoluteRight+dir, y, p, opPiece));
                 }
             }
         }

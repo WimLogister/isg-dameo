@@ -20,12 +20,12 @@ public class DebugPlayer extends Player {
 
     @Override
     public Move selectMove(Set<Move> moves) {
-        int r = DameoUtil.getRandomIntFromTo(0, moves.size());
-        int i = 0;
+        if (moves.isEmpty()) return null;
+        
         boolean foundCaptureMove = false;
         Iterator<Move> it = moves.iterator();
-        Move selectedMove = null;
-        while (it.hasNext() && i++ <= r && !foundCaptureMove) {
+        Move selectedMove = it.next();
+        while (it.hasNext() && !foundCaptureMove) {
             selectedMove = it.next();
             if (selectedMove instanceof SingleCaptureMove) {
                 foundCaptureMove = true;
