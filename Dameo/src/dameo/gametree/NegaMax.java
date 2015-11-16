@@ -1,10 +1,13 @@
 package dameo.gametree;
 
 import dameo.GameEngine;
+import dameo.Piece;
 import dameo.evalfunction.EvaluationFunction;
 import dameo.evalfunction.MenCountEvaluationFunction;
 import dameo.move.Move;
 import dameo.strategy.AIStrategy;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**

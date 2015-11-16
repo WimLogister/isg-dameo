@@ -85,5 +85,13 @@ public class Board {
         int[][] board = Board.setupBoard(whitePieces, blackPieces);
         System.out.println("\n" + Board.getBoardString(board));
     }
+
+    public static int[][] copyBoard(int[][] board) {
+        int[][] newBoard = new int[8][];
+        for (int i = 0; i < board.length; i++) {
+            newBoard[i] = board[i].clone();
+        }
+        return newBoard;
+    }
     
 }

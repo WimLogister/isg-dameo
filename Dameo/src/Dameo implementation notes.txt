@@ -4,6 +4,11 @@ TODO: test basic alpha-beta search implementation. NOTE: basic setup is working,
     but something is not going right in the state transitions: lots of weird
     stuff with pieces appearing out of thin air, board not being updated correctly,
     etc.
+    Problem: move that is returned by negamax contains a piece that is a different
+    object from the original piece. Idea: create a map that is indexed by keys
+    that reflect coordinates of the piece to which they are mapped. Use Point2D
+    for this, since it already has hashcode implemented.
+    Alternative idea: use a 2-D array of pieces instead of the current integer board.
 TODO: implement multi-moves
 TODO: implement king promotion
 

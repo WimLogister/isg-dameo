@@ -93,9 +93,8 @@ public class Piece {
         int result = hashCode;
         if (result == 0) {
             result = 17;
-            result = 31 * result + (row);
-            result = 31 * result + (col);
-            result = 31 * result + color.ordinal();
+            result = 31 * result + (10000*row);
+            result = 31 * result + (10000*col);
             hashCode = result;
         }
         return hashCode;
@@ -109,10 +108,12 @@ public class Piece {
     }
     
     public static void main(String[] args) {
-        Piece p1 = new Piece(4, 2, Constants.PlayerColors.WHITE, null);
-        Piece p2 = new Piece(0, 8, Constants.PlayerColors.BLACK, null);
+        Piece p1 = new Piece(0, 0, Constants.PlayerColors.WHITE, null);
+        Piece p2 = new Piece(8, 8, Constants.PlayerColors.BLACK, null);
+        Piece p3 = new Piece(5, 5, Constants.PlayerColors.BLACK, null);
         System.out.println(p1.hashCode());
         System.out.println(p2.hashCode());
+        System.out.println(p3.hashCode());
     }
     
 }

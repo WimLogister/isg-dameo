@@ -1,12 +1,7 @@
 package dameo.move;
 
-import dameo.Board;
-import dameo.Constants;
-import dameo.DameoUtil;
 import dameo.Piece;
 import dameo.gametree.State;
-import java.util.Iterator;
-import java.util.Set;
 
 /**
  * Single, non-jumping piece move

@@ -83,7 +83,13 @@ public class GameEngine {
         }
         
         /*
-        Change player
+        Change player's pieces in current state
+        */
+        currentState = new State(currentState.getOpponentPieces(),
+                currentState.getCurrentPlayerPieces(), currentState.getBoard());
+        
+        /*
+        Change players
         */
         Player temp = currentPlayer;
         currentPlayer = currentOpponent;
@@ -128,13 +134,6 @@ public class GameEngine {
         }
     }
     
-    public static int[][] copyBoard(int[][] board) {
-        int[][] newBoard = new int[8][];
-        for (int i = 0; i < board.length; i++) {
-            newBoard[i] = board[i].clone();
-        }
-        return newBoard;
-    }
     
     /**
      * Generate the list of legal moves in the current game state.
@@ -250,7 +249,7 @@ public class GameEngine {
         int[][] board = Board.setupBoard(Piece.generatePieceSet(Constants.PlayerColors.WHITE, size),
                 Piece.generatePieceSet(Constants.PlayerColors.BLACK, size));
         System.out.println(Board.getBoardString(board));
-        int[][] newBoard = GameEngine.copyBoard(board);
+        int[][] newBoard = Board.copyBoard(board);
         System.out.println(Board.getBoardString(newBoard));
     }
     
