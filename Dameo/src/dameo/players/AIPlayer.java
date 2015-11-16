@@ -15,8 +15,9 @@ public class AIPlayer extends Player {
     
     private AIStrategy strategy;
 
-    public AIPlayer(Constants.PlayerColors color, Set<Piece> pieces) {
+    public AIPlayer(Constants.PlayerColors color, Set<Piece> pieces, AIStrategy strategy) {
         super(color, pieces);
+        this.strategy = strategy;
     }
     
     public void setStrategy(AIStrategy strategy) {

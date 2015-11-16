@@ -34,8 +34,8 @@ public class Piece {
         return p;
     }
     
-    public static Piece copyIntoSet(Piece origPiece, Set<Piece> newSet) {
-        return new Piece(origPiece.getRow(), origPiece.getCol(), origPiece.getColor(), newSet);
+    public static void copyIntoSet(Piece origPiece, Set<Piece> newSet) {
+        newSet.add(new Piece(origPiece.getRow(), origPiece.getCol(), origPiece.getColor(), newSet));
     }
     
     public void setCoords(int row, int col) {

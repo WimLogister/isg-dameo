@@ -6,6 +6,7 @@ import dameo.move.SingleCaptureMove;
 import dameo.move.SingleMove;
 import dameo.players.Player;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -67,13 +68,16 @@ public class GameEngine {
         /*
         Current player selects move
         */
-        Move m = currentPlayer.selectMove(new State(currentPlayer.getPieces(), currentOpponent.getPieces(), board));
+        Move m = currentPlayer.selectMove(currentState);
         if (m == null) {
             end = true;
             System.out.printf("%s player has no more legal moves.\n", currentPlayer.getColor());
             System.out.printf("%s player wins.", currentOpponent.getColor());
         }
         else {
+            /*
+            Execute move and change state
+            */
             m.execute(currentState);
             System.out.println(m);
         }
@@ -99,7 +103,7 @@ public class GameEngine {
         */
         int p1Type, p2Type;
         
-        System.out.println("HUMAN = 1, AI = 2, RANDOM = 3, DEBUG = 4\n" +
+        System.out.println("HUMAN = 1, NEGAMAX = 2, RANDOM = 3, DEBUG = 4\n" +
                 "Please enter a player type for White player: ");
         p1Type = Integer.parseInt(DameoUtil.getConsoleInput());
         
@@ -145,7 +149,8 @@ public class GameEngine {
         
         Set<Move> moves = new HashSet<>();
         
-        Constants.PlayerColors color = currentPlayerPieceSet.iterator().next().getColor();
+        Iterator<Piece> it = currentPlayerPieceSet.iterator();
+        Constants.PlayerColors color = it.next().getColor();
         int dir = color.getDirection();
         
         for (Piece p : currentPlayerPieceSet) {
@@ -240,11 +245,22 @@ public class GameEngine {
         return board;
     }
 
+    public static void testBoardCopy() {
+        final int size = 18;
+        int[][] board = Board.setupBoard(Piece.generatePieceSet(Constants.PlayerColors.WHITE, size),
+                Piece.generatePieceSet(Constants.PlayerColors.BLACK, size));
+        System.out.println(Board.getBoardString(board));
+        int[][] newBoard = GameEngine.copyBoard(board);
+        System.out.println(Board.getBoardString(newBoard));
+    }
+    
+    public static void runGame() {
+        GameEngine eng = new GameEngine();
+        eng.start();
+    }
     
     public static void main(String[] args) {
-        GameEngine eng = new GameEngine();
-        eng.init();
-        eng.start();
+        runGame();
     }
     
     

@@ -40,7 +40,7 @@ public class State {
         for (Piece p : oldState.opponentPieces) {
             Piece.copyIntoSet(p, this.opponentPieces);
         }
-        this.board = GameEngine.copyBoard(board);
+        this.board = GameEngine.copyBoard(oldState.board);
     }
 
     public Set<Piece> getCurrentPlayerPieces() {

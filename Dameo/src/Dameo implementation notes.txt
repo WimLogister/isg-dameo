@@ -1,6 +1,9 @@
 Dameo considerations
 
-TODO: make basic alpha-beta search implementation
+TODO: test basic alpha-beta search implementation. NOTE: basic setup is working,
+    but something is not going right in the state transitions: lots of weird
+    stuff with pieces appearing out of thin air, board not being updated correctly,
+    etc.
 TODO: implement multi-moves
 TODO: implement king promotion
 

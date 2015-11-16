@@ -3,6 +3,7 @@ package dameo.players;
 import dameo.Constants;
 import dameo.move.Move;
 import dameo.Piece;
+import dameo.gametree.NegaMax;
 import dameo.gametree.State;
 import java.util.Iterator;
 import java.util.Set;
@@ -15,6 +16,9 @@ public abstract class Player {
     
     protected final Constants.PlayerColors color;
     protected Set<Piece> pieces;
+    
+    public static final int DEBUG_ALPHA = Integer.MIN_VALUE;
+    public static final int DEBUG_BETA = Integer.MAX_VALUE;
     
     protected Player(Constants.PlayerColors color, Set<Piece> pieces) {
         this.color = color;
@@ -41,11 +45,14 @@ public abstract class Player {
         if (type == PlayerTypes.DEBUG.value) {
             p = new DebugPlayer(color, pieceSet);
         }
+        if (type == PlayerTypes.NEGAMAX.value) {
+            p = new AIPlayer(color, pieceSet, new NegaMax(1));
+        }
         return p;
     }
     
     public enum PlayerTypes {
-        HUMAN(1), AI(2), RANDOM(3), DEBUG(4);
+        HUMAN(1), NEGAMAX(2), RANDOM(3), DEBUG(4);
         private int value;
 
         private PlayerTypes(int value) {
