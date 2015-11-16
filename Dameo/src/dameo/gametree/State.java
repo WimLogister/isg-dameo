@@ -1,5 +1,6 @@
 package dameo.gametree;
 
+import dameo.Board;
 import dameo.GameEngine;
 import dameo.Piece;
 import dameo.players.Player;
@@ -11,9 +12,9 @@ import java.util.Set;
  * @author Wim
  */
 public class State {
-    private Set<Piece> currentPlayerPieces;
-    private Set<Piece> opponentPieces;
-    private int[][] board;
+    private final Set<Piece> currentPlayerPieces;
+    private final Set<Piece> opponentPieces;
+    private final int[][] board;
 
     /**
      * Regular constructor for State encapsulating a particular game state.
@@ -40,7 +41,7 @@ public class State {
         for (Piece p : oldState.opponentPieces) {
             Piece.copyIntoSet(p, this.opponentPieces);
         }
-        this.board = GameEngine.copyBoard(oldState.board);
+        this.board = Board.copyBoard(oldState.board);
     }
 
     public Set<Piece> getCurrentPlayerPieces() {
