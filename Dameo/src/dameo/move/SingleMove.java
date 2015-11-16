@@ -53,20 +53,20 @@ public class SingleMove extends Move {
     
     
     public static void main(String[] args) {
-        final int numPiece = Constants.PIECES_PER_PLAYER;
-        Set<Piece> wp = Piece.generatePieceSet(Constants.PlayerColors.WHITE, numPiece);
-        Set<Piece> bp = Piece.generatePieceSet(Constants.PlayerColors.BLACK, numPiece);
-        int[][] board = Board.setupBoard(wp, bp);
-        System.out.println(Board.getBoardString(board));
-        int i = DameoUtil.getRandomIntFromTo(0, numPiece);
-        Iterator<Piece> it = wp.iterator();
-        Piece p = it.next();
-        while (it.hasNext()) {
-            p = it.next();
-        }
-        Move m = new SingleMove(p, 4, 4);
-        m.execute(board);
-        System.out.println(Board.getBoardString(board));
+//        final int numPiece = Constants.PIECES_PER_PLAYER;
+//        Set<Piece> wp = Piece.generatePieceSet(Constants.PlayerColors.WHITE, numPiece);
+//        Set<Piece> bp = Piece.generatePieceSet(Constants.PlayerColors.BLACK, numPiece);
+//        int[][] board = Board.setupBoard(wp, bp);
+//        System.out.println(Board.getBoardString(board));
+//        int i = DameoUtil.getRandomIntFromTo(0, numPiece);
+//        Iterator<Piece> it = wp.iterator();
+//        Piece p = it.next();
+//        while (it.hasNext()) {
+//            p = it.next();
+//        }
+//        Move m = new SingleMove(p, 4, 4);
+//        m.execute(board);
+//        System.out.println(Board.getBoardString(board));
         
     }
     

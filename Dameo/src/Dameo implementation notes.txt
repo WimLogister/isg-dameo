@@ -1,8 +1,6 @@
 Dameo considerations
 
-TODO: check if new move generation code works: new way of finding pieces,
-    using states, etc.
-    
+TODO: make basic alpha-beta search implementation
 TODO: implement multi-moves
 TODO: implement king promotion
 

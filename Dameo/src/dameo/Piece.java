@@ -13,6 +13,7 @@ public class Piece {
     private int row, col;
     private final Constants.PlayerColors color;
     private Set<Piece> pieceSet;
+    private int hashCode;
 
     private Piece(int row, int col, Constants.PlayerColors color, Set<Piece> pieceSet) {
         this.row = row;
@@ -88,8 +89,30 @@ public class Piece {
     }
 
     @Override
+    public int hashCode() {
+        int result = hashCode;
+        if (result == 0) {
+            result = 17;
+            result = 31 * result + (row);
+            result = 31 * result + (col);
+            result = 31 * result + color.ordinal();
+            hashCode = result;
+        }
+        return hashCode;
+    }
+    
+    
+
+    @Override
     public String toString() {
         return String.format("<%s,%s>", row,col);
+    }
+    
+    public static void main(String[] args) {
+        Piece p1 = new Piece(4, 2, Constants.PlayerColors.WHITE, null);
+        Piece p2 = new Piece(0, 8, Constants.PlayerColors.BLACK, null);
+        System.out.println(p1.hashCode());
+        System.out.println(p2.hashCode());
     }
     
 }

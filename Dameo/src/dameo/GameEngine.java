@@ -74,7 +74,7 @@ public class GameEngine {
             System.out.printf("%s player wins.", currentOpponent.getColor());
         }
         else {
-            m.execute(board);
+            m.execute(currentState);
             System.out.println(m);
         }
         
@@ -211,7 +211,9 @@ public class GameEngine {
             */
             if (relativeLeft >= color.getBoardLeftEdge()) {
                     // Check for left orthogonal capturing move
-                    if (relativeLeft-1 >= color.getBoardLeftEdge() && board[y][absoluteLeft] == color.getOpponent()) {
+                    if (/* Check we don't move off board*/ relativeLeft-1 >= color.getBoardLeftEdge()
+                            /* Check for opponent piece */ && board[y][absoluteLeft] == color.getOpponent()
+                            /* Check for empty square behind opponent */ && board[y][absoluteLeft-dir] == 0) {
                         Piece opPiece = Piece.findPiece(opponentPieceSet, absoluteLeft, y);
                         moves.add(new SingleCaptureMove(absoluteLeft-dir, y, p, opPiece));
                     }
@@ -223,7 +225,9 @@ public class GameEngine {
             */
             if (relativeRight <= color.getBoardRightEdge()) {
                 // Check for right orthogonal capturing move
-                if (relativeRight + 1 <= color.getBoardRightEdge() && board[y][absoluteRight] == color.getOpponent()) {
+                if (/* Check we don't move off the board */ relativeRight + 1 <= color.getBoardRightEdge()
+                        /* Check for opponent's piece */ && board[y][absoluteRight] == color.getOpponent()
+                        /* Check for empty square */ && board[y][absoluteRight+dir] == 0) {
                     Piece opPiece = Piece.findPiece(opponentPieceSet, absoluteRight, y);
                     moves.add(new SingleCaptureMove(absoluteRight+dir, y, p, opPiece));
                 }
@@ -241,8 +245,6 @@ public class GameEngine {
         GameEngine eng = new GameEngine();
         eng.init();
         eng.start();
-        Set<Move> legalMoves = eng.generateLegalMoves(null, null, null);
-        System.out.println(legalMoves.size());
     }
     
     
