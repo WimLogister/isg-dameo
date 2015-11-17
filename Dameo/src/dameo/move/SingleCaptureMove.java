@@ -9,28 +9,28 @@ import dameo.gametree.State;
  */
 public class SingleCaptureMove extends Move {
     
-    private final int cptOldX;
-    private final int cptOldY;
-    private final Piece capturedPiece;
+    private final int captX;
+    private final int captY;
 
-    public SingleCaptureMove(int newX, int newY, Piece piece, Piece capturedPiece) {
-        super(piece, newX, newY);
-        this.capturedPiece = capturedPiece;
-        this.cptOldX = capturedPiece.getCol();
-        this.cptOldY = capturedPiece.getRow();
+    public SingleCaptureMove(int newX, int newY, int oldX, int oldY, int captX, int captY) {
+        super(newX, newY, oldX, oldY);
+        this.captX = captX;
+        this.captY = captY;
     }
 
     @Override
     public void execute(State state) {
+        Piece capturingPiece = state.getBoard()[oldY][oldX];        
         // Remove capturing piece from previous position on board
-        state.getBoard()[piece.getRow()][piece.getCol()] = 0;
+        state.getBoard()[oldY][oldX] = null;
         // Put capturing piece on new position on board
-        state.getBoard()[newY][newX] = piece.getColor().getValue();
+        state.getBoard()[newY][newX] = capturingPiece;
         // Update capturing piece's local information
-        piece.setCoords(newY, newX);
+        capturingPiece.setCoords(newY, newX);
         
+        Piece capturedPiece = state.getBoard()[captY][captX];
         // Remove captured piece from board
-        state.getBoard()[capturedPiece.getRow()][capturedPiece.getCol()] = 0;
+        state.getBoard()[captY][captX] = null;
         // Remove captured piece from opponent's piece set
         capturedPiece.removeFromSet();
     }
@@ -38,7 +38,7 @@ public class SingleCaptureMove extends Move {
     @Override
     public String toString() {
         return String.format("From:<%d,%d>, To:<%d,%d>, Capturing:<%d,%d>", oldX+1,
-                oldY+1, newX+1, newY+1, cptOldX+1, cptOldY+1);
+                oldY+1, newX+1, newY+1, captX+1, captY+1);
     }
 
 }

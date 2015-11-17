@@ -76,16 +76,5 @@ public abstract class Player {
         return color;
     }
     
-    public Piece findPiece(int x, int y) {
-        Iterator<Piece> it = pieces.iterator();
-        Piece p = null;
-        while (it.hasNext()) {
-            Piece match = it.next();
-            if (match.getCol() == x && match.getRow() == y) {
-                p = match;
-            }
-        }
-        return p;
-    }
     
 }

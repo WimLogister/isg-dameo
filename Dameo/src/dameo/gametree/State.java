@@ -5,6 +5,7 @@ import dameo.GameEngine;
 import dameo.Piece;
 import dameo.players.Player;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Set;
 public class State {
     private final Set<Piece> currentPlayerPieces;
     private final Set<Piece> opponentPieces;
-    private final int[][] board;
+    private final Piece[][] board;
 
     /**
      * Regular constructor for State encapsulating a particular game state.
@@ -22,7 +23,7 @@ public class State {
      * @param opponentPieces
      * @param board 
      */
-    public State(Set<Piece> currentPlayerPieces, Set<Piece> opponentPieces, int[][] board) {
+    public State(Set<Piece> currentPlayerPieces, Set<Piece> opponentPieces, Piece[][] board) {
         this.currentPlayerPieces = currentPlayerPieces;
         this.opponentPieces = opponentPieces;
         this.board = board;
@@ -41,7 +42,22 @@ public class State {
         for (Piece p : oldState.opponentPieces) {
             Piece.copyIntoSet(p, this.opponentPieces);
         }
-        this.board = Board.copyBoard(oldState.board);
+        this.board = createBoardCopy(currentPlayerPieces, opponentPieces);
+        
+    }
+    
+    public static Piece[][] createBoardCopy(Set<Piece> currentPlayerSet, Set<Piece> opponentSet) {
+        Piece[][] newBoard = new Piece[8][8];
+        
+        for (Piece p : currentPlayerSet) {
+            newBoard[p.getRow()][p.getCol()] = p;
+        }
+        
+        for (Piece p : opponentSet) {
+            newBoard[p.getRow()][p.getCol()] = p;
+        }
+        
+        return newBoard;
     }
 
     public Set<Piece> getCurrentPlayerPieces() {
@@ -52,8 +68,19 @@ public class State {
         return opponentPieces;
     }
     
-    public int[][] getBoard() {
+    public Piece[][] getBoard() {
         return board;
     }
-
+    
+    private static Piece[][] putPiecesOnNewBoard(Set<Piece> currentPlayerPieces,
+            Set<Piece> opponentPieces) {
+        Piece[][] newBoard = new Piece[8][8];
+        for (Piece p : currentPlayerPieces) {
+            newBoard[p.getRow()][p.getCol()] = p;
+        }
+        for (Piece p : opponentPieces) {
+            newBoard[p.getRow()][p.getCol()] = p;
+        }
+        return newBoard;
+    }
 }
