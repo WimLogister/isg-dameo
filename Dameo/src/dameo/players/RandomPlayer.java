@@ -3,6 +3,8 @@ package dameo.players;
 import dameo.Constants;
 import dameo.Piece;
 import dameo.DameoUtil;
+import dameo.GameEngine;
+import dameo.gametree.State;
 import dameo.move.DummyMove;
 import dameo.move.Move;
 import java.util.HashSet;
@@ -21,19 +23,20 @@ public class RandomPlayer extends Player {
 
     /**
      * Random move selection.
-     * @param moves Set of moves to choose from.
+     * @param s Set of moves to choose from.
      * @return A move selected randomly from parameter set of moves.
      */
     @Override
     public Move selectMove(State s) {
-        int r = DameoUtil.getRandomIntFromTo(0, s.size());
+        Set<Move> moves = GameEngine.generateLegalMoves(s);
+        int r = DameoUtil.getRandomIntFromTo(0, moves.size());
         int i = 0;
-        Iterator<Move> it = s.iterator();
+        Iterator<Move> it = moves.iterator();
         Move selectedMove = null;
         while (it.hasNext() && i++ <= r) {
             selectedMove = it.next();
         }
         return selectedMove;
     }
-    
+
 }

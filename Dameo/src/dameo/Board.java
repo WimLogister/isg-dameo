@@ -17,46 +17,27 @@ public class Board {
      * @param blackPieceSet
      * @return 
      */
-    public static int[][] setupBoard(Set<Piece> whitePieceSet, Set<Piece> blackPieceSet) {
-        final int[][] board = new int[8][8];
+    public static Piece[][] setupBoard(Set<Piece> whitePieceSet, Set<Piece> blackPieceSet) {
+        final Piece[][] board = new Piece[8][8];
         
         // Set up white pieces
         final int startingRanks = 3;
-        int k = 0;
-        // Container for positions of white pieces to be set by iterator later
-        int[][] positions = new int[Constants.PIECES_PER_PLAYER][2];
+        Iterator<Piece> wIt = whitePieceSet.iterator();
         for (int i=0; i < startingRanks; i++) {
             for (int j=i; j < board.length-i; j++) {
-                board[i][j] = Constants.PLAYER_WHITE;
-                positions[k][0] = i;
-                positions[k++][1] = j;
+                Piece whitePiece = wIt.next();
+                board[i][j] = whitePiece;
+                whitePiece.setCoords(i, j);
             }
         }
         
-        k = 0;
-        Iterator<Piece> wit = whitePieceSet.iterator();
-        // Set white piece coordinates
-        while (wit.hasNext()) {
-            wit.next().setCoords(positions[k][0], positions[k++][1]);
-        }
-        
-        k = 0;        
         // Set up black pieces
-        // Container for positions of black pieces to be set by iterator later
-        positions = new int[Constants.PIECES_PER_PLAYER][2];
+        Iterator<Piece> bIt = blackPieceSet.iterator();
         for (int i=board.length-1; i > board.length-startingRanks-1; i--) {
             for (int j=i; j >= board.length-i-1; j--) {
-                board[i][j] = Constants.PLAYER_BLACK;
-                positions[k][0] = i;
-                positions[k++][1] = j;
+                Piece blackPiece = bIt.next();
+                board[i][j] = blackPiece;
             }
-        }
-        
-        k = 0;
-        Iterator<Piece> bit = blackPieceSet.iterator();
-        // Set black piece coordinates
-        while (bit.hasNext()) {
-            bit.next().setCoords(positions[k][0], positions[k++][1]);
         }
         
         return board;
@@ -67,13 +48,22 @@ public class Board {
      * @param board
      * @return 
      */
-    public static String getBoardString(int[][] board) {
+    public static String getBoardString(Piece[][] board) {
         StringBuilder sb = new StringBuilder();
+        int[][] intBoard = new int[8][8];
         for (int i=board.length-1; i >= 0; i--) {
-            sb.append(String.format("(%d) ",i+1)).append(Arrays.toString(board[i])).append("\n");
+            for (int j=board[i].length-1; j >= 0; j--) {
+                int value = 0;
+                if (board[i][j] != null)
+                    value = board[i][j].getColor().getValue();
+                intBoard[i][j] = value;
+            }
+        }
+        for (int i=intBoard.length-1; i >= 0; i--) {
+            sb.append(String.format("(%d) ",i+1)).append(Arrays.toString(intBoard[i])).append("\n");
         }
         sb.append("    ");
-        for (int i = 0; i < board.length; i++) {
+        for (int i = 0; i < intBoard.length; i++) {
             sb.append(String.format("(%d)",i+1));
         }
         return sb.toString();
@@ -82,16 +72,12 @@ public class Board {
     public static void main(String[] args) {
         Set<Piece> whitePieces = Piece.generatePieceSet(Constants.PlayerColors.WHITE, Constants.PIECES_PER_PLAYER);
         Set<Piece> blackPieces = Piece.generatePieceSet(Constants.PlayerColors.WHITE, Constants.PIECES_PER_PLAYER);
-        int[][] board = Board.setupBoard(whitePieces, blackPieces);
+        Piece[][] board = Board.setupBoard(whitePieces, blackPieces);
         System.out.println("\n" + Board.getBoardString(board));
     }
 
-    public static int[][] copyBoard(int[][] board) {
-        int[][] newBoard = new int[8][];
-        for (int i = 0; i < board.length; i++) {
-            newBoard[i] = board[i].clone();
-        }
-        return newBoard;
+    public static Piece[][] copyBoard(Set<Piece> whitePieceSet, Set<Piece> blackPieceSet) {
+        
     }
     
 }

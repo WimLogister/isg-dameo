@@ -29,9 +29,9 @@ public class SingleMove extends Move {
     public void execute(State state) {
         
         // Remove piece from previous position on board
-        state.getBoard()[piece.getRow()][piece.getCol()] = 0;
+        state.getBoard()[piece.getRow()][piece.getCol()] = null;
         // Put piece on new position on board
-        state.getBoard()[newY][newX] = piece.getColor().getValue();
+        state.getBoard()[newY][newX] = piece;
         
         // Update piece information
         piece.setCoords(newY, newX);

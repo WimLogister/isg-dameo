@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public class GameEngine {
     
-    private int[][] board;
+    private Piece[][] board;
     private State currentState;
     
     private Player currentPlayer;
@@ -144,7 +144,7 @@ public class GameEngine {
         Set<Piece> currentPlayerPieceSet = state.getCurrentPlayerPieces();
         Set<Piece> opponentPieceSet = state.getOpponentPieces();
         
-        int[][] board = state.getBoard();
+        Piece[][] board = state.getBoard();
         
         Set<Move> moves = new HashSet<>();
         
@@ -180,22 +180,22 @@ public class GameEngine {
                 // Check if we don't move off the left side of the board
                 if (relativeLeft >= color.getBoardLeftEdge()) {
                     // Check for single left diagonal forward move
-                    if (board[absoluteForward][absoluteLeft] == 0) {
+                    if (board[absoluteForward][absoluteLeft] == null) {
                         moves.add(new SingleMove(p, absoluteLeft, absoluteForward));
                     }
 
                 }
                 // Check legality single orthogonal forward move
-                if (board[absoluteForward][x] == 0) {
+                if (board[absoluteForward][x] == null) {
                     moves.add(new SingleMove(p, x, absoluteForward));
                     // TODO: check for multi-moves
                 }
 
                 // Check for forward capture
-                if (board[absoluteForward][x] == color.getOpponent()) {
+                if (board[absoluteForward][x].getColor().getValue() == color.getOpponent()) {
                         // Check if we don't end up jumping off the board and
                         // square behind enemy piece is empty
-                        if (relativeForward + 1 <= color.getBoardTopEdge() && board[absoluteForward+dir][x] == 0) {
+                        if (relativeForward + 1 <= color.getBoardTopEdge() && board[absoluteForward+dir][x] == null) {
                             Piece opPiece = Piece.findPiece(opponentPieceSet, x, absoluteForward);
                         moves.add(new SingleCaptureMove(x, absoluteForward + dir, p, opPiece));
                         }
@@ -204,7 +204,7 @@ public class GameEngine {
                 // Check legality single right diagonal forward move
                 if (relativeRight <= color.getBoardRightEdge()) {
                     // Check if not occupied by other piece
-                    if (board[absoluteForward][absoluteRight] == 0) {
+                    if (board[absoluteForward][absoluteRight] == null) {
                         moves.add(new SingleMove(p, absoluteRight, absoluteForward));
                     }
                 }
@@ -216,8 +216,8 @@ public class GameEngine {
             if (relativeLeft >= color.getBoardLeftEdge()) {
                     // Check for left orthogonal capturing move
                     if (/* Check we don't move off board*/ relativeLeft-1 >= color.getBoardLeftEdge()
-                            /* Check for opponent piece */ && board[y][absoluteLeft] == color.getOpponent()
-                            /* Check for empty square behind opponent */ && board[y][absoluteLeft-dir] == 0) {
+                            /* Check for opponent piece */ && board[y][absoluteLeft].getColor().getValue() == color.getOpponent()
+                            /* Check for empty square behind opponent */ && board[y][absoluteLeft-dir] == null) {
                         Piece opPiece = Piece.findPiece(opponentPieceSet, absoluteLeft, y);
                         moves.add(new SingleCaptureMove(absoluteLeft-dir, y, p, opPiece));
                     }
@@ -230,8 +230,8 @@ public class GameEngine {
             if (relativeRight <= color.getBoardRightEdge()) {
                 // Check for right orthogonal capturing move
                 if (/* Check we don't move off the board */ relativeRight + 1 <= color.getBoardRightEdge()
-                        /* Check for opponent's piece */ && board[y][absoluteRight] == color.getOpponent()
-                        /* Check for empty square */ && board[y][absoluteRight+dir] == 0) {
+                        /* Check for opponent's piece */ && board[y][absoluteRight].getColor().getValue() == color.getOpponent()
+                        /* Check for empty square */ && board[y][absoluteRight+dir] == null) {
                     Piece opPiece = Piece.findPiece(opponentPieceSet, absoluteRight, y);
                     moves.add(new SingleCaptureMove(absoluteRight+dir, y, p, opPiece));
                 }
@@ -240,17 +240,19 @@ public class GameEngine {
         return moves;
     }
     
-    public int[][] getBoard() {
+    public Piece[][] getBoard() {
         return board;
     }
 
     public static void testBoardCopy() {
         final int size = 18;
-        int[][] board = Board.setupBoard(Piece.generatePieceSet(Constants.PlayerColors.WHITE, size),
-                Piece.generatePieceSet(Constants.PlayerColors.BLACK, size));
+        Set<Piece> whiteSet = Piece.generatePieceSet(Constants.PlayerColors.WHITE, 18);
+        Set<Piece> blackSet = Piece.generatePieceSet(Constants.PlayerColors.BLACK, 18);
+        Piece[][] board = Board.setupBoard(whiteSet, blackSet);
+        State s = new State(whiteSet, blackSet, board);
         System.out.println(Board.getBoardString(board));
-        int[][] newBoard = Board.copyBoard(board);
-        System.out.println(Board.getBoardString(newBoard));
+        State copy = new State(s);
+        System.out.println(Board.getBoardString(copy.getBoard()));
     }
     
     public static void runGame() {
