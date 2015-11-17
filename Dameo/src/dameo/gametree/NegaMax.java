@@ -1,13 +1,9 @@
 package dameo.gametree;
 
 import dameo.GameEngine;
-import dameo.Piece;
-import dameo.evalfunction.EvaluationFunction;
-import dameo.evalfunction.MenCountEvaluationFunction;
+import dameo.evalfunction.CompositeEvaluator;
 import dameo.move.Move;
 import dameo.strategy.AIStrategy;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -16,30 +12,30 @@ import java.util.Set;
  */
 public class NegaMax implements AIStrategy {
     
-    private final EvaluationFunction eval;
-    private final int alpha, beta;
+    private final CompositeEvaluator evaluator;
+    private final long alpha, beta;
     private final int searchDepth;
 
-    public NegaMax(EvaluationFunction eval, int searchDepth, int alpha, int beta) {
-        this.eval = eval;
+    public NegaMax(CompositeEvaluator evaluator, int searchDepth, long alpha, long beta) {
+        this.evaluator = evaluator;
         this.searchDepth = searchDepth;
         this.alpha = alpha;
         this.beta = beta;
     }
 
     public NegaMax(int searchDepth) {
-        this.eval = new MenCountEvaluationFunction();
+        this.evaluator = CompositeEvaluator.createFullEvaluator();
         this.alpha = Integer.MIN_VALUE;
         this.beta = Integer.MAX_VALUE;
         this.searchDepth = searchDepth;
     }
     
-    private Edge alphaBeta(State s, int depth, int alpha, int beta) {
-        int score = Integer.MIN_VALUE;
+    private Edge alphaBeta(State s, int depth, long alpha, long beta) {
+        long score = Integer.MIN_VALUE;
         Set<Move> moves = GameEngine.generateLegalMoves(s);
         Edge bestMove = null;
         if (moves.isEmpty() || depth == 0) {
-            bestMove = new Edge(null, eval.evaluatePosition(s));
+            bestMove = new Edge(null, evaluator.evaluate(s));
         }
         else {
             for (Move m : moves) {

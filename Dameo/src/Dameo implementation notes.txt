@@ -1,8 +1,8 @@
 Dameo considerations
 
-TODO: thing to check next: finding opponent's piece corresponding to a given position.
-    I can remove the findPiece method from player now.
-TODO: merge new setup into master branch.
+TODO: filter out non-capturing moves in GameEngine.generateLegalMoves()
+TODO: check some basic checkers strategies: which squares are important and why?
+    is mobility important? etc.
 TODO: test basic alpha-beta search implementation on new setup.
 TODO: implement multi-moves. Idea: use recursion for this, where you send along a list
 of pieces that has already been captured.

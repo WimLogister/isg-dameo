@@ -1,16 +1,17 @@
 package dameo.evalfunction;
 
+import dameo.GameEngine;
 import dameo.gametree.State;
 
 /**
  *
  * @author Wim
  */
-public class MenCountEvaluationFunction extends EvaluationFunction {
+public class MobilityEvalFun extends EvaluationFunction {
 
     @Override
     public long evaluatePosition(State s) {
-        return 100 * s.getCurrentPlayerPieces().size();
+        return 100 * GameEngine.generateLegalMoves(s).size();
     }
     
 }

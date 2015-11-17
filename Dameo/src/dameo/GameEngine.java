@@ -236,6 +236,7 @@ public class GameEngine {
                 }
             }
         }
+        // Need to filter out non-capturing moves
         return moves;
     }
     

@@ -8,5 +8,5 @@ import dameo.gametree.State;
  */
 public abstract class EvaluationFunction {
     
-    public abstract int evaluatePosition(State s);
+    public abstract long evaluatePosition(State s);
 }

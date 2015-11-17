@@ -10,14 +10,14 @@ import dameo.move.Move;
 public class Edge {
     
     private final Move move;
-    private final int value;
+    private final long value;
 
-    public Edge(Move move, int value) {
+    public Edge(Move move, long value) {
         this.move = move;
         this.value = value;
     }
 
-    public int getValue() {
+    public long getValue() {
         return value;
     }
 
