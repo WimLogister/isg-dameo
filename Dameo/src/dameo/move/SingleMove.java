@@ -9,12 +9,8 @@ import dameo.gametree.State;
  */
 public class SingleMove extends Move {
 
-    public SingleMove(Piece piece, int newX, int newY) {
-        super(piece, newX, newY);
-    }
-    
-    public Piece getPiece() {
-        return piece;
+    public SingleMove(int newX, int newY, int oldX, int oldY) {
+        super(newX, newY, oldX, oldY);
     }
 
     public int getNewX() {
@@ -27,14 +23,14 @@ public class SingleMove extends Move {
 
     @Override
     public void execute(State state) {
-        
+        Piece p = state.getBoard()[oldY][oldX];
         // Remove piece from previous position on board
-        state.getBoard()[piece.getRow()][piece.getCol()] = null;
+        state.getBoard()[oldY][oldX] = null;
         // Put piece on new position on board
-        state.getBoard()[newY][newX] = piece;
+        state.getBoard()[newY][newX] = p;
         
         // Update piece information
-        piece.setCoords(newY, newX);
+        p.setCoords(newY, newX);
     }
 
 

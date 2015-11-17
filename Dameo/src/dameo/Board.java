@@ -37,6 +37,7 @@ public class Board {
             for (int j=i; j >= board.length-i-1; j--) {
                 Piece blackPiece = bIt.next();
                 board[i][j] = blackPiece;
+                blackPiece.setCoords(i, j);
             }
         }
         
@@ -74,10 +75,6 @@ public class Board {
         Set<Piece> blackPieces = Piece.generatePieceSet(Constants.PlayerColors.WHITE, Constants.PIECES_PER_PLAYER);
         Piece[][] board = Board.setupBoard(whitePieces, blackPieces);
         System.out.println("\n" + Board.getBoardString(board));
-    }
-
-    public static Piece[][] copyBoard(Set<Piece> whitePieceSet, Set<Piece> blackPieceSet) {
-        
     }
     
 }

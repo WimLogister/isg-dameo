@@ -11,15 +11,13 @@ import dameo.gametree.State;
  */
 public abstract class Move {
     
-    protected final Piece piece;
     final int newX, newY, oldX, oldY;
     
-    public Move(Piece piece, int newX, int newY) {
-        this.piece = piece;
+    public Move(int newX, int newY, int oldX, int oldY) {
         this.newX = newX;
         this.newY = newY;
-        this.oldX = piece.getCol();
-        this.oldY = piece.getRow();
+        this.oldX = oldX;
+        this.oldY = oldY;
     }
     
     public abstract void execute(State state);

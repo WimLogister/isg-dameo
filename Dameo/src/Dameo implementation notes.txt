@@ -1,12 +1,13 @@
 Dameo considerations
 
-TODO: rework moves to take out piece information. That information can now be accessed
-    efficiently from the board itself.
 TODO: thing to check next: finding opponent's piece corresponding to a given position.
-TODO: check current implementation on random players.
-TODO: test basic alpha-beta search implementation.
-TODO: implement multi-moves
-TODO: implement king promotion
+    I can remove the findPiece method from player now.
+TODO: merge new setup into master branch.
+TODO: test basic alpha-beta search implementation on new setup.
+TODO: implement multi-moves. Idea: use recursion for this, where you send along a list
+of pieces that has already been captured.
+TODO: implement king promotion.
+TODO: implement king functionality.
 
 
 Points to optimize:
