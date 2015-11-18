@@ -80,6 +80,8 @@ public class GameEngine {
             */
             m.execute(currentState);
             System.out.println(m);
+            System.out.println("State after move...");
+            System.out.println(Board.getBoardString(currentState.getBoard()));
         }
         
         /*
@@ -128,7 +130,6 @@ public class GameEngine {
      */
     public void start() {
         while (!end) {
-            System.out.println(Board.getBoardString(board));
             DameoUtil.getConsoleInput();
             next();
         }
@@ -208,8 +209,8 @@ public class GameEngine {
                         // square behind enemy piece is empty
                         if (relativeForward + 1 <= color.getBoardTopEdge() && board[absoluteForward+dir][x] == null) {
                             moves.add(new SingleCaptureMove(x, absoluteForward+dir, x, y, x, absoluteForward));
+                            capturingMovesPresent = true;
                         }
-                        capturingMovesPresent = true;
                 }
             }
         }
@@ -266,7 +267,6 @@ public class GameEngine {
                 }
             }
         }
-        // Check for non-capturing moves if no capturing moves were found
         return moves;
     }
     
