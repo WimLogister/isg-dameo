@@ -1,12 +1,7 @@
 Dameo considerations
 
-TODO: check new move generation scheme.
-TODO: filter out non-capturing moves in GameEngine.generateLegalMoves(). IDEA:
-    first generate capturing moves. If any are found, don't check for regular
-    moves.
 TODO: check some basic checkers strategies: which squares are important and why?
     is mobility important? etc.
-TODO: test basic alpha-beta search implementation on new setup.
 TODO: implement multi-moves. Idea: use recursion for this, where you send along a list
 of pieces that has already been captured.
 TODO: implement king promotion.
