@@ -38,6 +38,14 @@ public class DameoUtil {
         return s;
     }
     
+    public static double mean(double[] values) {
+        double sum = 0;
+        for (int i = 0; i < values.length; i++) {
+            sum += values[i];
+        }
+        return sum/values.length;
+    }
+    
     public static void main(String[] args) {
         for (int i = 0; i < 25; i++) {
             System.out.println(DameoUtil.getRandomIntFromTo(0, 5));

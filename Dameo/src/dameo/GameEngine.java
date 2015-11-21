@@ -15,7 +15,6 @@ import java.util.Set;
  */
 public class GameEngine {
     
-    private Piece[][] board;
     private State currentState;
     
     private Player currentPlayer;
@@ -23,9 +22,19 @@ public class GameEngine {
     
     private static boolean singletonExisting;
     private boolean end;
+    
+    private boolean printFlag;
+    private static final String PRINT = "Y";
+    
+    private boolean debug = false;
 
     private GameEngine() {
         init();
+    }
+    
+    private GameEngine(Player whitePlayer, Player blackPlayer) {
+        currentPlayer = whitePlayer;
+        currentOpponent = blackPlayer;
     }
     
     public static GameEngine createEngine() {
@@ -33,69 +42,54 @@ public class GameEngine {
         else return null;
     }
     
+    /**
+     * Returns a GameEngine with a white negamax player and a black random player.
+     * Implemented for testing basic negamax performance.
+     * @return 
+     */
+    public static GameEngine createTestEngine() {
+        Player whitePlayer = Player.generatePlayer(2, Constants.PlayerColors.WHITE,
+                Piece.generatePieceSet(Constants.PlayerColors.WHITE, 18));
+        Player blackPlayer = Player.generatePlayer(3, Constants.PlayerColors.BLACK,
+                Piece.generatePieceSet(Constants.PlayerColors.BLACK, 18));
+        return new GameEngine(whitePlayer, blackPlayer);
+    }
+    
     private void init() {
         
-        /*
-        Create black and white piece sets
-        */
-        Set<Piece> blackPieces = Piece.generatePieceSet(Constants.PlayerColors.BLACK,
-                Constants.PIECES_PER_PLAYER);
-        Set<Piece> whitePieces = Piece.generatePieceSet(Constants.PlayerColors.WHITE,
-                Constants.PIECES_PER_PLAYER);
-        
-        /*
-        Set up players and set p1 as current player
-        */
-        setupPlayers(whitePieces, blackPieces);
+        if (currentPlayer == null) {
+            /*
+            Create black and white piece sets
+            */
+            Set<Piece> blackPieces = Piece.generatePieceSet(Constants.PlayerColors.BLACK,
+                    Constants.PIECES_PER_PLAYER);
+            Set<Piece> whitePieces = Piece.generatePieceSet(Constants.PlayerColors.WHITE,
+                    Constants.PIECES_PER_PLAYER);
+            
+            /*
+            Set up players and set p1 as current player
+            */
+            setupPlayers(whitePieces, blackPieces);
+        }
         
         /*
         Initialize and set up the game board
         */
-        board = Board.setupBoard(whitePieces, blackPieces);
+        Piece[][] board = Board.setupBoard(currentPlayer.getPieces(), currentOpponent.getPieces());
         
-        currentState = new State(whitePieces, blackPieces, board);
+        currentState = new State(currentPlayer.getPieces(), currentOpponent.getPieces(), board);
         
-    }
-    
-    /**
-     * Advance the game one turn.
-     * The set of legal moves for the current player is generated. Then, the
-     * current player is asked to select a move from this set. This move is then
-     * executed and it becomes the next player's turn.
-     */
-    private void next() {
-        
-        /*
-        Current player selects move
-        */
-        Move m = currentPlayer.selectMove(currentState);
-        if (m == null) {
-            end = true;
-            System.out.printf("%s player has no more legal moves.\n", currentPlayer.getColor());
-            System.out.printf("%s player wins.", currentOpponent.getColor());
-        }
-        else {
-            /*
-            Execute move and change state
-            */
-            m.execute(currentState);
-            System.out.println(m);
-            System.out.println("State after move...");
-            System.out.println(Board.getBoardString(currentState.getBoard()));
+        if (debug) {
+            System.out.println("Enter Y for printing, anything else for no printing:");
+            String flagString = DameoUtil.getConsoleInput();
+            try {
+                if (flagString.equalsIgnoreCase(PRINT)) {
+                    printFlag = true;
+                }
+            } catch (IllegalArgumentException e) {
+            }
         }
         
-        /*
-        Change player's pieces in current state
-        */
-        currentState = new State(currentState.getOpponentPieces(),
-                currentState.getCurrentPlayerPieces(), currentState.getBoard());
-        
-        /*
-        Change players
-        */
-        Player temp = currentPlayer;
-        currentPlayer = currentOpponent;
-        currentOpponent = temp;
     }
     
     /**
@@ -126,13 +120,61 @@ public class GameEngine {
     }
     
     /**
-     * Run an initialized game.
+     * Advance the game one turn.
+     * The set of legal moves for the current player is generated. Then, the
+     * current player is asked to select a move from this set. This move is then
+     * executed and it becomes the next player's turn.
      */
-    public void start() {
+    private void next() {
+        
+        /*
+        Current player selects move
+        */
+        Move m = currentPlayer.selectMove(currentState);
+        if (m == null) {
+            end = true;
+            if (debug) {
+                System.out.printf("%s player has no more legal moves.\n", currentPlayer.getColor());
+                System.out.printf("%s player wins.", currentOpponent.getColor());
+            }
+        }
+        else {
+            /*
+            Execute move and change state
+            */
+            m.execute(currentState);
+            if (printFlag) {
+                System.out.println(m);
+                System.out.println("State after move...");
+                System.out.println(Board.getBoardString(currentState.getBoard()));
+            }
+        }
+        
+        /*
+        Change player's pieces in current state
+        */
+        currentState = new State(currentState.getOpponentPieces(),
+                currentState.getCurrentPlayerPieces(), currentState.getBoard());
+        
+        /*
+        Change players
+        */
+        Player temp = currentPlayer;
+        currentPlayer = currentOpponent;
+        currentOpponent = temp;
+    }
+    
+    /**
+     * Run an initialized game.
+     * @return The color of the winning player
+     */
+    public Constants.PlayerColors start() {
         while (!end) {
-            DameoUtil.getConsoleInput();
+            if (printFlag)
+                DameoUtil.getConsoleInput();
             next();
         }
+        return currentPlayer.getColor();
     }
     
     
@@ -149,9 +191,12 @@ public class GameEngine {
         Set<Move> moves = new HashSet<>();
         
         Iterator<Piece> it = currentPlayerPieceSet.iterator();
-        Constants.PlayerColors color = it.next().getColor();
-        int dir = color.getDirection();
-        
+        int dir = 0;
+        Constants.PlayerColors color = null;
+        if (it.hasNext()) {
+            color = it.next().getColor();
+            dir = color.getDirection();
+        }
         boolean capturingMovesPresent = false;
         
         // Check for capturing moves
@@ -269,11 +314,15 @@ public class GameEngine {
         }
         return moves;
     }
-    
-    public Piece[][] getBoard() {
-        return board;
+
+    public void setDEBUG(boolean DEBUG) {
+        this.debug = DEBUG;
     }
 
+    public State getCurrentState() {
+        return currentState;
+    }
+    
     public static void testBoardCopy() {
         final int size = 18;
         Set<Piece> whiteSet = Piece.generatePieceSet(Constants.PlayerColors.WHITE, 18);
@@ -286,8 +335,15 @@ public class GameEngine {
     }
     
     public static void runGame() {
-        GameEngine eng = new GameEngine();
-        eng.start();
+        final int runs = 100;
+        double[] values = new double[runs];
+        for (int i = 0; i < runs; i++) {
+            GameEngine eng = GameEngine.createTestEngine();
+            eng.init();
+            Constants.PlayerColors color = eng.start();
+            values[i] = color.getValue() % 2;
+        }
+        System.out.printf("Win percentage: %f", DameoUtil.mean(values));
     }
     
     public static void main(String[] args) {

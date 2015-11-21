@@ -31,10 +31,15 @@ public class NegaMax implements AIStrategy {
     }
     
     private Edge alphaBeta(State s, int depth, long alpha, long beta) {
-        long score = Integer.MIN_VALUE;
+        long score = Long.MIN_VALUE;
         Set<Move> moves = GameEngine.generateLegalMoves(s);
         Edge bestMove = null;
-        if (moves.isEmpty() || depth == 0) {
+        
+        // No more moves, game is lost
+        if (moves.isEmpty()) {
+            bestMove = new Edge(null, Long.MIN_VALUE);
+        }
+        if (depth == 0) {
             bestMove = new Edge(null, evaluator.evaluate(s));
         }
         else {
@@ -42,9 +47,9 @@ public class NegaMax implements AIStrategy {
                 State copyState = new State(s);
                 m.execute(copyState);
                 Edge valueNode = alphaBeta(copyState, depth-1, -beta, -alpha);
-                if (valueNode.getValue() > score) {
-                    bestMove = new Edge(m, valueNode.getValue());
-                    score = valueNode.getValue();
+                if (-valueNode.getValue() > score) {
+                    bestMove = new Edge(m, -valueNode.getValue());
+                    score = -valueNode.getValue();
                 }
                 if (score > alpha) alpha = score;
                 if (score >= beta) break;
