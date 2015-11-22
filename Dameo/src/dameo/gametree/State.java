@@ -46,7 +46,7 @@ public class State {
         
     }
     
-    public static Piece[][] createBoardCopy(Set<Piece> currentPlayerSet, Set<Piece> opponentSet) {
+    private static Piece[][] createBoardCopy(Set<Piece> currentPlayerSet, Set<Piece> opponentSet) {
         Piece[][] newBoard = new Piece[8][8];
         
         for (Piece p : currentPlayerSet) {
