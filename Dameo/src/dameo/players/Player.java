@@ -17,8 +17,8 @@ public abstract class Player {
     protected final Constants.PlayerColors color;
     protected Set<Piece> pieces;
     
-    public static final int DEBUG_ALPHA = Integer.MIN_VALUE;
-    public static final int DEBUG_BETA = Integer.MAX_VALUE;
+    public static final long DEBUG_ALPHA = Long.MIN_VALUE;
+    public static final long DEBUG_BETA = Long.MAX_VALUE;
     
     protected Player(Constants.PlayerColors color, Set<Piece> pieces) {
         this.color = color;
