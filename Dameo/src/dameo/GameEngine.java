@@ -334,7 +334,7 @@ public class GameEngine {
         System.out.println(Board.getBoardString(copy.getBoard()));
     }
     
-    public static void runGame() {
+    public static void runTestGames(int numRuns) {
         final int runs = 100;
         double[] values = new double[runs];
         for (int i = 0; i < runs; i++) {
@@ -347,7 +347,7 @@ public class GameEngine {
     }
     
     public static void main(String[] args) {
-        runGame();
+        runTestGames(1);
     }
     
     

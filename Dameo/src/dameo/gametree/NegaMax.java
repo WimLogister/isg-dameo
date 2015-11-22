@@ -25,8 +25,8 @@ public class NegaMax implements AIStrategy {
 
     public NegaMax(int searchDepth) {
         this.evaluator = CompositeEvaluator.createFullEvaluator();
-        this.alpha = Integer.MIN_VALUE;
-        this.beta = Integer.MAX_VALUE;
+        this.alpha = Long.MIN_VALUE;
+        this.beta = Long.MAX_VALUE;
         this.searchDepth = searchDepth;
     }
     
