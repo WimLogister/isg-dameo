@@ -1,7 +1,8 @@
 Dameo considerations
 
 TODO: implement multi-moves. Idea: use recursion for this, where you send along a list
-of pieces that has already been captured.
+of pieces that has already been captured. Create a tree, keep track of deepest
+node.
 TODO: implement king promotion.
 TODO: implement king functionality.
 TODO: implement human player. Has to be able to analyse input move.
