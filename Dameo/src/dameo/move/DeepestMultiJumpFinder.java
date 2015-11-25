@@ -19,8 +19,6 @@ public class DeepestMultiJumpFinder {
     public DeepestMultiJumpFinder() {
     }
     
-    
-    
     public Stack<Move> findDeepestNode(JumpNode root, State state) {
         currentDeepest.add(root);
         for (Piece p : root.state.getCurrentPlayerPieces()) {
@@ -47,6 +45,19 @@ public class DeepestMultiJumpFinder {
         return multiJump;
     }
     
+    private Set<Move> constructMultiMove() {
+        for (JumpNode n : currentDeepest) {
+            Stack<SingleCaptureMove> jumpStack = new Stack<>();
+            JumpNode currentNode = n;
+            while (currentNode != null) {
+                jumpStack.push(currentNode.captureMove);
+                currentNode = currentNode.parent;
+            }
+        }
+        Stack<SingleCaptureMove> jumpStack = new Stack<>();
+        JumpNode currentNode = currentDeepest
+    }
+    
     private void recursiveFind(JumpNode n) {
         // Execute move stored in node n to advance state
         n.captureMove.execute(n.state);
@@ -57,6 +68,7 @@ public class DeepestMultiJumpFinder {
         final int y = n.captureMove.newY;
         Piece capturingPiece = n.state.getBoard()[y][x];
         Set<SingleCaptureMove> moves = capturingPiece.generateCapturingMoves(n.state, null);
+        // This is a terminal node: no more jumps can be made
         if (moves.isEmpty()) {
             /*
             Case: we've found a series of jumps that is strictly longer than
@@ -76,6 +88,18 @@ public class DeepestMultiJumpFinder {
             */
             else if (n.depth == currentDeepest.getCurrentMaxDepth()) {
                 currentDeepest.add(n);
+            }
+        }
+        else {
+            for (SingleCaptureMove m : moves) {
+                // Every child of n should get a new copy of the list of captured
+                // pieces
+                List<Point> cpl = new ArrayList<>(n.capturedPieces);
+                // Create new child node for move m
+                JumpNode child = new JumpNode(m, new State(n.state), n.depth+1,
+                        n, cpl);
+                // Recursively search this child
+                recursiveFind(child);
             }
         }
     }
