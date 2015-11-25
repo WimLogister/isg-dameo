@@ -177,9 +177,13 @@ public class GameEngine {
         return currentPlayer.getColor();
     }
     
+    public static Set<Move> newGenerateLegalMoves(State s) {
+        
+    }
     
     /**
-     * Generate the list of legal moves in the current game state.
+     * Generate the list of legal moves in the given game state.
+     * Note: only returns legal moves for current player.
      * @return Hashset of legal moves in the current game state.
      */
     public static Set<Move> generateLegalMoves(State state) {
