@@ -4,6 +4,8 @@ import dameo.gametree.State;
 import dameo.move.Move;
 import dameo.move.SingleCaptureMove;
 import dameo.move.SingleMove;
+import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -70,7 +72,17 @@ public class Piece {
         return newPieceSet;
     }
     
-    public Set<SingleCaptureMove> generateCapturingMoves(State s, List<Piece> capturedList) {
+    private static boolean listContainsPoint(List<Point> list, Point point) {
+        boolean contains = false;
+        for (Point listPoint : list) {
+            if (listPoint.equals(point)) {
+                contains = true;
+            }
+        }
+        return contains;
+    }
+    
+    public Set<SingleCaptureMove> generateCapturingMoves(State s, List<Point> capturedList) {
         
         Piece[][] board = s.getBoard();
         
@@ -92,12 +104,13 @@ public class Piece {
         */
         if (relativeRight <= color.getBoardRightEdge()) {
             // Check for right orthogonal capturing move
-            if (/* Check we don't move off the board */ relativeRight + 1 <= color.getBoardRightEdge() &&
-                    board[row][absoluteRight] != null &&
-                    /* Check for opponent's piece */ board[row][absoluteRight].getColor().getValue() == color.getOpponent()
-                    /* Check for empty square */ && board[row][absoluteRight+dir] == null) {
+            if (    /* Check we don't move off the board */ relativeRight + 1 <= color.getBoardRightEdge() &&
+                    /* Check there is something in square */ board[row][absoluteRight] != null &&
+                    /* Check piece is opponent's */ board[row][absoluteRight].getColor().getValue() == color.getOpponent() &&
+                    /* Check for empty square */ board[row][absoluteRight+dir] == null &&
+                    /* Check piece has not already been captured in previous step in multi-jump */
+                    !Piece.listContainsPoint(capturedList, new Point(col, absoluteRight))) {
                 moves.add(new SingleCaptureMove(absoluteRight+dir, row, col, row, absoluteRight, row));
-                capturingMovesPresent = true;
             }
         }
 
@@ -106,12 +119,14 @@ public class Piece {
         */
         if (relativeLeft >= color.getBoardLeftEdge()) {
                 // Check for left orthogonal capturing move
-                if (/* Check we don't move off board*/ relativeLeft-1 >= color.getBoardLeftEdge()
-                        /* Check for opponent piece */ && board[row][absoluteLeft] != null &&
-                                board[row][absoluteLeft].getColor().getValue() == color.getOpponent()
-                        /* Check for empty square behind opponent */ && board[row][absoluteLeft-dir] == null) {
+                if (    /* Check we don't move off board*/ relativeLeft-1 >= color.getBoardLeftEdge() &&
+                        /* Check there is something in square */ board[row][absoluteLeft] != null &&
+                        /* Check piece is opponent's */ board[row][absoluteLeft].getColor().getValue() == color.getOpponent() &&
+                        /* Check for empty square behind opponent */ board[row][absoluteLeft-dir] == null &&
+                        /* Check piece has not already been captured in previous step in multi-jump */
+                        !Piece.listContainsPoint(capturedList, new Point(col, absoluteLeft))) {
+                    
                     moves.add(new SingleCaptureMove(absoluteLeft-dir, row, col, row, absoluteLeft, row));
-                    capturingMovesPresent = true;
                 }
         }
 
@@ -120,13 +135,15 @@ public class Piece {
         */
         if (relativeForward <= color.getBoardTopEdge()) {
             // Check for forward capture
-            if (board[absoluteForward][col] != null &&
-                    board[absoluteForward][col].getColor().getValue() == color.getOpponent()) {
-                    // Check if we don't end up jumping off the board and
-                    // square behind enemy piece is empty
-                    if (relativeForward + 1 <= color.getBoardTopEdge() && board[absoluteForward+dir][col] == null) {
+            if (    /* Check there is something in square */ board[absoluteForward][col] != null &&
+                    /* Check piece is opponent's */ board[absoluteForward][col].getColor().getValue() == color.getOpponent()) {
+                    
+                    if (    /* Check if we don't end up jumping off the board */
+                            relativeForward + 1 <= color.getBoardTopEdge()
+                            /* Check empty square behind opponent */ && board[absoluteForward+dir][col] == null &&
+                            /* Check piece has not already been captured in previous step in multi-jump */
+                            !Piece.listContainsPoint(capturedList, new Point(col, absoluteForward))) {
                         moves.add(new SingleCaptureMove(col, absoluteForward+dir, col, row, col, absoluteForward));
-                        capturingMovesPresent = true;
                     }
             }
         }
@@ -235,7 +252,14 @@ public class Piece {
         return hashCode;
     }
     
-    
+    public static void hashCodeTest() {
+        Piece p1 = new Piece(0, 0, Constants.PlayerColors.WHITE, null);
+        Piece p2 = new Piece(8, 8, Constants.PlayerColors.BLACK, null);
+        Piece p3 = new Piece(5, 5, Constants.PlayerColors.BLACK, null);
+        System.out.println(p1.hashCode());
+        System.out.println(p2.hashCode());
+        System.out.println(p3.hashCode());
+    }
 
     @Override
     public String toString() {
@@ -243,12 +267,13 @@ public class Piece {
     }
     
     public static void main(String[] args) {
-        Piece p1 = new Piece(0, 0, Constants.PlayerColors.WHITE, null);
-        Piece p2 = new Piece(8, 8, Constants.PlayerColors.BLACK, null);
-        Piece p3 = new Piece(5, 5, Constants.PlayerColors.BLACK, null);
-        System.out.println(p1.hashCode());
-        System.out.println(p2.hashCode());
-        System.out.println(p3.hashCode());
+        List<Point> pointList = new ArrayList<>();
+        pointList.add(new Point(5, 10));
+        pointList.add(new Point(7, 9));
+        pointList.add(new Point(3, 1));
+        
+        System.out.println(Piece.listContainsPoint(pointList, new Point(7, 8)));
+//        System.out.println(new Point(5, 10).equals(new Point(5, 10)));
     }
     
 }

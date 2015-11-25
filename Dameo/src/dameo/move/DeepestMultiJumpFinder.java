@@ -4,6 +4,7 @@ import dameo.Piece;
 import dameo.gametree.State;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
@@ -19,33 +20,45 @@ public class DeepestMultiJumpFinder {
     public DeepestMultiJumpFinder() {
     }
     
-    public Stack<Move> findDeepestNode(JumpNode root, State state) {
+    public Set<Move> findDeepestNode(JumpNode root, State state) {
         currentDeepest.add(root);
+        currentDeepest.setCurrentMaxDepth(root.depth);
+        
+        /*
+        Generate capturing moves for all pieces that can move in the current
+        state. These will form the first level of the tree. All subsequent levels
+        must be jumps with the same piece that was used in the ancestor in the
+        first level of the tree.
+        */
         for (Piece p : root.state.getCurrentPlayerPieces()) {
             Set<SingleCaptureMove> captureMoves = p.generateCapturingMoves(root.state, new ArrayList<>());
             for (SingleCaptureMove m : captureMoves) {
                 // Need to create a copy of root's list so nodes in other
                 // branches don't modify it.
                 List<Point> capturedListCopy = new ArrayList<>(root.capturedPieces);
-                // Create child node around generated move
+                // We don't need to create a copy of the root node itself since we
+                // don't modify it anyway.
+                
+                // Create child node to store generated move
                 JumpNode child = new JumpNode(m, new State(root.state), root.depth+1, root,
                         capturedListCopy);
                 // Recursively search child node
                 recursiveFind(child);
             }
         }
+        
         /*
         Construct multi-jump in the form of a stack from search tree.
         */
-        JumpNode node = currentDeepest;
-        while (node != null) {
-            multiJump.push(node.captureMove);
-            node = node.parent;
-        }
-        return multiJump;
+        return constructMultiMove();
     }
     
+    /**
+     * Construct a set of multi-jump moves from the list of all deepest nodes.
+     * @return 
+     */
     private Set<Move> constructMultiMove() {
+        Set<Move> moves = new HashSet<>();
         for (JumpNode n : currentDeepest) {
             Stack<SingleCaptureMove> jumpStack = new Stack<>();
             JumpNode currentNode = n;
@@ -53,9 +66,9 @@ public class DeepestMultiJumpFinder {
                 jumpStack.push(currentNode.captureMove);
                 currentNode = currentNode.parent;
             }
+            moves.add(new MultiCaptureMove(jumpStack));
         }
-        Stack<SingleCaptureMove> jumpStack = new Stack<>();
-        JumpNode currentNode = currentDeepest
+        return moves;
     }
     
     private void recursiveFind(JumpNode n) {
@@ -67,7 +80,8 @@ public class DeepestMultiJumpFinder {
         final int x = n.captureMove.newX;
         final int y = n.captureMove.newY;
         Piece capturingPiece = n.state.getBoard()[y][x];
-        Set<SingleCaptureMove> moves = capturingPiece.generateCapturingMoves(n.state, null);
+        Set<SingleCaptureMove> moves = capturingPiece.generateCapturingMoves(n.state, n.capturedPieces);
+        
         // This is a terminal node: no more jumps can be made
         if (moves.isEmpty()) {
             /*
@@ -124,7 +138,6 @@ class MultiJumpList extends ArrayList<JumpNode> {
         this.currentMaxDepth = currentMaxDepth;
     }
     
-    
 }
 
 class JumpNode {
@@ -137,7 +150,7 @@ class JumpNode {
     JumpNode parent;
     List<Point> capturedPieces;
 
-    public JumpNode(Move captureMove, State state, int depth, JumpNode parent,
+    public JumpNode(SingleCaptureMove captureMove, State state, int depth, JumpNode parent,
             List<Point> capturedPieces) {
         this.captureMove = captureMove;
         this.state = state;
@@ -158,7 +171,7 @@ class JumpNode {
         return parent;
     }
 
-    public void setCaptureMove(Move captureMove) {
+    public void setCaptureMove(SingleCaptureMove captureMove) {
         this.captureMove = captureMove;
     }
     
