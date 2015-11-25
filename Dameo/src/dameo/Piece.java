@@ -2,6 +2,7 @@ package dameo;
 
 import dameo.gametree.State;
 import dameo.move.Move;
+import dameo.move.SingleCaptureMove;
 import dameo.move.SingleMove;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -18,12 +19,14 @@ public class Piece {
     private final Constants.PlayerColors color;
     private Set<Piece> pieceSet;
     private int hashCode;
+    private int dir;
 
     private Piece(int row, int col, Constants.PlayerColors color, Set<Piece> pieceSet) {
         this.row = row;
         this.col = col;
         this.color = color;
         this.pieceSet = pieceSet;
+        this.dir = color.getDirection();
     }
 
     public static Piece findPiece(Set<Piece> pieceSet, int x, int y) {
@@ -67,8 +70,66 @@ public class Piece {
         return newPieceSet;
     }
     
-    public Set<Move> generateCapturingMoves(State s, List<Piece> capturedList) {
+    public Set<SingleCaptureMove> generateCapturingMoves(State s, List<Piece> capturedList) {
         
+        Piece[][] board = s.getBoard();
+        
+        Set<SingleCaptureMove> moves = new HashSet<>();
+        
+        final int checkX = dir*col;
+        final int checkY = dir*row;
+        final int relativeForward = checkY + 1;
+        final int relativeLeft = checkX - 1;
+        final int relativeRight = checkX + 1;
+
+        final int absoluteForward = dir*relativeForward;
+        final int absoluteLeft = dir*relativeLeft;
+        final int absoluteRight = dir*relativeRight;
+
+        /*
+        Check if we don't move off the right side of the board. This is for
+        right orthogonal moves.
+        */
+        if (relativeRight <= color.getBoardRightEdge()) {
+            // Check for right orthogonal capturing move
+            if (/* Check we don't move off the board */ relativeRight + 1 <= color.getBoardRightEdge() &&
+                    board[row][absoluteRight] != null &&
+                    /* Check for opponent's piece */ board[row][absoluteRight].getColor().getValue() == color.getOpponent()
+                    /* Check for empty square */ && board[row][absoluteRight+dir] == null) {
+                moves.add(new SingleCaptureMove(absoluteRight+dir, row, col, row, absoluteRight, row));
+                capturingMovesPresent = true;
+            }
+        }
+
+        /*
+        Check for left orthogonal capturing move.
+        */
+        if (relativeLeft >= color.getBoardLeftEdge()) {
+                // Check for left orthogonal capturing move
+                if (/* Check we don't move off board*/ relativeLeft-1 >= color.getBoardLeftEdge()
+                        /* Check for opponent piece */ && board[row][absoluteLeft] != null &&
+                                board[row][absoluteLeft].getColor().getValue() == color.getOpponent()
+                        /* Check for empty square behind opponent */ && board[row][absoluteLeft-dir] == null) {
+                    moves.add(new SingleCaptureMove(absoluteLeft-dir, row, col, row, absoluteLeft, row));
+                    capturingMovesPresent = true;
+                }
+        }
+
+        /*
+        Check for forward capturing move.
+        */
+        if (relativeForward <= color.getBoardTopEdge()) {
+            // Check for forward capture
+            if (board[absoluteForward][col] != null &&
+                    board[absoluteForward][col].getColor().getValue() == color.getOpponent()) {
+                    // Check if we don't end up jumping off the board and
+                    // square behind enemy piece is empty
+                    if (relativeForward + 1 <= color.getBoardTopEdge() && board[absoluteForward+dir][col] == null) {
+                        moves.add(new SingleCaptureMove(col, absoluteForward+dir, col, row, col, absoluteForward));
+                        capturingMovesPresent = true;
+                    }
+            }
+        }
         return null;
     }
     
@@ -85,17 +146,14 @@ public class Piece {
         Set<Move> moves = new HashSet<>();
         
         /*
+        Convert this piece's coordinates to relative coordinates, which allows us
+        to check black and white pieces in the same way, regardless of their
+        difference in directionality.
+        
         Variable dir determines the directionality of movement of this piece
         based on its color: for white pieces up and right are positive moves in terms
         in terms of the board's coordinates system, for black left and down are
         positive moves.
-        */
-        int dir = color.getDirection();
-        
-        /*
-        Convert this piece's coordinates to relative coordinates, which allows us
-        to check black and white pieces in the same way, regardless of their
-        difference in directionality.
         */
         final int checkX = dir*col;
         final int checkY = dir*row;

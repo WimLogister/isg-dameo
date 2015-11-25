@@ -177,8 +177,13 @@ public class GameEngine {
         return currentPlayer.getColor();
     }
     
-    public static Set<Move> newGenerateLegalMoves(State s) {
-        
+    public static Set<Move> generateLegalMoves(State s) {
+        Set<Piece> currentPlayerPieceSet = s.getCurrentPlayerPieces();
+        Set<Move> moveSet = new HashSet();
+        for (Piece p : currentPlayerPieceSet) {
+            moveSet.addAll(p.generateSingleMoves(s));
+        }
+        return moveSet;
     }
     
     /**
@@ -186,7 +191,7 @@ public class GameEngine {
      * Note: only returns legal moves for current player.
      * @return Hashset of legal moves in the current game state.
      */
-    public static Set<Move> generateLegalMoves(State state) {
+    public static Set<Move> oldgenerateLegalMoves(State state) {
         
         Set<Piece> currentPlayerPieceSet = state.getCurrentPlayerPieces();
         
@@ -338,11 +343,12 @@ public class GameEngine {
         System.out.println(Board.getBoardString(copy.getBoard()));
     }
     
-    public static void runTestGames(int numRuns) {
+    public static void runTestGames(int numRuns, boolean debug) {
         final int runs = 100;
         double[] values = new double[runs];
         for (int i = 0; i < runs; i++) {
             GameEngine eng = GameEngine.createTestEngine();
+            eng.setDEBUG(debug);
             eng.init();
             Constants.PlayerColors color = eng.start();
             values[i] = color.getValue() % 2;
@@ -351,7 +357,7 @@ public class GameEngine {
     }
     
     public static void main(String[] args) {
-        runTestGames(1);
+        runTestGames(1, true);
     }
     
     
