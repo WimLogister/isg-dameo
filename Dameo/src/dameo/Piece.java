@@ -1,11 +1,18 @@
 package dameo;
 
+import dameo.gametree.State;
+import dameo.move.Move;
+import dameo.move.SingleCaptureMove;
+import dameo.move.SingleMove;
+import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
- *
+ * Models a regular (non-king) Dameo piece.
  * @author Wim
  */
 public class Piece {
@@ -14,12 +21,22 @@ public class Piece {
     private final Constants.PlayerColors color;
     private Set<Piece> pieceSet;
     private int hashCode;
+    private int dir;
 
     private Piece(int row, int col, Constants.PlayerColors color, Set<Piece> pieceSet) {
         this.row = row;
         this.col = col;
         this.color = color;
         this.pieceSet = pieceSet;
+        this.dir = color.getDirection();
+    }
+    
+    protected Piece(Piece p) {
+        this.row = p.getRow();
+        this.col = p.getCol();
+        this.color = p.getColor();
+        this.pieceSet = p.getPieceSet();
+        this.dir = p.getDir();
     }
 
     public static Piece findPiece(Set<Piece> pieceSet, int x, int y) {
@@ -47,20 +64,24 @@ public class Piece {
         pieceSet.remove(this);
     }
 
-    public void setCol(int col) {
-        this.col = col;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
     public int getCol() {
         return col;
     }
 
     public int getRow() {
         return row;
+    }
+
+    public Set<Piece> getPieceSet() {
+        return pieceSet;
+    }
+
+    public int getDir() {
+        return dir;
+    }
+    
+    public int getBoardValue() {
+        return this.color.getValue();
     }
     
     public static Set<Piece> copyPieceSet(Set<Piece> origPieceSet) throws CloneNotSupportedException {
@@ -70,19 +91,186 @@ public class Piece {
         }
         return newPieceSet;
     }
-
-    @Override
-    protected Piece clone() throws CloneNotSupportedException {
-        return new Piece(row, col, color, pieceSet);
+    
+    private static boolean listContainsPoint(List<Point> list, Point point) {
+        boolean contains = false;
+        for (Point listPoint : list) {
+            if (listPoint.equals(point)) {
+                contains = true;
+            }
+        }
+        return contains;
     }
+    
+    public Set<SingleCaptureMove> generateCapturingMoves(State s, List<Point> capturedList) {
+        
+        Piece[][] board = s.getBoard();
+        
+        Set<SingleCaptureMove> moves = new HashSet<>();
+        
+        final int checkX = dir*col;
+        final int checkY = dir*row;
+        final int relativeForward = checkY + 1;
+        final int relativeBackward = checkY - 1;
+        final int relativeLeft = checkX - 1;
+        final int relativeRight = checkX + 1;
+
+        final int absoluteForward = dir*relativeForward;
+        final int absoluteBackward = dir*relativeBackward;
+        final int absoluteLeft = dir*relativeLeft;
+        final int absoluteRight = dir*relativeRight;
+
+        /*
+        Check if we don't move off the right side of the board. This is for
+        right orthogonal moves.
+        */
+        if (relativeRight <= color.getBoardRightEdge()) {
+            if (    /* Check we don't move off the board */ relativeRight + 1 <= color.getBoardRightEdge() &&
+                    /* Check there is something in square */ board[row][absoluteRight] != null &&
+                    /* Check piece is opponent's */ board[row][absoluteRight].getColor().getValue() == color.getOpponent() &&
+                    /* Check for empty square */ board[row][absoluteRight+dir] == null &&
+                    /* Check piece has not already been captured in previous step in multi-jump */
+                    !Piece.listContainsPoint(capturedList, new Point(absoluteRight, row))) {
+                moves.add(new SingleCaptureMove(absoluteRight+dir, row, col, row, absoluteRight, row));
+            }
+        }
+
+        /*
+        Check for left orthogonal capturing move.
+        */
+        if (relativeLeft >= color.getBoardLeftEdge()) {
+                if (    /* Check we don't move off board*/ relativeLeft-1 >= color.getBoardLeftEdge() &&
+                        /* Check there is something in square */ board[row][absoluteLeft] != null &&
+                        /* Check piece is opponent's */ board[row][absoluteLeft].getColor().getValue() == color.getOpponent() &&
+                        /* Check for empty square behind opponent */ board[row][absoluteLeft-dir] == null &&
+                        /* Check piece has not already been captured in previous step in multi-jump */
+                        !Piece.listContainsPoint(capturedList, new Point(absoluteLeft, row))) {
+                    
+                    moves.add(new SingleCaptureMove(absoluteLeft-dir, row, col, row, absoluteLeft, row));
+                }
+        }
+
+        /*
+        Check for forward capturing move.
+        */
+        if (relativeForward <= color.getBoardTopEdge()) {
+            if (    /* Check there is something in square */ board[absoluteForward][col] != null &&
+                    /* Check piece is opponent's */ board[absoluteForward][col].getColor().getValue() == color.getOpponent()) {
+                    
+                    if (    /* Check if we don't end up jumping off the board */
+                            relativeForward + 1 <= color.getBoardTopEdge()
+                            /* Check empty square behind opponent */ && board[absoluteForward+dir][col] == null &&
+                            /* Check piece has not already been captured in previous step in multi-jump */
+                            !Piece.listContainsPoint(capturedList, new Point(col, absoluteForward))) {
+                        moves.add(new SingleCaptureMove(col, absoluteForward+dir, col, row, col, absoluteForward));
+                    }
+            }
+        }
+        
+        /*
+        Check for backward capturing move.
+        */
+        if (relativeBackward >= color.getBoardBottomEdge()) {
+            if (    /* Chek there is something in square */ board[absoluteBackward][col] != null &&
+                    /* Check piece is opponent's */ board[absoluteBackward][col].getColor().getValue() == color.getOpponent()) {
+                
+                if (    /* Check if we don't end up jumping off the board */
+                            relativeBackward - 1 >= color.getBoardBottomEdge()
+                            /* Check empty square behind opponent */ && board[absoluteBackward-dir][col] == null &&
+                            /* Check piece has not already been captured in previous step in multi-jump */
+                            !Piece.listContainsPoint(capturedList, new Point(col, absoluteBackward))) {
+                        moves.add(new SingleCaptureMove(col, absoluteBackward-dir, col, row, col, absoluteBackward));
+                    }
+            }
+        }
+        return moves;
+    }
+    
+    /**
+     * Generate the set of legal non-jumping or single moves for this piece.
+     * @param s The current state, which includes the necessary information for
+     * this piece to generate all of its legal moves.
+     * @return 
+     */
+    public Set<Move> generateSingleMoves(State s) {
+        
+        Piece[][] board = s.getBoard();
+        
+        Set<Move> moves = new HashSet<>();
+        
+        /*
+        Convert this piece's coordinates to relative coordinates, which allows us
+        to check black and white pieces in the same way, regardless of their
+        difference in directionality.
+        
+        Variable dir determines the directionality of movement of this piece
+        based on its color: for white pieces up and right are positive moves in terms
+        in terms of the board's coordinates system, for black left and down are
+        positive moves.
+        */
+        final int checkX = dir*col;
+        final int checkY = dir*row;
+        
+        /*
+        Construct non-jumping moves in relative coordinates.
+        */
+        final int relativeForward = checkY + 1;
+        final int relativeLeft = checkX - 1;
+        final int relativeRight = checkX + 1;
+
+        /*
+        For final movement, reconstruct non-jumping moves to absolute coordinates.
+        We need these to actually update the board later, which only takes absolute
+        coordinates.
+        */
+        final int absoluteForward = dir*relativeForward;
+        final int absoluteLeft = dir*relativeLeft;
+        final int absoluteRight = dir*relativeRight;
+
+        /*
+        Check if don't move off the board if move forward. This is for
+        forward and diagonal moves.
+        */
+        if (relativeForward <= color.getBoardTopEdge()) {
+
+            /*
+            So now we know that we don't move off the board by moving
+            forward.
+            */
+
+            // Check legality single left diagonal forward move
+            if (relativeLeft >= color.getBoardLeftEdge()) {
+                // Check for single left diagonal forward move
+                if (board[absoluteForward][absoluteLeft] == null) {
+                    moves.add(new SingleMove(absoluteLeft, absoluteForward, col, row));
+                }
+
+            }
+            // Check legality single orthogonal forward move
+            if (board[absoluteForward][col] == null) {
+                moves.add(new SingleMove(col, absoluteForward, col, row));
+            }
+
+
+            // Check legality single right diagonal forward move
+            if (relativeRight <= color.getBoardRightEdge()) {
+                // Check if not occupied by other piece
+                if (board[absoluteForward][absoluteRight] == null) {
+                    moves.add(new SingleMove(absoluteRight, absoluteForward, col, row));
+                }
+            }
+        }
+        return moves;
+    }
+
     
     public Constants.PlayerColors getColor() {
         return color;
     }
     
-    public static Set<Piece> generatePieceSet(Constants.PlayerColors color, int size) {
-        Set<Piece> pieceSet = new HashSet<>(size);
-        for (int i = 0; i < size; i++)  {
+    public static Set<Piece> generatePieceSet(Constants.PlayerColors color) {
+        Set<Piece> pieceSet = new HashSet<>(Constants.PIECES_PER_PLAYER);
+        for (int i = 0; i < Constants.PIECES_PER_PLAYER; i++)  {
             pieceSet.add(new Piece(0, 0, color, pieceSet));
         }
         return pieceSet;
@@ -100,7 +288,14 @@ public class Piece {
         return hashCode;
     }
     
-    
+    public static void hashCodeTest() {
+        Piece p1 = new Piece(0, 0, Constants.PlayerColors.WHITE, null);
+        Piece p2 = new Piece(8, 8, Constants.PlayerColors.BLACK, null);
+        Piece p3 = new Piece(5, 5, Constants.PlayerColors.BLACK, null);
+        System.out.println(p1.hashCode());
+        System.out.println(p2.hashCode());
+        System.out.println(p3.hashCode());
+    }
 
     @Override
     public String toString() {
@@ -108,12 +303,13 @@ public class Piece {
     }
     
     public static void main(String[] args) {
-        Piece p1 = new Piece(0, 0, Constants.PlayerColors.WHITE, null);
-        Piece p2 = new Piece(8, 8, Constants.PlayerColors.BLACK, null);
-        Piece p3 = new Piece(5, 5, Constants.PlayerColors.BLACK, null);
-        System.out.println(p1.hashCode());
-        System.out.println(p2.hashCode());
-        System.out.println(p3.hashCode());
+        List<Point> pointList = new ArrayList<>();
+        pointList.add(new Point(5, 10));
+        pointList.add(new Point(7, 9));
+        pointList.add(new Point(3, 1));
+        
+        System.out.println(Piece.listContainsPoint(pointList, new Point(7, 8)));
+//        System.out.println(new Point(5, 10).equals(new Point(5, 10)));
     }
     
 }

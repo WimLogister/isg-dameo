@@ -9,8 +9,8 @@ import dameo.gametree.State;
  */
 public class SingleCaptureMove extends Move {
     
-    private final int captX;
-    private final int captY;
+    final int captX;
+    final int captY;
 
     public SingleCaptureMove(int newX, int newY, int oldX, int oldY, int captX, int captY) {
         super(newX, newY, oldX, oldY);
@@ -33,6 +33,8 @@ public class SingleCaptureMove extends Move {
         state.getBoard()[captY][captX] = null;
         // Remove captured piece from opponent's piece set
         capturedPiece.removeFromSet();
+        
+        super.promotePiece(state);
     }
 
     @Override

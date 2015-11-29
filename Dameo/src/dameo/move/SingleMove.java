@@ -31,6 +31,8 @@ public class SingleMove extends Move {
         
         // Update piece information
         p.setCoords(newY, newX);
+        
+        super.promotePiece(state);
     }
 
 

@@ -56,7 +56,7 @@ public class Board {
             for (int j=board[i].length-1; j >= 0; j--) {
                 int value = 0;
                 if (board[i][j] != null)
-                    value = board[i][j].getColor().getValue();
+                    value = board[i][j].getBoardValue();
                 intBoard[i][j] = value;
             }
         }
@@ -71,8 +71,8 @@ public class Board {
     }
     
     public static void main(String[] args) {
-        Set<Piece> whitePieces = Piece.generatePieceSet(Constants.PlayerColors.WHITE, Constants.PIECES_PER_PLAYER);
-        Set<Piece> blackPieces = Piece.generatePieceSet(Constants.PlayerColors.WHITE, Constants.PIECES_PER_PLAYER);
+        Set<Piece> whitePieces = Piece.generatePieceSet(Constants.PlayerColors.WHITE);
+        Set<Piece> blackPieces = Piece.generatePieceSet(Constants.PlayerColors.WHITE);
         Piece[][] board = Board.setupBoard(whitePieces, blackPieces);
         System.out.println("\n" + Board.getBoardString(board));
     }

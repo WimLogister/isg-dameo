@@ -1,11 +1,7 @@
 package dameo.gametree;
 
-import dameo.Board;
-import dameo.GameEngine;
 import dameo.Piece;
-import dameo.players.Player;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
