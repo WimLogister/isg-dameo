@@ -147,7 +147,7 @@ public class Piece {
                     }
             }
         }
-        return null;
+        return moves;
     }
     
     /**
@@ -232,9 +232,9 @@ public class Piece {
         return color;
     }
     
-    public static Set<Piece> generatePieceSet(Constants.PlayerColors color, int size) {
-        Set<Piece> pieceSet = new HashSet<>(size);
-        for (int i = 0; i < size; i++)  {
+    public static Set<Piece> generatePieceSet(Constants.PlayerColors color) {
+        Set<Piece> pieceSet = new HashSet<>(Constants.PIECES_PER_PLAYER);
+        for (int i = 0; i < Constants.PIECES_PER_PLAYER; i++)  {
             pieceSet.add(new Piece(0, 0, color, pieceSet));
         }
         return pieceSet;

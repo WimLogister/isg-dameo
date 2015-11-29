@@ -1,6 +1,7 @@
 package dameo;
 
 import dameo.gametree.State;
+import dameo.move.DeepestMultiJumpFinder;
 import dameo.move.Move;
 import dameo.move.SingleCaptureMove;
 import dameo.move.SingleMove;
@@ -49,9 +50,17 @@ public class GameEngine {
      */
     public static GameEngine createTestEngine() {
         Player whitePlayer = Player.generatePlayer(2, Constants.PlayerColors.WHITE,
-                Piece.generatePieceSet(Constants.PlayerColors.WHITE, 18));
+                Piece.generatePieceSet(Constants.PlayerColors.WHITE));
         Player blackPlayer = Player.generatePlayer(3, Constants.PlayerColors.BLACK,
-                Piece.generatePieceSet(Constants.PlayerColors.BLACK, 18));
+                Piece.generatePieceSet(Constants.PlayerColors.BLACK));
+        return new GameEngine(whitePlayer, blackPlayer);
+    }
+    
+    public static GameEngine createRandomPlayerGame() {
+        Player whitePlayer = Player.generatePlayer(3, Constants.PlayerColors.WHITE,
+                Piece.generatePieceSet(Constants.PlayerColors.WHITE));
+        Player blackPlayer = Player.generatePlayer(3, Constants.PlayerColors.BLACK,
+                Piece.generatePieceSet(Constants.PlayerColors.BLACK));
         return new GameEngine(whitePlayer, blackPlayer);
     }
     
@@ -61,10 +70,8 @@ public class GameEngine {
             /*
             Create black and white piece sets
             */
-            Set<Piece> blackPieces = Piece.generatePieceSet(Constants.PlayerColors.BLACK,
-                    Constants.PIECES_PER_PLAYER);
-            Set<Piece> whitePieces = Piece.generatePieceSet(Constants.PlayerColors.WHITE,
-                    Constants.PIECES_PER_PLAYER);
+            Set<Piece> blackPieces = Piece.generatePieceSet(Constants.PlayerColors.BLACK);
+            Set<Piece> whitePieces = Piece.generatePieceSet(Constants.PlayerColors.WHITE);
             
             /*
             Set up players and set p1 as current player
@@ -177,12 +184,26 @@ public class GameEngine {
         return currentPlayer.getColor();
     }
     
+    /**
+     * Generates all legal moves for a given game state.
+     * @param s
+     * @return 
+     */
     public static Set<Move> generateLegalMoves(State s) {
         Set<Piece> currentPlayerPieceSet = s.getCurrentPlayerPieces();
         Set<Move> moveSet = new HashSet();
-        for (Piece p : currentPlayerPieceSet) {
-            moveSet.addAll(p.generateSingleMoves(s));
+        DeepestMultiJumpFinder finder = new DeepestMultiJumpFinder();
+        Set<Move> jumpMoves = finder.findDeepestNode(s);
+        /*
+        The player must play jump moves if there are any. If there are none,
+        he can play any non-jumping move.
+        */
+        if (jumpMoves.isEmpty()) {
+            for (Piece p : currentPlayerPieceSet) {
+                moveSet.addAll(p.generateSingleMoves(s));
+            }
         }
+        else moveSet = jumpMoves;
         return moveSet;
     }
     
@@ -332,22 +353,10 @@ public class GameEngine {
         return currentState;
     }
     
-    public static void testBoardCopy() {
-        final int size = 18;
-        Set<Piece> whiteSet = Piece.generatePieceSet(Constants.PlayerColors.WHITE, 18);
-        Set<Piece> blackSet = Piece.generatePieceSet(Constants.PlayerColors.BLACK, 18);
-        Piece[][] board = Board.setupBoard(whiteSet, blackSet);
-        State s = new State(whiteSet, blackSet, board);
-        System.out.println(Board.getBoardString(board));
-        State copy = new State(s);
-        System.out.println(Board.getBoardString(copy.getBoard()));
-    }
-    
     public static void runTestGames(int numRuns, boolean debug) {
-        final int runs = 100;
-        double[] values = new double[runs];
-        for (int i = 0; i < runs; i++) {
-            GameEngine eng = GameEngine.createTestEngine();
+        double[] values = new double[numRuns];
+        for (int i = 0; i < numRuns; i++) {
+            GameEngine eng = GameEngine.createRandomPlayerGame();
             eng.setDEBUG(debug);
             eng.init();
             Constants.PlayerColors color = eng.start();

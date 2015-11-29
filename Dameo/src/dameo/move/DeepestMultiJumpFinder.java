@@ -16,11 +16,13 @@ import java.util.Stack;
 public class DeepestMultiJumpFinder {
     MultiJumpList currentDeepest = new MultiJumpList();
     Stack<Move> multiJump;
+    JumpNode root;
 
     public DeepestMultiJumpFinder() {
     }
     
-    public Set<Move> findDeepestNode(JumpNode root, State state) {
+    public Set<Move> findDeepestNode(State state) {
+        this.root = new JumpNode(null, state, 0, null, new ArrayList<>(), 0, 0);
         currentDeepest.add(root);
         currentDeepest.setCurrentMaxDepth(root.depth);
         
@@ -41,7 +43,7 @@ public class DeepestMultiJumpFinder {
                 
                 // Create child node to store generated move
                 JumpNode child = new JumpNode(m, new State(root.state), root.depth+1, root,
-                        capturedListCopy);
+                        capturedListCopy, m.oldX, m.oldY);
                 // Recursively search child node
                 recursiveFind(child);
             }
@@ -58,16 +60,26 @@ public class DeepestMultiJumpFinder {
      * @return 
      */
     private Set<Move> constructMultiMove() {
+        // In fact we don't need the entire stack, just the deepest nodes, since
+        // we only need the original and final location of the jumping piece and
+        // the list of captured pieces and those are all stored in the nodes.
         Set<Move> moves = new HashSet<>();
-        for (JumpNode n : currentDeepest) {
-            Stack<SingleCaptureMove> jumpStack = new Stack<>();
-            JumpNode currentNode = n;
-            while (currentNode != null) {
-                jumpStack.push(currentNode.captureMove);
-                currentNode = currentNode.parent;
+        if (currentDeepest.currentMaxDepth > 0) {
+            for (JumpNode n : currentDeepest) {
+                moves.add(new MultiCaptureMove(n.captureMove.newX, n.captureMove.newY,
+                        n.ancestorX, n.ancestorY, n.capturedPieces));
             }
-            moves.add(new MultiCaptureMove(jumpStack));
         }
+        // TODO: remove commented code below if everything works
+//        for (JumpNode n : currentDeepest) {
+//            Stack<SingleCaptureMove> jumpStack = new Stack<>();
+//            JumpNode currentNode = n;
+//            while (currentNode != null) {
+//                jumpStack.push(currentNode.captureMove);
+//                currentNode = currentNode.parent;
+//            }
+//            moves.add(new MultiCaptureMove(jumpStack));
+//        }
         return moves;
     }
     
@@ -111,7 +123,7 @@ public class DeepestMultiJumpFinder {
                 List<Point> cpl = new ArrayList<>(n.capturedPieces);
                 // Create new child node for move m
                 JumpNode child = new JumpNode(m, new State(n.state), n.depth+1,
-                        n, cpl);
+                        n, cpl, n.ancestorX, n.ancestorY);
                 // Recursively search this child
                 recursiveFind(child);
             }
@@ -149,14 +161,17 @@ class JumpNode {
     int depth;
     JumpNode parent;
     List<Point> capturedPieces;
+    int ancestorX, ancestorY;
 
     public JumpNode(SingleCaptureMove captureMove, State state, int depth, JumpNode parent,
-            List<Point> capturedPieces) {
+            List<Point> capturedPieces, int ancestorX, int ancestorY) {
         this.captureMove = captureMove;
         this.state = state;
         this.depth = depth;
         this.parent = parent;
         this.capturedPieces = capturedPieces;
+        this.ancestorX = ancestorX;
+        this.ancestorY = ancestorY;
     }
 
     public int getDepth() {
@@ -174,6 +189,5 @@ class JumpNode {
     public void setCaptureMove(SingleCaptureMove captureMove) {
         this.captureMove = captureMove;
     }
-    
     
 }

@@ -11,7 +11,7 @@ import java.util.Random;
  */
 public class DameoUtil {
     
-    public static final Random rng = new Random();
+    public static final Random rng = new Random(Constants.RANDOM_SEED);
     private static final BufferedReader br =
             new BufferedReader(new InputStreamReader(System.in));
     
