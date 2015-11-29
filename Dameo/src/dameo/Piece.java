@@ -2,6 +2,7 @@ package dameo;
 
 import dameo.gametree.State;
 import dameo.move.Move;
+import dameo.move.MultiPieceMove;
 import dameo.move.SingleCaptureMove;
 import dameo.move.SingleMove;
 import java.awt.Point;
@@ -259,14 +260,19 @@ public class Piece {
                                 relativeBackward - y_i >= color.getBoardBottomEdge()) {
                             // Check if own piece present
                             if (board[absoluteBackward-dir*y_i][absoluteRight+dir*x_i].getColor().getValue() == color.getValue()) {
+                                // Push new move onto stack
                                 multiMove.push(new SingleMove((absoluteRight-1)+dir*x_i, (absoluteBackward+1)-dir*y_i, absoluteRight+dir*x_i, absoluteBackward-dir*y_i));
+                                // Create new multi-piece move around copy of current stack
+                                Stack<SingleMove> copyStack = new Stack<>();
+                                copyStack.addAll(multiMove);
+                                moves.add(new MultiPieceMove(copyStack, 0, 0, 0, 0));
                             }
                         }
                         x_i++; y_i++;
                     }
                 }
-
             }
+            
             // Check legality single orthogonal forward move
             if (board[absoluteForward][col] == null) {
                 moves.add(new SingleMove(col, absoluteForward, col, row));
@@ -283,6 +289,10 @@ public class Piece {
                             // Check if own piece present
                             if (board[absoluteBackward-dir*y_i][col].getColor().getValue() == color.getValue()) {
                                 multiMove.push(new SingleMove(col, (absoluteBackward+1)-dir*y_i, col, absoluteBackward-dir*y_i));
+                                // Create new multi-piece move around copy of current stack
+                                Stack<SingleMove> copyStack = new Stack<>();
+                                copyStack.addAll(multiMove);
+                                moves.add(new MultiPieceMove(copyStack, 0, 0, 0, 0));
                             }
                         }
                         x_i++; y_i++;
@@ -309,6 +319,10 @@ public class Piece {
                             // Check if own piece present
                             if (board[absoluteBackward-dir*y_i][absoluteLeft-dir*x_i].getColor().getValue() == color.getValue()) {
                                 multiMove.push(new SingleMove((absoluteLeft+1)-dir*x_i, (absoluteBackward+1)-dir*y_i, absoluteLeft-dir*x_i, absoluteBackward-dir*y_i));
+                                // Create new multi-piece move around copy of current stack
+                                Stack<SingleMove> copyStack = new Stack<>();
+                                copyStack.addAll(multiMove);
+                                moves.add(new MultiPieceMove(copyStack, 0, 0, 0, 0));
                             }
                         }
                         x_i++; y_i++;
