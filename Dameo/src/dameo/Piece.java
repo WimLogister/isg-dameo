@@ -91,10 +91,12 @@ public class Piece {
         final int checkX = dir*col;
         final int checkY = dir*row;
         final int relativeForward = checkY + 1;
+        final int relativeBackward = checkY - 1;
         final int relativeLeft = checkX - 1;
         final int relativeRight = checkX + 1;
 
         final int absoluteForward = dir*relativeForward;
+        final int absoluteBackward = dir*relativeBackward;
         final int absoluteLeft = dir*relativeLeft;
         final int absoluteRight = dir*relativeRight;
 
@@ -103,7 +105,6 @@ public class Piece {
         right orthogonal moves.
         */
         if (relativeRight <= color.getBoardRightEdge()) {
-            // Check for right orthogonal capturing move
             if (    /* Check we don't move off the board */ relativeRight + 1 <= color.getBoardRightEdge() &&
                     /* Check there is something in square */ board[row][absoluteRight] != null &&
                     /* Check piece is opponent's */ board[row][absoluteRight].getColor().getValue() == color.getOpponent() &&
@@ -118,7 +119,6 @@ public class Piece {
         Check for left orthogonal capturing move.
         */
         if (relativeLeft >= color.getBoardLeftEdge()) {
-                // Check for left orthogonal capturing move
                 if (    /* Check we don't move off board*/ relativeLeft-1 >= color.getBoardLeftEdge() &&
                         /* Check there is something in square */ board[row][absoluteLeft] != null &&
                         /* Check piece is opponent's */ board[row][absoluteLeft].getColor().getValue() == color.getOpponent() &&
@@ -134,7 +134,6 @@ public class Piece {
         Check for forward capturing move.
         */
         if (relativeForward <= color.getBoardTopEdge()) {
-            // Check for forward capture
             if (    /* Check there is something in square */ board[absoluteForward][col] != null &&
                     /* Check piece is opponent's */ board[absoluteForward][col].getColor().getValue() == color.getOpponent()) {
                     
@@ -144,6 +143,23 @@ public class Piece {
                             /* Check piece has not already been captured in previous step in multi-jump */
                             !Piece.listContainsPoint(capturedList, new Point(col, absoluteForward))) {
                         moves.add(new SingleCaptureMove(col, absoluteForward+dir, col, row, col, absoluteForward));
+                    }
+            }
+        }
+        
+        /*
+        Check for backward capturing move.
+        */
+        if (relativeBackward >= color.getBoardBottomEdge()) {
+            if (    /* Chek there is something in square */ board[absoluteBackward][col] != null &&
+                    /* Check piece is opponent's */ board[absoluteBackward][col].getColor().getValue() == color.getOpponent()) {
+                
+                if (    /* Check if we don't end up jumping off the board */
+                            relativeBackward - 1 >= color.getBoardBottomEdge()
+                            /* Check empty square behind opponent */ && board[absoluteBackward-dir][col] == null &&
+                            /* Check piece has not already been captured in previous step in multi-jump */
+                            !Piece.listContainsPoint(capturedList, new Point(col, absoluteBackward))) {
+                        moves.add(new SingleCaptureMove(col, absoluteBackward-dir, col, row, col, absoluteBackward));
                     }
             }
         }
