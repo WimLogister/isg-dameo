@@ -109,7 +109,7 @@ public class Piece {
                     /* Check piece is opponent's */ board[row][absoluteRight].getColor().getValue() == color.getOpponent() &&
                     /* Check for empty square */ board[row][absoluteRight+dir] == null &&
                     /* Check piece has not already been captured in previous step in multi-jump */
-                    !Piece.listContainsPoint(capturedList, new Point(col, absoluteRight))) {
+                    !Piece.listContainsPoint(capturedList, new Point(absoluteRight, row))) {
                 moves.add(new SingleCaptureMove(absoluteRight+dir, row, col, row, absoluteRight, row));
             }
         }
@@ -124,7 +124,7 @@ public class Piece {
                         /* Check piece is opponent's */ board[row][absoluteLeft].getColor().getValue() == color.getOpponent() &&
                         /* Check for empty square behind opponent */ board[row][absoluteLeft-dir] == null &&
                         /* Check piece has not already been captured in previous step in multi-jump */
-                        !Piece.listContainsPoint(capturedList, new Point(col, absoluteLeft))) {
+                        !Piece.listContainsPoint(capturedList, new Point(absoluteLeft, row))) {
                     
                     moves.add(new SingleCaptureMove(absoluteLeft-dir, row, col, row, absoluteLeft, row));
                 }

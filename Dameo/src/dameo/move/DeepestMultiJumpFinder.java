@@ -70,16 +70,6 @@ public class DeepestMultiJumpFinder {
                         n.ancestorX, n.ancestorY, n.capturedPieces));
             }
         }
-        // TODO: remove commented code below if everything works
-//        for (JumpNode n : currentDeepest) {
-//            Stack<SingleCaptureMove> jumpStack = new Stack<>();
-//            JumpNode currentNode = n;
-//            while (currentNode != null) {
-//                jumpStack.push(currentNode.captureMove);
-//                currentNode = currentNode.parent;
-//            }
-//            moves.add(new MultiCaptureMove(jumpStack));
-//        }
         return moves;
     }
     
@@ -91,6 +81,9 @@ public class DeepestMultiJumpFinder {
         
         final int x = n.captureMove.newX;
         final int y = n.captureMove.newY;
+        if (x == 2 && y == 4) {
+            System.out.println("");
+        }
         Piece capturingPiece = n.state.getBoard()[y][x];
         Set<SingleCaptureMove> moves = capturingPiece.generateCapturingMoves(n.state, n.capturedPieces);
         
