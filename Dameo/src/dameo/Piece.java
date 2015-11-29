@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 /**
  * Models a regular (non-king) Dameo piece.
@@ -215,6 +216,7 @@ public class Piece {
         Construct non-jumping moves in relative coordinates.
         */
         final int relativeForward = checkY + 1;
+        final int relativeBackward = checkY - 1;
         final int relativeLeft = checkX - 1;
         final int relativeRight = checkX + 1;
 
@@ -224,6 +226,7 @@ public class Piece {
         coordinates.
         */
         final int absoluteForward = dir*relativeForward;
+        final int absoluteBackward = dir*relativeBackward;
         final int absoluteLeft = dir*relativeLeft;
         final int absoluteRight = dir*relativeRight;
 
@@ -243,12 +246,47 @@ public class Piece {
                 // Check for single left diagonal forward move
                 if (board[absoluteForward][absoluteLeft] == null) {
                     moves.add(new SingleMove(absoluteLeft, absoluteForward, col, row));
+                    
+                    // See if you can move multiple pieces in the same direction
+                    boolean canAddPieces = false;
+                    int x_i = 0;
+                    int y_i = 0;
+                    
+                    Stack<SingleMove> multiMove = new Stack();
+                    while (canAddPieces) {
+                        // Check if still within bounds
+                        if (relativeRight + x_i <= color.getBoardRightEdge() &&
+                                relativeBackward - y_i >= color.getBoardBottomEdge()) {
+                            // Check if own piece present
+                            if (board[absoluteBackward-dir*y_i][absoluteRight+dir*x_i].getColor().getValue() == color.getValue()) {
+                                multiMove.push(new SingleMove((absoluteRight-1)+dir*x_i, (absoluteBackward+1)-dir*y_i, absoluteRight+dir*x_i, absoluteBackward-dir*y_i));
+                            }
+                        }
+                        x_i++; y_i++;
+                    }
                 }
 
             }
             // Check legality single orthogonal forward move
             if (board[absoluteForward][col] == null) {
                 moves.add(new SingleMove(col, absoluteForward, col, row));
+                
+                // See if you can move multiple pieces in the same direction
+                    boolean canAddPieces = false;
+                    int x_i = 0;
+                    int y_i = 0;
+                    
+                    Stack<SingleMove> multiMove = new Stack();
+                    while (canAddPieces) {
+                        // Check if still within bounds
+                        if (relativeBackward - y_i >= color.getBoardBottomEdge()) {
+                            // Check if own piece present
+                            if (board[absoluteBackward-dir*y_i][col].getColor().getValue() == color.getValue()) {
+                                multiMove.push(new SingleMove(col, (absoluteBackward+1)-dir*y_i, col, absoluteBackward-dir*y_i));
+                            }
+                        }
+                        x_i++; y_i++;
+                    }
             }
 
 
@@ -257,6 +295,24 @@ public class Piece {
                 // Check if not occupied by other piece
                 if (board[absoluteForward][absoluteRight] == null) {
                     moves.add(new SingleMove(absoluteRight, absoluteForward, col, row));
+                    
+                    // See if you can move multiple pieces in the same direction
+                    boolean canAddPieces = false;
+                    int x_i = 0;
+                    int y_i = 0;
+                    
+                    Stack<SingleMove> multiMove = new Stack();
+                    while (canAddPieces) {
+                        // Check if still within bounds
+                        if (relativeLeft - x_i >= color.getBoardLeftEdge() &&
+                                relativeBackward - y_i >= color.getBoardBottomEdge()) {
+                            // Check if own piece present
+                            if (board[absoluteBackward-dir*y_i][absoluteLeft-dir*x_i].getColor().getValue() == color.getValue()) {
+                                multiMove.push(new SingleMove((absoluteLeft+1)-dir*x_i, (absoluteBackward+1)-dir*y_i, absoluteLeft-dir*x_i, absoluteBackward-dir*y_i));
+                            }
+                        }
+                        x_i++; y_i++;
+                    }
                 }
             }
         }
