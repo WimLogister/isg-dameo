@@ -1,5 +1,7 @@
 package dameo.move;
 
+import dameo.Constants;
+import dameo.KingPiece;
 import dameo.Piece;
 import dameo.gametree.State;
 
@@ -21,6 +23,26 @@ public abstract class Move {
     }
     
     public abstract void execute(State state);
+    
+    void promotePiece(State s) {
+        Piece[][] board = s.getBoard();
+        Piece p = board[newY][newX];
+        // Check for white player
+        if (p.getColor() == Constants.PlayerColors.WHITE) {
+            // Check if last row reached
+            if (newY == 7) {
+                p.removeFromSet();
+                board[newY][newX] = new KingPiece(p);
+            }
+        }
+        else {
+            // Check if last row reached
+            if (newY == 0) {
+                p.removeFromSet();
+                board[newY][newX] = new KingPiece(p);
+            }
+        }
+    }
     
     @Override
     public String toString() {

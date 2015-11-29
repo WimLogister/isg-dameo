@@ -56,7 +56,7 @@ public class Board {
             for (int j=board[i].length-1; j >= 0; j--) {
                 int value = 0;
                 if (board[i][j] != null)
-                    value = board[i][j].getColor().getValue();
+                    value = board[i][j].getBoardValue();
                 intBoard[i][j] = value;
             }
         }

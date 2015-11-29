@@ -52,7 +52,8 @@ public class MultiCaptureMove extends Move {
             board[p.y][p.x] = null;
             capturedPiece.removeFromSet();
         }
-                
+        
+        super.promotePiece(state);
     }
     
 }

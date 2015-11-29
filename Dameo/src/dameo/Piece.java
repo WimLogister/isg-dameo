@@ -30,6 +30,14 @@ public class Piece {
         this.pieceSet = pieceSet;
         this.dir = color.getDirection();
     }
+    
+    protected Piece(Piece p) {
+        this.row = p.getRow();
+        this.col = p.getCol();
+        this.color = p.getColor();
+        this.pieceSet = p.getPieceSet();
+        this.dir = p.getDir();
+    }
 
     public static Piece findPiece(Set<Piece> pieceSet, int x, int y) {
         Iterator<Piece> it = pieceSet.iterator();
@@ -62,6 +70,18 @@ public class Piece {
 
     public int getRow() {
         return row;
+    }
+
+    public Set<Piece> getPieceSet() {
+        return pieceSet;
+    }
+
+    public int getDir() {
+        return dir;
+    }
+    
+    public int getBoardValue() {
+        return this.color.getValue();
     }
     
     public static Set<Piece> copyPieceSet(Set<Piece> origPieceSet) throws CloneNotSupportedException {

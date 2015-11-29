@@ -33,6 +33,8 @@ public class SingleCaptureMove extends Move {
         state.getBoard()[captY][captX] = null;
         // Remove captured piece from opponent's piece set
         capturedPiece.removeFromSet();
+        
+        super.promotePiece(state);
     }
 
     @Override
