@@ -249,7 +249,7 @@ public class Piece {
                     moves.add(new SingleMove(absoluteLeft, absoluteForward, col, row));
                     
                     // See if you can move multiple pieces in the same direction
-                    boolean canAddPieces = false;
+                    boolean canAddPieces = true;
                     int x_i = 0;
                     int y_i = 0;
                     
@@ -258,15 +258,27 @@ public class Piece {
                         // Check if still within bounds
                         if (relativeRight + x_i <= color.getBoardRightEdge() &&
                                 relativeBackward - y_i >= color.getBoardBottomEdge()) {
-                            // Check if own piece present
-                            if (board[absoluteBackward-dir*y_i][absoluteRight+dir*x_i].getColor().getValue() == color.getValue()) {
-                                // Push new move onto stack
-                                multiMove.push(new SingleMove((absoluteRight-1)+dir*x_i, (absoluteBackward+1)-dir*y_i, absoluteRight+dir*x_i, absoluteBackward-dir*y_i));
-                                // Create new multi-piece move around copy of current stack
-                                Stack<SingleMove> copyStack = new Stack<>();
-                                copyStack.addAll(multiMove);
-                                moves.add(new MultiPieceMove(copyStack, 0, 0, 0, 0));
+                            // Check if it's not an empty square
+                            if (board[absoluteBackward-dir*y_i][absoluteRight+dir*x_i] != null) {
+                                // Check if own piece present
+                                if (board[absoluteBackward-dir*y_i][absoluteRight+dir*x_i].getColor().getValue() == color.getValue()) {
+                                    // Push new move onto stack
+                                    multiMove.push(new SingleMove((absoluteRight-1)+dir*x_i, (absoluteBackward+1)-dir*y_i, absoluteRight+dir*x_i, absoluteBackward-dir*y_i));
+                                    // Create new multi-piece move around copy of current stack
+                                    Stack<SingleMove> copyStack = new Stack<>();
+                                    copyStack.addAll(multiMove);
+                                    moves.add(new MultiPieceMove(copyStack, 0, 0, 0, 0));
+                                }
+                                else {
+                                    canAddPieces = false;
+                                }
                             }
+                            else {
+                                canAddPieces = false;
+                            }
+                        }
+                        else {
+                            canAddPieces = false;
                         }
                         x_i++; y_i++;
                     }
@@ -286,14 +298,25 @@ public class Piece {
                     while (canAddPieces) {
                         // Check if still within bounds
                         if (relativeBackward - y_i >= color.getBoardBottomEdge()) {
-                            // Check if own piece present
-                            if (board[absoluteBackward-dir*y_i][col].getColor().getValue() == color.getValue()) {
-                                multiMove.push(new SingleMove(col, (absoluteBackward+1)-dir*y_i, col, absoluteBackward-dir*y_i));
-                                // Create new multi-piece move around copy of current stack
-                                Stack<SingleMove> copyStack = new Stack<>();
-                                copyStack.addAll(multiMove);
-                                moves.add(new MultiPieceMove(copyStack, 0, 0, 0, 0));
+                            if (board[absoluteBackward-dir*y_i][col] != null) {
+                                // Check if own piece present
+                                if (board[absoluteBackward-dir*y_i][col].getColor().getValue() == color.getValue()) {
+                                    multiMove.push(new SingleMove(col, (absoluteBackward+1)-dir*y_i, col, absoluteBackward-dir*y_i));
+                                    // Create new multi-piece move around copy of current stack
+                                    Stack<SingleMove> copyStack = new Stack<>();
+                                    copyStack.addAll(multiMove);
+                                    moves.add(new MultiPieceMove(copyStack, 0, 0, 0, 0));
+                                }
+                                else {
+                                    canAddPieces = false;
+                                }
                             }
+                            else {
+                                canAddPieces = false;
+                            }
+                        }
+                        else {
+                            canAddPieces = false;
                         }
                         x_i++; y_i++;
                     }
@@ -316,14 +339,25 @@ public class Piece {
                         // Check if still within bounds
                         if (relativeLeft - x_i >= color.getBoardLeftEdge() &&
                                 relativeBackward - y_i >= color.getBoardBottomEdge()) {
-                            // Check if own piece present
-                            if (board[absoluteBackward-dir*y_i][absoluteLeft-dir*x_i].getColor().getValue() == color.getValue()) {
-                                multiMove.push(new SingleMove((absoluteLeft+1)-dir*x_i, (absoluteBackward+1)-dir*y_i, absoluteLeft-dir*x_i, absoluteBackward-dir*y_i));
-                                // Create new multi-piece move around copy of current stack
-                                Stack<SingleMove> copyStack = new Stack<>();
-                                copyStack.addAll(multiMove);
-                                moves.add(new MultiPieceMove(copyStack, 0, 0, 0, 0));
+                            if (board[absoluteBackward-dir*y_i][absoluteLeft-dir*x_i] != null) {
+                                // Check if own piece present
+                                if (board[absoluteBackward-dir*y_i][absoluteLeft-dir*x_i].getColor().getValue() == color.getValue()) {
+                                    multiMove.push(new SingleMove((absoluteLeft+1)-dir*x_i, (absoluteBackward+1)-dir*y_i, absoluteLeft-dir*x_i, absoluteBackward-dir*y_i));
+                                    // Create new multi-piece move around copy of current stack
+                                    Stack<SingleMove> copyStack = new Stack<>();
+                                    copyStack.addAll(multiMove);
+                                    moves.add(new MultiPieceMove(copyStack, 0, 0, 0, 0));
+                                }
+                                else {
+                                    canAddPieces = false;
+                                }
                             }
+                            else {
+                                canAddPieces = false;
+                            }
+                        }
+                        else {
+                            canAddPieces = false;
                         }
                         x_i++; y_i++;
                     }
