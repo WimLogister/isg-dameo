@@ -1,6 +1,7 @@
 package dameo.move;
 
 import dameo.gametree.State;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -9,9 +10,9 @@ import java.util.Stack;
  */
 public class MultiPieceMove extends Move {
     
-    Stack<SingleMove> moves;
+    List<SingleMove> moves;
 
-    public MultiPieceMove(Stack<SingleMove> moves) {
+    public MultiPieceMove(List<SingleMove> moves) {
         super(0, 0, 0, 0);
         this.moves = moves;
     }
@@ -22,8 +23,8 @@ public class MultiPieceMove extends Move {
         if (moves.size() > 1) {
             System.out.println("Debug");
         }
-        while (!moves.empty()) {
-            moves.pop().execute(state);
+        while (!moves.isEmpty()) {
+            moves.remove(0).execute(state);
         }
     }
     

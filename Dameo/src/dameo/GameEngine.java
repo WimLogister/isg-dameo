@@ -136,7 +136,7 @@ public class GameEngine {
      */
     private void next() {
 
-        if (moveCounter == 14) {
+        if (moveCounter == 16) {
             System.out.println("Debug");
         }
         System.out.printf("Turn number %d\n",moveCounter++);
