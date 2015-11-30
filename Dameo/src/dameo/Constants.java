@@ -11,7 +11,7 @@ public class Constants {
     
     public static final int PIECES_PER_PLAYER = 18;
     
-    public static final int RANDOM_SEED = 37;
+    public static final int RANDOM_SEED = 13;
     
     public enum PlayerColors {
         WHITE(1, 0, 7, 7, 0, 1, 2), BLACK(2, -7, 0, 0, -7, -1, 1);

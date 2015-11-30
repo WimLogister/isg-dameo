@@ -5,9 +5,7 @@ import dameo.Piece;
 import dameo.DameoUtil;
 import dameo.GameEngine;
 import dameo.gametree.State;
-import dameo.move.DummyMove;
 import dameo.move.Move;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
