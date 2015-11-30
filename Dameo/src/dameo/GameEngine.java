@@ -28,6 +28,8 @@ public class GameEngine {
     private static final String PRINT = "Y";
     
     private boolean debug = false;
+    
+    private int moveCounter;
 
     private GameEngine() {
         init();
@@ -133,6 +135,11 @@ public class GameEngine {
      * executed and it becomes the next player's turn.
      */
     private void next() {
+
+        if (moveCounter == 14) {
+            System.out.println("Debug");
+        }
+        System.out.printf("Turn number %d\n",moveCounter++);
         
         /*
         Current player selects move

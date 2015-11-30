@@ -1,9 +1,7 @@
 Dameo considerations
 
-TODO: implement multi-moves. Idea: use recursion for this, where you send along a list
-of pieces that has already been captured. Create a tree, keep track of deepest
-node.
-TODO: implement king promotion.
+TODO: debug multi-piece moves. I'm not pushing the original piece's single move
+    onto the stack, this needs to be fixed.
 TODO: implement king functionality.
 TODO: implement human player. Has to be able to analyse input move.
 TODO: try some basic debugging on negamax first.

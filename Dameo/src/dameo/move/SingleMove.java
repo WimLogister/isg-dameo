@@ -23,7 +23,13 @@ public class SingleMove extends Move {
 
     @Override
     public void execute(State state) {
+        if (newX > 7 || newY > 7) {
+            System.out.println("Bug found");
+        }
         Piece p = state.getBoard()[oldY][oldX];
+        if (p == null) {
+            System.out.println("Check for empty piece");
+        }
         // Remove piece from previous position on board
         state.getBoard()[oldY][oldX] = null;
         // Put piece on new position on board
