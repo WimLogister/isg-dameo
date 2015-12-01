@@ -18,11 +18,11 @@ import java.util.Set;
  */
 public class Piece {
     
-    private int row, col;
-    private final Constants.PlayerColors color;
+    protected int row, col;
+    protected final Constants.PlayerColors color;
     private Set<Piece> pieceSet;
     private int hashCode;
-    private int dir;
+    protected int dir;
 
     private Piece(int row, int col, Constants.PlayerColors color, Set<Piece> pieceSet) {
         this.row = row;

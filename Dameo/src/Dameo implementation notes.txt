@@ -1,7 +1,5 @@
 Dameo considerations
 
-TODO: discrepancy between board and piece lists. A piece on the piece list is no
-    longer on the board. Either board or piece list is updated incorrectly.
 TODO: implement king functionality.
 TODO: implement human player. Has to be able to analyse input move.
 TODO: try some basic debugging on negamax first.
