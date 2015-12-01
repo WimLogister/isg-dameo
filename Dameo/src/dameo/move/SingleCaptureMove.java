@@ -43,4 +43,12 @@ public class SingleCaptureMove extends Move {
                 oldY+1, newX+1, newY+1, captX+1, captY+1);
     }
 
+    public int getCaptX() {
+        return captX;
+    }
+
+    public int getCaptY() {
+        return captY;
+    }
+    
 }

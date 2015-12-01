@@ -32,16 +32,18 @@ public abstract class Move {
             // Check if last row reached
             if (newY == 7) {
                 p.removeFromSet();
-                board[newY][newX] = new KingPiece(p);
-                s.getCurrentPlayerPieces().add(p);
+                Piece king = new KingPiece(p);
+                board[newY][newX] = king;
+                s.getCurrentPlayerPieces().add(king);
             }
         }
         else {
             // Check if last row reached
             if (newY == 0) {
                 p.removeFromSet();
-                board[newY][newX] = new KingPiece(p);
-                s.getCurrentPlayerPieces().add(p);
+                Piece king = new KingPiece(p);
+                board[newY][newX] = king;
+                s.getCurrentPlayerPieces().add(king);
             }
         }
     }

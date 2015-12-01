@@ -19,7 +19,7 @@ public class MultiPieceMove extends Move {
     
     @Override
     public void execute(State state) {
-        System.out.printf("Move %d pieces",moves.size());
+        System.out.printf("Move %d pieces\n",moves.size());
         while (!moves.isEmpty()) {
             moves.remove(0).execute(state);
         }

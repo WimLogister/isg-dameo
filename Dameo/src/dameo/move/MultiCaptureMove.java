@@ -29,10 +29,6 @@ public class MultiCaptureMove extends Move {
         super(newX, newY, oldX, oldY);
         this.capturedPieces = capturedPieces;
     }
-    
-    
-    
-    
 
     @Override
     public void execute(State state) {
@@ -54,6 +50,10 @@ public class MultiCaptureMove extends Move {
         }
         
         super.promotePiece(state);
+    }
+
+    public Stack<SingleCaptureMove> getMoves() {
+        return moves;
     }
     
 }

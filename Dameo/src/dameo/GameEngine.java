@@ -3,6 +3,7 @@ package dameo;
 import dameo.gametree.State;
 import dameo.move.DeepestMultiJumpFinder;
 import dameo.move.Move;
+import dameo.move.MultiCaptureMove;
 import dameo.move.SingleCaptureMove;
 import dameo.move.SingleMove;
 import dameo.players.Player;
@@ -140,6 +141,7 @@ public class GameEngine {
             System.out.println("Debug");
         }
         System.out.printf("Turn number %d\n",moveCounter++);
+        System.out.printf("%s player to move\n",currentPlayer.getColor());
         
         /*
         Current player selects move
@@ -153,12 +155,20 @@ public class GameEngine {
             }
         }
         else {
+//            if (m instanceof MultiCaptureMove) {
+//                    MultiCaptureMove capt = (MultiCaptureMove) m;
+//                    System.out.println("debug");
+//                    for (SingleCaptureMove move : capt.getMoves()) {
+//                        System.out.printf("Captured: <%d,%d>\n",move.getCaptX(),move.getCaptY());
+//                    }
+//                }
             /*
             Execute move and change state
             */
             m.execute(currentState);
             if (printFlag) {
-                System.out.println(m);
+                System.out.println(m.getClass().toString());
+                
                 System.out.println("State after move...");
                 System.out.println(Board.getBoardString(currentState.getBoard()));
             }
