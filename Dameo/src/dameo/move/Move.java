@@ -33,6 +33,7 @@ public abstract class Move {
             if (newY == 7) {
                 p.removeFromSet();
                 board[newY][newX] = new KingPiece(p);
+                s.getCurrentPlayerPieces().add(p);
             }
         }
         else {
@@ -40,6 +41,7 @@ public abstract class Move {
             if (newY == 0) {
                 p.removeFromSet();
                 board[newY][newX] = new KingPiece(p);
+                s.getCurrentPlayerPieces().add(p);
             }
         }
     }
