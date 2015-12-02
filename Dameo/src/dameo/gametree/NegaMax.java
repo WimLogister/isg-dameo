@@ -1,5 +1,6 @@
 package dameo.gametree;
 
+import dameo.Constants;
 import dameo.GameEngine;
 import dameo.evalfunction.CompositeEvaluator;
 import dameo.move.Move;
@@ -23,8 +24,8 @@ public class NegaMax implements AIStrategy {
         this.beta = beta;
     }
 
-    public NegaMax(int searchDepth) {
-        this.evaluator = CompositeEvaluator.createFullEvaluator();
+    public NegaMax(int searchDepth, Constants.PlayerColors color) {
+        this.evaluator = CompositeEvaluator.createFullEvaluator(color);
         this.alpha = Long.MIN_VALUE;
         this.beta = Long.MAX_VALUE;
         this.searchDepth = searchDepth;
