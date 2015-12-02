@@ -55,9 +55,10 @@ public class KingPiece extends Piece {
         SingleCaptureMoves for each empty square.
         */
         if (pieceReached && board[relativeY*dir][col].getColor().getValue() == color.getOpponent()) {
+            int captY = relativeY*dir;
             while (++relativeY <= color.getBoardTopEdge() &&
                     board[relativeY*dir][col] == null) {
-                moves.add(new SingleCaptureMove(col, relativeY*dir, col, row, col, (relativeY*dir)-1));
+                moves.add(new SingleCaptureMove(col, relativeY*dir, col, row, col, captY));
             }
         }
         pieceReached = false;
@@ -77,9 +78,10 @@ public class KingPiece extends Piece {
         SingleCaptureMoves for each empty square.
         */
         if (pieceReached && board[relativeY*dir][col].getColor().getValue() == color.getOpponent()) {
+            int captY = relativeY*dir;
             while (--relativeY >= color.getBoardBottomEdge() &&
                     board[relativeY*dir][col] == null) {
-                moves.add(new SingleCaptureMove(col, relativeY*dir, col, row, col, (relativeY*dir)+1));
+                moves.add(new SingleCaptureMove(col, relativeY*dir, col, row, col, captY));
             }
         }
         pieceReached = false;
@@ -98,9 +100,10 @@ public class KingPiece extends Piece {
         SingleCaptureMoves for each empty square.
         */
         if (pieceReached && board[row][relativeX*dir].getColor().getValue() == color.getOpponent()) {
+            int captX = relativeX*dir;
             while (--relativeX >= color.getBoardLeftEdge() &&
                     board[row][relativeX*dir] == null) {
-                moves.add(new SingleCaptureMove(relativeX*dir, row, col, row, (relativeX*dir)+1, row));
+                moves.add(new SingleCaptureMove(relativeX*dir, row, col, row, captX, row));
             }
         }
         pieceReached = false;
@@ -119,9 +122,10 @@ public class KingPiece extends Piece {
         SingleCaptureMoves for each empty square.
         */
         if (pieceReached && board[row][relativeX*dir].getColor().getValue() == color.getOpponent()) {
+            int captX = relativeX*dir;
             while (++relativeX <= color.getBoardRightEdge() &&
                     board[row][relativeX*dir] == null) {
-                moves.add(new SingleCaptureMove(relativeX*dir, row, col, row, (relativeX*dir)-1, row));
+                moves.add(new SingleCaptureMove(relativeX*dir, row, col, row, captX, row));
             }
         }
         return moves;
