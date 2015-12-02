@@ -29,7 +29,102 @@ public class KingPiece extends Piece {
         Piece[][] board = s.getBoard();
         
         Set<SingleCaptureMove> moves = new HashSet<>();
-        return super.generateCapturingMoves(s, capturedList); //To change body of generated methods, choose Tools | Templates.
+        
+        /*
+        Variable dir determines the directionality of movement of this piece
+        based on its color: for white pieces up and right are positive moves in terms
+        in terms of the board's coordinates system, for black left and down are
+        positive moves.
+        */
+        int relativeX = dir*col;
+        int relativeY = dir*row;
+        
+        boolean pieceReached = false;
+        
+        relativeY++;
+        /* Check up */
+        while(++relativeY <= color.getBoardTopEdge() && !pieceReached) {
+            /* Check that square is empty */
+            if (board[relativeY*dir][col] != null) {
+                pieceReached = true;
+            }
+        }
+        relativeY--;
+        /*
+        If we've reached an enemy piece, start iterating and adding
+        SingleCaptureMoves for each empty square.
+        */
+        if (pieceReached && board[relativeY*dir][col].getColor().getValue() == color.getOpponent()) {
+            while (++relativeY <= color.getBoardTopEdge() &&
+                    board[relativeY*dir][col] == null) {
+                moves.add(new SingleCaptureMove(col, relativeY*dir, col, row, col, (relativeY*dir)-1));
+            }
+        }
+        pieceReached = false;
+        relativeY = dir*row;
+        
+        
+        /* Check down */
+        while(--relativeY >= color.getBoardBottomEdge() && !pieceReached) {
+            /* Check that square is empty */
+            if (board[relativeY*dir][col] != null) {
+                pieceReached = true;
+            }
+        }
+        relativeY++;
+        /*
+        If we've reached an enemy piece, start iterating and adding
+        SingleCaptureMoves for each empty square.
+        */
+        if (pieceReached && board[relativeY*dir][col].getColor().getValue() == color.getOpponent()) {
+            while (--relativeY >= color.getBoardBottomEdge() &&
+                    board[relativeY*dir][col] == null) {
+                moves.add(new SingleCaptureMove(col, relativeY*dir, col, row, col, (relativeY*dir)+1));
+            }
+        }
+        pieceReached = false;
+
+        
+        /* Check left */
+        while(--relativeX >= color.getBoardLeftEdge() && !pieceReached) {
+            /* Check that square is empty */
+            if (board[row][relativeX*dir] != null) {
+                pieceReached = true;
+            }
+        }
+        relativeX++;
+        /*
+        If we've reached an enemy piece, start iterating and adding
+        SingleCaptureMoves for each empty square.
+        */
+        if (pieceReached && board[row][relativeX*dir].getColor().getValue() == color.getOpponent()) {
+            while (--relativeX >= color.getBoardLeftEdge() &&
+                    board[row][relativeX*dir] == null) {
+                moves.add(new SingleCaptureMove(relativeX*dir, row, col, row, (relativeX*dir)+1, row));
+            }
+        }
+        pieceReached = false;
+        relativeX = dir*row;
+        
+        /* Check right */
+        while(++relativeX <= color.getBoardRightEdge() && !pieceReached) {
+            /* Check that square is empty */
+            if (board[row][relativeX*dir] != null) {
+                pieceReached = true;
+            }
+        }
+        relativeX--;
+        /*
+        If we've reached an enemy piece, start iterating and adding
+        SingleCaptureMoves for each empty square.
+        */
+        if (pieceReached && board[row][relativeX*dir].getColor().getValue() == color.getOpponent()) {
+            while (++relativeX <= color.getBoardRightEdge() &&
+                    board[row][relativeX*dir] == null) {
+                moves.add(new SingleCaptureMove(relativeX*dir, row, col, row, (relativeX*dir)-1, row));
+            }
+        }
+        return moves;
     }
 
     @Override
@@ -49,10 +144,7 @@ public class KingPiece extends Piece {
         
         boolean pieceReached = false;
         
-        /*
-        Check up.
-        Start by checking we don't move off the board
-        */
+        /* Check up */
         while(++relativeY <= color.getBoardTopEdge() && !pieceReached) {
             /* Check that square is empty */
             if (board[relativeY*dir][col] == null) {
