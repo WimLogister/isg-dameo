@@ -178,7 +178,7 @@ public class KingPiece extends Piece {
         /* Check left */
         while(--relativeX >= color.getBoardLeftEdge() && !pieceReached) {
             /* Check that square is empty */
-            if (board[row][relativeX] == null) {
+            if (board[row][relativeX*dir] == null) {
                 moves.add(new SingleMove(relativeX*dir, row, col, row));
             }
             /* Non-empty square reached, stop iterating in this direction */
@@ -192,7 +192,7 @@ public class KingPiece extends Piece {
         /* Check right */
         while(++relativeX <= color.getBoardRightEdge() && !pieceReached) {
             /* Check that square is empty */
-            if (board[row][relativeX] == null) {
+            if (board[row][relativeX*dir] == null) {
                 moves.add(new SingleMove(relativeX*dir, row, col, row));
             }
             /* Non-empty square reached, stop iterating in this direction */
@@ -210,7 +210,7 @@ public class KingPiece extends Piece {
         while(++relativeX <= color.getBoardRightEdge() &&
                 ++relativeY <= color.getBoardTopEdge() && !pieceReached) {
             /* Check that square is empty */
-            if (board[relativeY][relativeX] == null) {
+            if (board[relativeY*dir][relativeX*dir] == null) {
                 moves.add(new SingleMove(relativeX*dir, relativeY*dir, col, row));
             }
             /* Non-empty square reached, stop iterating in this direction */
@@ -228,7 +228,7 @@ public class KingPiece extends Piece {
         while(++relativeX <= color.getBoardRightEdge() &&
                 --relativeY >= color.getBoardBottomEdge()&& !pieceReached) {
             /* Check that square is empty */
-            if (board[relativeY][relativeX] == null) {
+            if (board[relativeY*dir][relativeX*dir] == null) {
                 moves.add(new SingleMove(relativeX*dir, relativeY*dir, col, row));
             }
             /* Non-empty square reached, stop iterating in this direction */
@@ -246,7 +246,7 @@ public class KingPiece extends Piece {
         while(--relativeX >= color.getBoardLeftEdge() &&
                 --relativeY >= color.getBoardBottomEdge() && !pieceReached) {
             /* Check that square is empty */
-            if (board[relativeY][relativeX] == null) {
+            if (board[relativeY*dir][relativeX*dir] == null) {
                 moves.add(new SingleMove(relativeX*dir, relativeY*dir, col, row));
             }
             /* Non-empty square reached, stop iterating in this direction */
@@ -264,7 +264,7 @@ public class KingPiece extends Piece {
         while(--relativeX >= color.getBoardLeftEdge() &&
                 ++relativeY <= color.getBoardTopEdge() && !pieceReached) {
             /* Check that square is empty */
-            if (board[relativeY][relativeX] == null) {
+            if (board[relativeY*dir][relativeX*dir] == null) {
                 moves.add(new SingleMove(relativeX*dir, relativeY*dir, col, row));
             }
             /* Non-empty square reached, stop iterating in this direction */
