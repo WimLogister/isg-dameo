@@ -48,8 +48,14 @@ public class NegaMax implements AIStrategy {
                 m.execute(copyState);
                 Edge valueNode = alphaBeta(copyState, depth-1, -beta, -alpha);
                 if (-valueNode.getValue() > score) {
+                    if (depth == 3) {
+                        System.out.println("debug");
+                    }
                     bestMove = new Edge(m, -valueNode.getValue());
                     score = -valueNode.getValue();
+                if (depth == 3) {
+                        System.out.println("debug");
+                }
                 }
                 if (score > alpha) alpha = score;
                 if (score >= beta) break;

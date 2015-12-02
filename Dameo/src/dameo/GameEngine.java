@@ -28,7 +28,7 @@ public class GameEngine {
     private boolean printFlag;
     private static final String PRINT = "Y";
     
-    private boolean debug = false;
+    public static int DEBUG = 0;
     
     private int moveCounter;
 
@@ -89,7 +89,7 @@ public class GameEngine {
         
         currentState = new State(currentPlayer.getPieces(), currentOpponent.getPieces(), board);
         
-        if (debug) {
+        if (DEBUG > 0) {
             System.out.println("Enter Y for printing, anything else for no printing:");
             String flagString = DameoUtil.getConsoleInput();
             try {
@@ -149,19 +149,12 @@ public class GameEngine {
         Move m = currentPlayer.selectMove(currentState);
         if (m == null) {
             end = true;
-            if (debug) {
+            if (DEBUG > 0) {
                 System.out.printf("%s player has no more legal moves.\n", currentPlayer.getColor());
                 System.out.printf("%s player wins.", currentOpponent.getColor());
             }
         }
         else {
-//            if (m instanceof MultiCaptureMove) {
-//                    MultiCaptureMove capt = (MultiCaptureMove) m;
-//                    System.out.println("debug");
-//                    for (SingleCaptureMove move : capt.getMoves()) {
-//                        System.out.printf("Captured: <%d,%d>\n",move.getCaptX(),move.getCaptY());
-//                    }
-//                }
             /*
             Execute move and change state
             */
@@ -362,19 +355,15 @@ public class GameEngine {
         return moves;
     }
 
-    public void setDEBUG(boolean DEBUG) {
-        this.debug = DEBUG;
-    }
-
     public State getCurrentState() {
         return currentState;
     }
     
     public static void runTestGames(int numRuns, boolean debug) {
+        GameEngine.DEBUG = 1;
         double[] values = new double[numRuns];
         for (int i = 0; i < numRuns; i++) {
-            GameEngine eng = GameEngine.createRandomPlayerGame();
-            eng.setDEBUG(debug);
+            GameEngine eng = GameEngine.createTestEngine();
             eng.init();
             Constants.PlayerColors color = eng.start();
             values[i] = color.getValue() % 2;
