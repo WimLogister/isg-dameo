@@ -3,7 +3,7 @@ package dameo.players;
 import dameo.Constants;
 import dameo.move.Move;
 import dameo.Piece;
-import dameo.DameoUtil;
+import dameo.util.DameoUtil;
 import dameo.gametree.State;
 import java.util.Set;
 

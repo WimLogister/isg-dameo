@@ -1,5 +1,6 @@
 package dameo;
 
+import dameo.util.DameoUtil;
 import dameo.gametree.State;
 import dameo.move.DeepestMultiJumpFinder;
 import dameo.move.Move;
@@ -7,15 +8,17 @@ import dameo.move.MultiCaptureMove;
 import dameo.move.SingleCaptureMove;
 import dameo.move.SingleMove;
 import dameo.players.Player;
+import dameo.util.Observer;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
  *
  * @author Wim
  */
-public class GameEngine {
+public class DameoEngine {
     
     private State currentState;
     
@@ -31,18 +34,20 @@ public class GameEngine {
     public static int DEBUG = 0;
     
     private int moveCounter;
+    
+    private List<Observer> observers;
 
-    private GameEngine() {
+    private DameoEngine() {
         init();
     }
     
-    private GameEngine(Player whitePlayer, Player blackPlayer) {
+    private DameoEngine(Player whitePlayer, Player blackPlayer) {
         currentPlayer = whitePlayer;
         currentOpponent = blackPlayer;
     }
     
-    public static GameEngine createEngine() {
-        if (!singletonExisting) return new GameEngine();
+    public static DameoEngine createEngine() {
+        if (!singletonExisting) return new DameoEngine();
         else return null;
     }
     
@@ -51,20 +56,20 @@ public class GameEngine {
      * Implemented for testing basic negamax performance.
      * @return 
      */
-    public static GameEngine createTestEngine() {
+    public static DameoEngine createTestEngine() {
         Player whitePlayer = Player.generatePlayer(2, Constants.PlayerColors.WHITE,
                 Piece.generatePieceSet(Constants.PlayerColors.WHITE));
         Player blackPlayer = Player.generatePlayer(3, Constants.PlayerColors.BLACK,
                 Piece.generatePieceSet(Constants.PlayerColors.BLACK));
-        return new GameEngine(whitePlayer, blackPlayer);
+        return new DameoEngine(whitePlayer, blackPlayer);
     }
     
-    public static GameEngine createRandomPlayerGame() {
+    public static DameoEngine createRandomPlayerGame() {
         Player whitePlayer = Player.generatePlayer(3, Constants.PlayerColors.WHITE,
                 Piece.generatePieceSet(Constants.PlayerColors.WHITE));
         Player blackPlayer = Player.generatePlayer(3, Constants.PlayerColors.BLACK,
                 Piece.generatePieceSet(Constants.PlayerColors.BLACK));
-        return new GameEngine(whitePlayer, blackPlayer);
+        return new DameoEngine(whitePlayer, blackPlayer);
     }
     
     private void init() {
@@ -178,6 +183,10 @@ public class GameEngine {
         Player temp = currentPlayer;
         currentPlayer = currentOpponent;
         currentOpponent = temp;
+        
+        for (Observer o : observers) {
+            o.update();
+        }
     }
     
     /**
@@ -359,10 +368,10 @@ public class GameEngine {
     }
     
     public static void runTestGames(int numRuns) {
-        GameEngine.DEBUG = 0;
+        DameoEngine.DEBUG = 0;
         double[] values = new double[numRuns];
         for (int i = 0; i < numRuns; i++) {
-            GameEngine eng = GameEngine.createTestEngine();
+            DameoEngine eng = DameoEngine.createTestEngine();
             System.out.printf("Now starting game number %d\n",i+1);
             eng.init();
             Constants.PlayerColors color = eng.start();

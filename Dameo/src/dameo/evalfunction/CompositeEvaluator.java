@@ -1,7 +1,7 @@
 package dameo.evalfunction;
 
 import dameo.Constants;
-import dameo.GameEngine;
+import dameo.DameoEngine;
 import dameo.gametree.State;
 import java.util.ArrayList;
 import java.util.List;

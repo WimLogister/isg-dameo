@@ -6,7 +6,7 @@ package dameo;
  */
 public class Dameo {
     
-    public static final GameEngine ENGINE = GameEngine.createEngine();
+    public static final DameoEngine ENGINE = DameoEngine.createEngine();
 
     /**
      * @param args the command line arguments

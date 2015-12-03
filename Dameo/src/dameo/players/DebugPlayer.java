@@ -1,8 +1,8 @@
 package dameo.players;
 
 import dameo.Constants;
-import dameo.DameoUtil;
-import dameo.GameEngine;
+import dameo.util.DameoUtil;
+import dameo.DameoEngine;
 import dameo.Piece;
 import dameo.gametree.State;
 import dameo.move.Move;
@@ -22,7 +22,7 @@ public class DebugPlayer extends Player {
 
     @Override
     public Move selectMove(State s) {
-        Set<Move> moves = GameEngine.generateLegalMoves(s);
+        Set<Move> moves = DameoEngine.generateLegalMoves(s);
         if (moves.isEmpty()) return null;
         
         boolean foundCaptureMove = false;

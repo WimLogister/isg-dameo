@@ -1,6 +1,6 @@
 package dameo.move;
 
-import dameo.GameEngine;
+import dameo.DameoEngine;
 import dameo.gametree.State;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class MultiPieceMove extends Move {
 
     @Override
     public void execute(State state) {
-        if (GameEngine.DEBUG > 2)
+        if (DameoEngine.DEBUG > 2)
             System.out.printf("Move %d pieces\n",moves.size());
         for (int i = 0; i < moves.size(); i++) {
             moves.get(i).execute(state);
