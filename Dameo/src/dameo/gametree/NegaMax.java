@@ -16,22 +16,17 @@ public class NegaMax implements AIStrategy {
     private final CompositeEvaluator evaluator;
     private final long alpha, beta;
     private final int searchDepth;
-
-    public NegaMax(CompositeEvaluator evaluator, int searchDepth, long alpha, long beta) {
-        this.evaluator = evaluator;
-        this.searchDepth = searchDepth;
-        this.alpha = alpha;
-        this.beta = beta;
-    }
+    private final int negamaxColor;
 
     public NegaMax(int searchDepth, Constants.PlayerColors color) {
         this.evaluator = CompositeEvaluator.createFullEvaluator(color);
         this.alpha = Long.MIN_VALUE;
         this.beta = Long.MAX_VALUE;
         this.searchDepth = searchDepth;
+        this.negamaxColor = color.getNegamaxColor();
     }
     
-    private Edge alphaBeta(State s, int depth, long alpha, long beta) {
+    private Edge alphaBeta(State s, int depth, long alpha, long beta, int color) {
         long score = Long.MIN_VALUE;
         Set<Move> moves = GameEngine.generateLegalMoves(s);
         Edge bestMove = null;
@@ -40,14 +35,15 @@ public class NegaMax implements AIStrategy {
         if (moves.isEmpty()) {
             bestMove = new Edge(null, Long.MIN_VALUE);
         }
-        if (depth == 0) {
-            bestMove = new Edge(null, evaluator.evaluate(s));
+        else if (depth == 0) {
+            bestMove = new Edge(null, color*evaluator.evaluate(s));
         }
         else {
             for (Move m : moves) {
                 State copyState = new State(s);
                 m.execute(copyState);
-                Edge valueNode = alphaBeta(copyState, depth-1, -beta, -alpha);
+                copyState.switchPlayers();
+                Edge valueNode = alphaBeta(copyState, depth-1, -beta, -alpha, -color);
                 if (-valueNode.getValue() > score) {
                     bestMove = new Edge(m, -valueNode.getValue());
                     score = -valueNode.getValue();
@@ -56,12 +52,15 @@ public class NegaMax implements AIStrategy {
                 if (score >= beta) break;
             }
         }
+        if (bestMove == null) {
+            System.out.println("debug");
+        }
         return bestMove;
     }
     
     @Override
     public Move searchBestMove(State s) {
-        Move m = alphaBeta(s, searchDepth, alpha, beta).getMove();
+        Move m = alphaBeta(s, searchDepth, alpha, beta, negamaxColor).getMove();
         return m;
     }
     

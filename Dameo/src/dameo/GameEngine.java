@@ -137,10 +137,6 @@ public class GameEngine {
      */
     private void next() {
 
-        if (moveCounter == 16) {
-            System.out.println("Debug");
-        }
-        System.out.printf("Turn number %d\n",moveCounter++);
         System.out.printf("%s player to move\n",currentPlayer.getColor());
         
         /*

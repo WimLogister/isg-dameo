@@ -1,6 +1,6 @@
 Dameo considerations
 
-TODO: implement king functionality.
+TODO: king is not always capturing when it has to.
 TODO: implement human player. Has to be able to analyse input move.
 TODO: try some basic debugging on negamax first.
 TODO: make abstract negamax framework so I can check it on e.g. tic-tac-toe.

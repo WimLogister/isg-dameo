@@ -18,7 +18,8 @@ public class MaterialDifferenceEvaluator extends EvaluationFunction {
         else {
             State copyState = new State(s);
             copyState.switchPlayers();
-            return 500 * (s.getCurrentPlayerPieces().size() - s.getOpponentPieces().size());
+            long score = 500 * (copyState.getCurrentPlayerPieces().size() - copyState.getOpponentPieces().size());
+            return score;
         }
     }
     
