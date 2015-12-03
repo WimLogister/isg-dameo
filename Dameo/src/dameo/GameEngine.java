@@ -138,6 +138,7 @@ public class GameEngine {
     private void next() {
 
         System.out.printf("%s player to move\n",currentPlayer.getColor());
+        System.out.printf("Turn number %d\n",moveCounter++);
         
         /*
         Current player selects move

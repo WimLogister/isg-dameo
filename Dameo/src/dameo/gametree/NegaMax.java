@@ -20,20 +20,31 @@ public class NegaMax implements AIStrategy {
 
     public NegaMax(int searchDepth, Constants.PlayerColors color) {
         this.evaluator = CompositeEvaluator.createFullEvaluator(color);
-        this.alpha = Long.MIN_VALUE;
-        this.beta = Long.MAX_VALUE;
+        this.alpha = Integer.MIN_VALUE;
+        this.beta = Integer.MAX_VALUE;
         this.searchDepth = searchDepth;
         this.negamaxColor = color.getNegamaxColor();
     }
     
     private Edge alphaBeta(State s, int depth, long alpha, long beta, int color) {
-        long score = Long.MIN_VALUE;
+        long score = Integer.MIN_VALUE;
+        if (s.getCurrentPlayerPieces().size() == 1) {
+            System.out.println("debug");
+        }
         Set<Move> moves = GameEngine.generateLegalMoves(s);
         Edge bestMove = null;
         
         // No more moves, game is lost
         if (moves.isEmpty()) {
-            bestMove = new Edge(null, Long.MIN_VALUE);
+            bestMove = new Edge(null, color*Integer.MIN_VALUE);
+//            // This player has no more moves: this negamax player loses
+//            if (color == negamaxColor) {
+//                bestMove = new Edge(null, Integer.MIN_VALUE);
+//            }
+//            // Opponent has no more moves: this negamax player wins
+//            else {
+//                bestMove = new Edge(null, Integer.MAX_VALUE);
+//            }
         }
         else if (depth == 0) {
             bestMove = new Edge(null, color*evaluator.evaluate(s));
@@ -53,6 +64,7 @@ public class NegaMax implements AIStrategy {
             }
         }
         if (bestMove == null) {
+            bestMove = new Edge(moves.iterator().next(), color*Integer.MIN_VALUE);
             System.out.println("debug");
         }
         return bestMove;
