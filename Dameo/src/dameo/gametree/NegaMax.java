@@ -28,9 +28,9 @@ public class NegaMax implements AIStrategy {
     
     private Edge alphaBeta(State s, int depth, long alpha, long beta, int color) {
         long score = Integer.MIN_VALUE;
-        if (s.getCurrentPlayerPieces().size() == 1) {
-            System.out.println("debug");
-        }
+//        if (s.getCurrentPlayerPieces().size() == 1) {
+//            System.out.println("debug");
+//        }
         Set<Move> moves = GameEngine.generateLegalMoves(s);
         Edge bestMove = null;
         
@@ -65,7 +65,6 @@ public class NegaMax implements AIStrategy {
         }
         if (bestMove == null) {
             bestMove = new Edge(moves.iterator().next(), color*Integer.MIN_VALUE);
-            System.out.println("debug");
         }
         return bestMove;
     }

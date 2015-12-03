@@ -137,8 +137,10 @@ public class GameEngine {
      */
     private void next() {
 
-        System.out.printf("%s player to move\n",currentPlayer.getColor());
-        System.out.printf("Turn number %d\n",moveCounter++);
+        if (DEBUG > 0) {
+            System.out.printf("%s player to move\n",currentPlayer.getColor());
+            System.out.printf("Turn number %d\n",moveCounter++);
+        }
         
         /*
         Current player selects move
@@ -156,7 +158,7 @@ public class GameEngine {
             Execute move and change state
             */
             m.execute(currentState);
-            if (printFlag) {
+            if (DEBUG > 0) {
                 System.out.println(m.getClass().toString());
                 
                 System.out.println("State after move...");
@@ -356,11 +358,12 @@ public class GameEngine {
         return currentState;
     }
     
-    public static void runTestGames(int numRuns, boolean debug) {
-        GameEngine.DEBUG = 1;
+    public static void runTestGames(int numRuns) {
+        GameEngine.DEBUG = 0;
         double[] values = new double[numRuns];
         for (int i = 0; i < numRuns; i++) {
             GameEngine eng = GameEngine.createTestEngine();
+            System.out.printf("Now starting game number %d\n",i+1);
             eng.init();
             Constants.PlayerColors color = eng.start();
             values[i] = color.getValue() % 2;
@@ -369,7 +372,7 @@ public class GameEngine {
     }
     
     public static void main(String[] args) {
-        runTestGames(1, true);
+        runTestGames(10);
     }
     
     
