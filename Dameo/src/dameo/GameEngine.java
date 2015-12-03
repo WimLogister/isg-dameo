@@ -372,7 +372,7 @@ public class GameEngine {
     }
     
     public static void main(String[] args) {
-        runTestGames(10);
+        runTestGames(25);
     }
     
     
