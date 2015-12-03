@@ -81,9 +81,6 @@ public class DeepestMultiJumpFinder {
         
         final int x = n.captureMove.newX;
         final int y = n.captureMove.newY;
-        if (x == 2 && y == 4) {
-            System.out.println("");
-        }
         Piece capturingPiece = n.state.getBoard()[y][x];
         Set<SingleCaptureMove> moves = capturingPiece.generateCapturingMoves(n.state, n.capturedPieces);
         

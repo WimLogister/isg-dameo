@@ -70,11 +70,4 @@ public class Board {
         return sb.toString();
     }
     
-    public static void main(String[] args) {
-        Set<Piece> whitePieces = Piece.generatePieceSet(Constants.PlayerColors.WHITE);
-        Set<Piece> blackPieces = Piece.generatePieceSet(Constants.PlayerColors.WHITE);
-        Piece[][] board = Board.setupBoard(whitePieces, blackPieces);
-        System.out.println("\n" + Board.getBoardString(board));
-    }
-    
 }

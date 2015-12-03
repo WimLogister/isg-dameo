@@ -2,6 +2,7 @@ package dameo;
 
 import dameo.gametree.State;
 import dameo.move.Move;
+import dameo.move.MultiPieceMove;
 import dameo.move.SingleCaptureMove;
 import dameo.move.SingleMove;
 import java.awt.Point;
@@ -17,11 +18,11 @@ import java.util.Set;
  */
 public class Piece {
     
-    private int row, col;
-    private final Constants.PlayerColors color;
+    protected int row, col;
+    protected final Constants.PlayerColors color;
     private Set<Piece> pieceSet;
     private int hashCode;
-    private int dir;
+    protected int dir;
 
     private Piece(int row, int col, Constants.PlayerColors color, Set<Piece> pieceSet) {
         this.row = row;
@@ -215,6 +216,7 @@ public class Piece {
         Construct non-jumping moves in relative coordinates.
         */
         final int relativeForward = checkY + 1;
+        final int relativeBackward = checkY - 1;
         final int relativeLeft = checkX - 1;
         final int relativeRight = checkX + 1;
 
@@ -224,6 +226,7 @@ public class Piece {
         coordinates.
         */
         final int absoluteForward = dir*relativeForward;
+        final int absoluteBackward = dir*relativeBackward;
         final int absoluteLeft = dir*relativeLeft;
         final int absoluteRight = dir*relativeRight;
 
@@ -242,13 +245,88 @@ public class Piece {
             if (relativeLeft >= color.getBoardLeftEdge()) {
                 // Check for single left diagonal forward move
                 if (board[absoluteForward][absoluteLeft] == null) {
-                    moves.add(new SingleMove(absoluteLeft, absoluteForward, col, row));
+                    SingleMove firstMove = new SingleMove(absoluteLeft, absoluteForward, col, row);
+                    
+                    // See if you can move multiple pieces in the same direction
+                    boolean canAddPieces = true;
+                    int x_i = 0;
+                    int y_i = 0;
+                    
+                    List<SingleMove> multiMove = new ArrayList<>();
+                    multiMove.add(firstMove);
+                    List<SingleMove> listCopy = new ArrayList<>(multiMove);
+                    moves.add(new MultiPieceMove(listCopy));
+                    while (canAddPieces) {
+                        // Check if still within bounds
+                        if (relativeRight + x_i <= color.getBoardRightEdge() &&
+                                relativeBackward - y_i >= color.getBoardBottomEdge()) {
+                            // Check if it's not an empty square
+                            if (board[absoluteBackward-dir*y_i][absoluteRight+dir*x_i] != null) {
+                                // Check if own piece present
+                                if (board[absoluteBackward-dir*y_i][absoluteRight+dir*x_i].getColor().getValue() == color.getValue()) {
+                                    // Add new move to list
+                                    multiMove.add(new SingleMove((absoluteRight+dir*x_i)-dir, (absoluteBackward-dir*y_i)+dir, absoluteRight+dir*x_i, absoluteBackward-dir*y_i));
+                                    // Create new multi-piece move around copy of current list
+                                    List<SingleMove> copyList = new ArrayList<>(multiMove);
+                                    moves.add(new MultiPieceMove(copyList));
+                                }
+                                else {
+                                    canAddPieces = false;
+                                }
+                            }
+                            else {
+                                canAddPieces = false;
+                            }
+                        }
+                        else {
+                            canAddPieces = false;
+                        }
+                        x_i++; y_i++;
+                    }
                 }
-
             }
+            
             // Check legality single orthogonal forward move
             if (board[absoluteForward][col] == null) {
-                moves.add(new SingleMove(col, absoluteForward, col, row));
+                SingleMove firstMove = new SingleMove(col, absoluteForward, col, row);
+                
+                // See if you can move multiple pieces in the same direction
+                    boolean canAddPieces = true;
+                    int y_i = 0;
+                    
+                    List<SingleMove> multiMove = new ArrayList<>();
+                    multiMove.add(firstMove);
+                    List<SingleMove> listCopy = new ArrayList<>(multiMove);
+                    moves.add(new MultiPieceMove(listCopy));
+                    while (canAddPieces) {
+                        // Check if still within bounds
+                        if (relativeBackward - y_i >= color.getBoardBottomEdge()) {
+                            // Check if this space is not empty
+                            if (board[absoluteBackward-dir*y_i][col] != null) {
+                                // Check if own piece present
+                                if (board[absoluteBackward-dir*y_i][col].getColor().getValue() == color.getValue()) {
+                                    /*
+                                    Add new multimove to list that includes this
+                                    additional piece.
+                                    */
+                                    multiMove.add(new SingleMove(col, (absoluteBackward-dir*y_i)+dir, col, absoluteBackward-dir*y_i));
+                                    // Create new multi-piece move around copy of current list
+                                    List<SingleMove> copyList = new ArrayList<>(multiMove);
+                                    moves.add(new MultiPieceMove(copyList));
+                                }
+                                else {
+                                    canAddPieces = false;
+                                }
+                            }
+                            else {
+                                canAddPieces = false;
+                            }
+                        }
+                        else {
+                            canAddPieces = false;
+                        }
+                        y_i++;
+                    }
             }
 
 
@@ -256,7 +334,43 @@ public class Piece {
             if (relativeRight <= color.getBoardRightEdge()) {
                 // Check if not occupied by other piece
                 if (board[absoluteForward][absoluteRight] == null) {
-                    moves.add(new SingleMove(absoluteRight, absoluteForward, col, row));
+                    SingleMove firstMove = new SingleMove(absoluteRight, absoluteForward, col, row);
+                    
+                    
+                    // See if you can move multiple pieces in the same direction
+                    boolean canAddPieces = true;
+                    int x_i = 0;
+                    int y_i = 0;
+                    
+                    List<SingleMove> multiMove = new ArrayList<>();
+                    multiMove.add(firstMove);
+                    List<SingleMove> listCopy = new ArrayList<>(multiMove);
+                    moves.add(new MultiPieceMove(listCopy));
+                    while (canAddPieces) {
+                        // Check if still within bounds
+                        if (relativeLeft - x_i >= color.getBoardLeftEdge() &&
+                                relativeBackward - y_i >= color.getBoardBottomEdge()) {
+                            if (board[absoluteBackward-dir*y_i][absoluteLeft-dir*x_i] != null) {
+                                // Check if own piece present
+                                if (board[absoluteBackward-dir*y_i][absoluteLeft-dir*x_i].getColor().getValue() == color.getValue()) {
+                                    multiMove.add(new SingleMove((absoluteLeft-dir*x_i)+dir, (absoluteBackward-dir*y_i)+dir, absoluteLeft-dir*x_i, absoluteBackward-dir*y_i));
+                                    // Create new multi-piece move around copy of current list
+                                    List<SingleMove> copyList = new ArrayList<>(multiMove);
+                                    moves.add(new MultiPieceMove(copyList));
+                                }
+                                else {
+                                    canAddPieces = false;
+                                }
+                            }
+                            else {
+                                canAddPieces = false;
+                            }
+                        }
+                        else {
+                            canAddPieces = false;
+                        }
+                        x_i++; y_i++;
+                    }
                 }
             }
         }

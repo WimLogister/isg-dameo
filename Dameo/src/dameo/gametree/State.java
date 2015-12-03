@@ -9,8 +9,8 @@ import java.util.Set;
  * @author Wim
  */
 public class State {
-    private final Set<Piece> currentPlayerPieces;
-    private final Set<Piece> opponentPieces;
+    private Set<Piece> currentPlayerPieces;
+    private Set<Piece> opponentPieces;
     private final Piece[][] board;
 
     /**
@@ -66,6 +66,12 @@ public class State {
     
     public Piece[][] getBoard() {
         return board;
+    }
+    
+    public void switchPlayers() {
+        Set<Piece> temp = this.currentPlayerPieces;
+        this.currentPlayerPieces = this.opponentPieces;
+        this.opponentPieces = temp;
     }
     
     private static Piece[][] putPiecesOnNewBoard(Set<Piece> currentPlayerPieces,

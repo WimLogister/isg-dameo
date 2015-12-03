@@ -3,6 +3,7 @@ package dameo;
 import dameo.gametree.State;
 import dameo.move.DeepestMultiJumpFinder;
 import dameo.move.Move;
+import dameo.move.MultiCaptureMove;
 import dameo.move.SingleCaptureMove;
 import dameo.move.SingleMove;
 import dameo.players.Player;
@@ -27,7 +28,9 @@ public class GameEngine {
     private boolean printFlag;
     private static final String PRINT = "Y";
     
-    private boolean debug = false;
+    public static int DEBUG = 0;
+    
+    private int moveCounter;
 
     private GameEngine() {
         init();
@@ -86,7 +89,7 @@ public class GameEngine {
         
         currentState = new State(currentPlayer.getPieces(), currentOpponent.getPieces(), board);
         
-        if (debug) {
+        if (DEBUG > 0) {
             System.out.println("Enter Y for printing, anything else for no printing:");
             String flagString = DameoUtil.getConsoleInput();
             try {
@@ -133,6 +136,8 @@ public class GameEngine {
      * executed and it becomes the next player's turn.
      */
     private void next() {
+
+        System.out.printf("%s player to move\n",currentPlayer.getColor());
         
         /*
         Current player selects move
@@ -140,7 +145,7 @@ public class GameEngine {
         Move m = currentPlayer.selectMove(currentState);
         if (m == null) {
             end = true;
-            if (debug) {
+            if (DEBUG > 0) {
                 System.out.printf("%s player has no more legal moves.\n", currentPlayer.getColor());
                 System.out.printf("%s player wins.", currentOpponent.getColor());
             }
@@ -151,7 +156,8 @@ public class GameEngine {
             */
             m.execute(currentState);
             if (printFlag) {
-                System.out.println(m);
+                System.out.println(m.getClass().toString());
+                
                 System.out.println("State after move...");
                 System.out.println(Board.getBoardString(currentState.getBoard()));
             }
@@ -345,19 +351,15 @@ public class GameEngine {
         return moves;
     }
 
-    public void setDEBUG(boolean DEBUG) {
-        this.debug = DEBUG;
-    }
-
     public State getCurrentState() {
         return currentState;
     }
     
     public static void runTestGames(int numRuns, boolean debug) {
+        GameEngine.DEBUG = 1;
         double[] values = new double[numRuns];
         for (int i = 0; i < numRuns; i++) {
-            GameEngine eng = GameEngine.createRandomPlayerGame();
-            eng.setDEBUG(debug);
+            GameEngine eng = GameEngine.createTestEngine();
             eng.init();
             Constants.PlayerColors color = eng.start();
             values[i] = color.getValue() % 2;
