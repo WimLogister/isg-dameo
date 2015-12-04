@@ -23,8 +23,10 @@ import java.util.Set;
 import javafx.scene.control.RadioButton;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
@@ -45,6 +47,7 @@ public class DameoFrame extends JFrame implements Observer {
     public PlayerTypes p2;
 
     public DameoFrame() throws HeadlessException {
+        runGameSetupFrame();
         engine = DameoEngine.createRandomPlayerGame();
         createBoardPanel();
         createDashBoardPanel();
@@ -60,9 +63,11 @@ public class DameoFrame extends JFrame implements Observer {
     }
     
     private void runGameSetupFrame() {
-        JFrame setupFrame = new JFrame();
-        setupFrame.setLayout(new BoxLayout(setupFrame, BoxLayout.Y_AXIS));
-        setupFrame.add(new JLabel("White player type:"));
+        final JOptionPane setupFrame = new JFrame();
+        setupFrame.setSize(450, 200);
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.add(new JLabel("White player type:"));
         
         ButtonGroup p1Group = new ButtonGroup();
         
@@ -112,6 +117,27 @@ public class DameoFrame extends JFrame implements Observer {
             }
         });
         
+        JPanel group1Panel = new JPanel();
+        group1Panel.setLayout(new BoxLayout(group1Panel, BoxLayout.X_AXIS));
+        group1Panel.add(humanButton1); group1Panel.add(aiButton1); group1Panel.add(randomButton1);
+        
+        JPanel group2Panel = new JPanel();
+        group2Panel.setLayout(new BoxLayout(group2Panel, BoxLayout.X_AXIS));
+        group2Panel.add(humanButton2); group2Panel.add(aiButton2); group2Panel.add(randomButton2);
+        
+        contentPanel.add(group1Panel); contentPanel.add(group2Panel);
+        
+        JButton closeButton = new JButton("Set players");
+        closeButton.setSize(100, 50);
+        closeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setupFrame.dispose();
+            }
+        });
+        contentPanel.add(closeButton);
+        setupFrame.add(contentPanel);
+        setupFrame.setVisible(true);
     }
     
     private void createBoardPanel() {
