@@ -9,6 +9,7 @@ import dameo.move.SingleCaptureMove;
 import dameo.move.SingleMove;
 import dameo.players.Player;
 import dameo.util.Observer;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -35,7 +36,7 @@ public class DameoEngine {
     
     private int moveCounter;
     
-    private List<Observer> observers;
+    private List<Observer> observers = new ArrayList<>();
 
     private DameoEngine() {
         init();
@@ -44,6 +45,7 @@ public class DameoEngine {
     private DameoEngine(Player whitePlayer, Player blackPlayer) {
         currentPlayer = whitePlayer;
         currentOpponent = blackPlayer;
+        init();
     }
     
     public static DameoEngine createEngine() {
@@ -134,6 +136,10 @@ public class DameoEngine {
         
     }
     
+    public void setObserver(Observer o) {
+        this.observers.add(o);
+    }
+    
     /**
      * Advance the game one turn.
      * The set of legal moves for the current player is generated. Then, the
@@ -195,7 +201,7 @@ public class DameoEngine {
      */
     public Constants.PlayerColors start() {
         while (!end) {
-            if (printFlag)
+            if (DEBUG > 0)
                 DameoUtil.getConsoleInput();
             next();
         }
