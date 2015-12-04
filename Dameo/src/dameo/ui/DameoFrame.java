@@ -4,15 +4,22 @@ import dameo.Constants;
 import dameo.DameoEngine;
 import dameo.Piece;
 import dameo.gametree.State;
+import dameo.players.Player;
 import dameo.util.Observer;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.geom.Ellipse2D;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -22,16 +29,19 @@ import javax.swing.JPanel;
 public class DameoFrame extends JFrame implements Observer {
     
     private JPanel boardPanel;
+    private JPanel dashBoardPanel;
     private JPanel controlPanel;
     private JPanel inputPanel;
     private final DameoEngine engine;
-    public static final int WIDTH = 600;
-    public static final int HEIGHT = 600;
+    public static final int WIDTH = 900;
+    public static final int HEIGHT = 900;
 
     public DameoFrame() throws HeadlessException {
-        
         engine = DameoEngine.createRandomPlayerGame();
         createBoardPanel();
+        createDashBoardPanel();
+        this.getContentPane().repaint();
+        this.getContentPane().revalidate();
     }
     
     public void start() {
@@ -41,11 +51,25 @@ public class DameoFrame extends JFrame implements Observer {
         
     }
     
+    private void runGameSetupFrame() {
+        
+    }
+    
     private void createBoardPanel() {
         boardPanel = new DameoBoardPanel();
-        this.getContentPane().add(boardPanel);
-        this.getContentPane().repaint();
-        this.getContentPane().revalidate();
+        this.getContentPane().add(boardPanel, BorderLayout.CENTER);
+    }
+    
+    private void createDashBoardPanel() {
+        dashBoardPanel = new JPanel();
+        dashBoardPanel.setLayout(new BoxLayout(dashBoardPanel, BoxLayout.Y_AXIS));
+        List<Player> list = engine.getPlayers();
+        dashBoardPanel.add(new JLabel("White Player"));
+        dashBoardPanel.add(new JLabel(String.format("Type: %s", list.get(0).getPlayerType())));
+        dashBoardPanel.add(new JLabel("Black Player"));
+        dashBoardPanel.add(new JLabel(String.format("Type: %s", list.get(1).getPlayerType())));
+        dashBoardPanel.setPreferredSize(new Dimension(100, 200));
+        this.getContentPane().add(dashBoardPanel, BorderLayout.EAST);
     }
     
     private void createControlPanel() {
@@ -60,7 +84,9 @@ public class DameoFrame extends JFrame implements Observer {
     public void update() {
         this.getContentPane().removeAll();
         createBoardPanel();
-        
+        createDashBoardPanel();
+        this.getContentPane().repaint();
+        this.getContentPane().revalidate();
     }
     
     class DameoBoardPanel extends JPanel {
@@ -84,9 +110,6 @@ public class DameoFrame extends JFrame implements Observer {
                         g.setColor(khaki);
                     }
                     g.fillRect(x, y, squareSide, squareSide);
-//                    this.add(new SquarePanel(col*this.getWidth()/cols,
-//                            row*this.getHeight()/rows, this.getWidth()/cols,
-//                            this.getHeight()/rows));
                 }
             }
             State s = engine.getCurrentState();

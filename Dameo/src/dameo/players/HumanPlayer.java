@@ -12,6 +12,8 @@ import java.util.Set;
  * @author Wim
  */
 public class HumanPlayer extends Player {
+    
+    private PlayerTypes type;
 
     public HumanPlayer(Constants.PlayerColors color, Set<Piece> pieceSet) {
         super(color, pieceSet);
@@ -26,6 +28,11 @@ public class HumanPlayer extends Player {
     
     public static void generateMoveFromString(String s) {
         
+    }
+
+    @Override
+    public PlayerTypes getPlayerType() {
+        return PlayerTypes.HUMAN;
     }
     
 }

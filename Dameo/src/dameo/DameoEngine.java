@@ -4,7 +4,6 @@ import dameo.util.DameoUtil;
 import dameo.gametree.State;
 import dameo.move.DeepestMultiJumpFinder;
 import dameo.move.Move;
-import dameo.move.MultiCaptureMove;
 import dameo.move.SingleCaptureMove;
 import dameo.move.SingleMove;
 import dameo.players.Player;
@@ -37,6 +36,7 @@ public class DameoEngine {
     private int moveCounter;
     
     private List<Observer> observers = new ArrayList<>();
+    private List<Player> players = new ArrayList<>();
 
     private DameoEngine() {
         init();
@@ -75,6 +75,8 @@ public class DameoEngine {
     }
     
     private void init() {
+        players.add(currentPlayer);
+        players.add(currentOpponent);
         
         if (currentPlayer == null) {
             /*
@@ -229,6 +231,10 @@ public class DameoEngine {
         }
         else moveSet = jumpMoves;
         return moveSet;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
     
     /**

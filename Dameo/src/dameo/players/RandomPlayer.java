@@ -14,6 +14,8 @@ import java.util.Set;
  * @author Wim
  */
 public class RandomPlayer extends Player {
+    
+    private PlayerTypes type;
 
     public RandomPlayer(Constants.PlayerColors color, Set<Piece> pieces) {
         super(color, pieces);
@@ -35,6 +37,11 @@ public class RandomPlayer extends Player {
             selectedMove = it.next();
         }
         return selectedMove;
+    }
+
+    @Override
+    public PlayerTypes getPlayerType() {
+        return PlayerTypes.RANDOM;
     }
 
 }

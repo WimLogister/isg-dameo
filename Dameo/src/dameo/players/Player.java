@@ -27,6 +27,8 @@ public abstract class Player {
     
     public abstract Move selectMove(State s);
     
+    public abstract PlayerTypes getPlayerType();
+    
     /**
      * Static factory method for creating players based on passed parameters.
      * @param type The type of player (HUMAN == 1, AI == 2, RANDOM == 3)
@@ -42,9 +44,6 @@ public abstract class Player {
         if (type == PlayerTypes.RANDOM.value) {
             p = new RandomPlayer(color, pieceSet);
         }
-        if (type == PlayerTypes.DEBUG.value) {
-            p = new DebugPlayer(color, pieceSet);
-        }
         if (type == PlayerTypes.NEGAMAX.value) {
             p = new AIPlayer(color, pieceSet, new NegaMax(5, color));
         }
@@ -52,7 +51,7 @@ public abstract class Player {
     }
     
     public enum PlayerTypes {
-        HUMAN(1), NEGAMAX(2), RANDOM(3), DEBUG(4);
+        HUMAN(1), NEGAMAX(2), RANDOM(3);
         private int value;
 
         private PlayerTypes(int value) {
