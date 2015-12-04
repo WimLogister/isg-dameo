@@ -5,6 +5,7 @@ import dameo.DameoEngine;
 import dameo.Piece;
 import dameo.gametree.State;
 import dameo.players.Player;
+import dameo.players.Player.PlayerTypes;
 import dameo.util.Observer;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -13,14 +14,19 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javafx.scene.control.RadioButton;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 /**
  *
@@ -35,6 +41,8 @@ public class DameoFrame extends JFrame implements Observer {
     private final DameoEngine engine;
     public static final int WIDTH = 900;
     public static final int HEIGHT = 900;
+    public PlayerTypes p1;
+    public PlayerTypes p2;
 
     public DameoFrame() throws HeadlessException {
         engine = DameoEngine.createRandomPlayerGame();
@@ -52,6 +60,57 @@ public class DameoFrame extends JFrame implements Observer {
     }
     
     private void runGameSetupFrame() {
+        JFrame setupFrame = new JFrame();
+        setupFrame.setLayout(new BoxLayout(setupFrame, BoxLayout.Y_AXIS));
+        setupFrame.add(new JLabel("White player type:"));
+        
+        ButtonGroup p1Group = new ButtonGroup();
+        
+        JRadioButton humanButton1 = new JRadioButton("Human"); p1Group.add(humanButton1);
+        humanButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                p1 = PlayerTypes.HUMAN;
+            }
+        });
+        JRadioButton aiButton1 = new JRadioButton("AI"); p1Group.add(aiButton1);
+        aiButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                p1 = PlayerTypes.NEGAMAX;
+            }
+        });
+        JRadioButton randomButton1 = new JRadioButton("Random"); p1Group.add(randomButton1);
+        randomButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                p1 = PlayerTypes.RANDOM;
+            }
+        });
+        
+        ButtonGroup p2Group = new ButtonGroup();
+        
+        JRadioButton humanButton2 = new JRadioButton("Human"); p2Group.add(humanButton2);
+        humanButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                p2 = PlayerTypes.HUMAN;
+            }
+        });
+        JRadioButton aiButton2 = new JRadioButton("AI"); p2Group.add(aiButton2);
+        aiButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                p2 = PlayerTypes.NEGAMAX;
+            }
+        });
+        JRadioButton randomButton2 = new JRadioButton("Random"); p2Group.add(randomButton2);
+        randomButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                p2 = PlayerTypes.RANDOM;
+            }
+        });
         
     }
     
