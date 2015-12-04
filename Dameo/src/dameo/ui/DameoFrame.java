@@ -29,11 +29,16 @@ public class DameoFrame extends JFrame implements Observer {
     public static final int HEIGHT = 600;
 
     public DameoFrame() throws HeadlessException {
-        DameoEngine.DEBUG = 1;
+        
         engine = DameoEngine.createRandomPlayerGame();
-        engine.setObserver(this);
         createBoardPanel();
+    }
+    
+    public void start() {
+        DameoEngine.DEBUG = 1;
+        engine.setObserver(this);
         engine.start();
+        
     }
     
     private void createBoardPanel() {
@@ -112,6 +117,7 @@ public class DameoFrame extends JFrame implements Observer {
 //        frame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.start();
     }
     
 }

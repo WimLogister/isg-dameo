@@ -190,9 +190,6 @@ public class DameoEngine {
         currentPlayer = currentOpponent;
         currentOpponent = temp;
         
-        for (Observer o : observers) {
-            o.update();
-        }
     }
     
     /**
@@ -204,6 +201,9 @@ public class DameoEngine {
             if (DEBUG > 0)
                 DameoUtil.getConsoleInput();
             next();
+            for (Observer o : observers) {
+                o.update();
+            }
         }
         return currentPlayer.getColor();
     }
