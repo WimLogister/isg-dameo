@@ -68,6 +68,7 @@ public class KingPiece extends Piece {
             }
         }
         pieceReached = false;
+        relativeX = dir*col;
         relativeY = dir*row;
         
         
@@ -92,7 +93,8 @@ public class KingPiece extends Piece {
             }
         }
         pieceReached = false;
-
+        relativeX = dir*col;
+        relativeY = dir*row;
         
         /* Check left */
         while(--relativeX >= color.getBoardLeftEdge() && !pieceReached) {
@@ -115,7 +117,8 @@ public class KingPiece extends Piece {
             }
         }
         pieceReached = false;
-        relativeX = dir*row;
+        relativeX = dir*col;
+        relativeY = dir*row;
         
         /* Check right */
         while(++relativeX <= color.getBoardRightEdge() && !pieceReached) {
