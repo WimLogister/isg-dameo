@@ -1,11 +1,16 @@
 package dameo.players;
 
 import dameo.Constants;
+import dameo.DameoEngine;
 import dameo.move.Move;
 import dameo.Piece;
 import dameo.util.DameoUtil;
 import dameo.gametree.State;
+import java.awt.HeadlessException;
+import java.util.Iterator;
 import java.util.Set;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,9 +26,13 @@ public class HumanPlayer extends Player {
 
     @Override
     public Move selectMove(State s) {
-        System.out.printf("Player %d, please enter a legal move: ", color);
-        String str = DameoUtil.getConsoleInput();
-        return null;
+        MoveSelectFrame frame = new MoveSelectFrame();
+        frame.setSize(200,200);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Set<Move> moves = DameoEngine.generateLegalMoves(s);
+        Move m = frame.getPlayerMoveInput(moves);
+        return m;
     }
     
     public static void generateMoveFromString(String s) {
@@ -33,6 +42,34 @@ public class HumanPlayer extends Player {
     @Override
     public PlayerTypes getPlayerType() {
         return PlayerTypes.HUMAN;
+    }
+    
+    class MoveSelectFrame extends JFrame {
+        
+        public MoveSelectFrame() throws HeadlessException {
+        }
+        
+        Move getPlayerMoveInput(Set<Move> moves) {
+            Object[] possibilities = new Object[moves.size()];
+            int i = 0;
+            for (Move m : moves) {
+                possibilities[i++] = m.toString();
+            }
+            String s = (String)JOptionPane.showInputDialog(this, "Select move",
+                    "Get player move", JOptionPane.QUESTION_MESSAGE, null,
+                    possibilities, possibilities[0]);
+            boolean moveFound = false;
+            Iterator<Move> it = moves.iterator();
+            Move returnMove = null;
+            while (it.hasNext() && !moveFound) {
+                Move m = it.next();
+                if (m.toString().equals(s)) {
+                    returnMove = m;
+                    moveFound = true;
+                }
+            }
+            return returnMove;
+        }
     }
     
 }

@@ -27,5 +27,14 @@ public class MultiPieceMove extends Move {
             moves.get(i).execute(state);
         }
     }
+
+    @Override
+    public String toString() {
+        Move firstMove = moves.get(0);
+        Move lastMove = moves.get(moves.size()-1);
+        return String.format("Multi-piece <%d,%d>:<%d,%d>", firstMove.newX+1, firstMove.newY+1,
+                lastMove.oldX+1, lastMove.oldY+1);
+    }
+    
     
 }

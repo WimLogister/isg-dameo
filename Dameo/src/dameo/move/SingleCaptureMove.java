@@ -37,7 +37,7 @@ public class SingleCaptureMove extends Move {
 
     @Override
     public String toString() {
-        return String.format("From:<%d,%d>, To:<%d,%d>, Capturing:<%d,%d>", oldX+1,
+        return String.format("Single capture <%d,%d>:<%d,%d>,Capturing:(%d,%d)", oldX+1,
                 oldY+1, newX+1, newY+1, captX+1, captY+1);
     }
 
@@ -48,5 +48,4 @@ public class SingleCaptureMove extends Move {
     public int getCaptY() {
         return captY;
     }
-    
 }

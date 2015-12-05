@@ -41,7 +41,7 @@ public class SingleMove extends Move {
 
     @Override
     public String toString() {
-        return String.format("From:<%d,%d>, To:<%d,%d>", oldX+1,
+        return String.format("Single move <%d,%d>:<%d,%d>", oldX+1,
                 oldY+1, newX+1, newY+1);
     }
     

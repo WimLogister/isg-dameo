@@ -4,6 +4,7 @@ import dameo.Constants;
 import dameo.DameoEngine;
 import dameo.Piece;
 import dameo.gametree.State;
+import dameo.move.Move;
 import dameo.players.Player;
 import dameo.players.Player.PlayerTypes;
 import dameo.util.Observer;
@@ -45,14 +46,16 @@ public class DameoFrame extends JFrame implements Observer {
     public static final int HEIGHT = 900;
     public PlayerTypes p1;
     public PlayerTypes p2;
+    private Move selectedMove;
 
     public DameoFrame() throws HeadlessException {
-        getUserInput();
+        getPlayerSetupInput();
         engine = DameoEngine.createInputPlayerGame(p1, p2);
         createBoardPanel();
         createDashBoardPanel();
         this.getContentPane().repaint();
         this.getContentPane().revalidate();
+        this.selectedMove = null;
     }
     
     public void start() {
@@ -61,86 +64,9 @@ public class DameoFrame extends JFrame implements Observer {
         engine.start();
         
     }
+   
     
-//    private void runGameSetupFrame() {
-//        final JOptionPane setupFrame = new JOptionPane();
-//        setupFrame.setSize(450, 200);
-//        JPanel contentPanel = new JPanel();
-//        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-//        contentPanel.add(new JLabel("White player type:"));
-//        
-//        ButtonGroup p1Group = new ButtonGroup();
-//        
-//        JRadioButton humanButton1 = new JRadioButton("Human"); p1Group.add(humanButton1);
-//        humanButton1.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                p1 = PlayerTypes.HUMAN;
-//            }
-//        });
-//        JRadioButton aiButton1 = new JRadioButton("AI"); p1Group.add(aiButton1);
-//        aiButton1.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                p1 = PlayerTypes.NEGAMAX;
-//            }
-//        });
-//        JRadioButton randomButton1 = new JRadioButton("Random"); p1Group.add(randomButton1);
-//        randomButton1.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                p1 = PlayerTypes.RANDOM;
-//            }
-//        });
-//        
-//        ButtonGroup p2Group = new ButtonGroup();
-//        
-//        JRadioButton humanButton2 = new JRadioButton("Human"); p2Group.add(humanButton2);
-//        humanButton2.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                p2 = PlayerTypes.HUMAN;
-//            }
-//        });
-//        JRadioButton aiButton2 = new JRadioButton("AI"); p2Group.add(aiButton2);
-//        aiButton2.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                p2 = PlayerTypes.NEGAMAX;
-//            }
-//        });
-//        JRadioButton randomButton2 = new JRadioButton("Random"); p2Group.add(randomButton2);
-//        randomButton2.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                p2 = PlayerTypes.RANDOM;
-//            }
-//        });
-//        
-//        JPanel group1Panel = new JPanel();
-//        group1Panel.setLayout(new BoxLayout(group1Panel, BoxLayout.X_AXIS));
-//        group1Panel.add(humanButton1); group1Panel.add(aiButton1); group1Panel.add(randomButton1);
-//        
-//        JPanel group2Panel = new JPanel();
-//        group2Panel.setLayout(new BoxLayout(group2Panel, BoxLayout.X_AXIS));
-//        group2Panel.add(humanButton2); group2Panel.add(aiButton2); group2Panel.add(randomButton2);
-//        
-//        contentPanel.add(group1Panel); contentPanel.add(group2Panel);
-//        
-//        JButton closeButton = new JButton("Set players");
-//        closeButton.setSize(100, 50);
-//        closeButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                setupFrame.dispose();
-//            }
-//        });
-//        contentPanel.add(closeButton);
-//        setupFrame.add(contentPanel);
-//        setupFrame.setVisible(true);
-//    }
-    
-    private void getUserInput() {
+    private void getPlayerSetupInput() {
         Object[] possibilities = {"Human", "AI", "Random"};
         String s1 = (String)JOptionPane.showInputDialog(this, "Select a player type for white player",
                 "Get player input", JOptionPane.PLAIN_MESSAGE,null, possibilities, "Human");
