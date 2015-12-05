@@ -210,7 +210,7 @@ public class DameoEngine {
     public Constants.PlayerColors start() {
         while (!end) {
             if (DEBUG > 0)
-                DameoUtil.getConsoleInput();
+//                DameoUtil.getConsoleInput();
             next();
             for (Observer o : observers) {
                 o.update();

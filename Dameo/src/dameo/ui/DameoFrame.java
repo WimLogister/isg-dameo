@@ -2,6 +2,7 @@ package dameo.ui;
 
 import dameo.Constants;
 import dameo.DameoEngine;
+import dameo.KingPiece;
 import dameo.Piece;
 import dameo.gametree.State;
 import dameo.move.Move;
@@ -173,6 +174,11 @@ public class DameoFrame extends JFrame implements Observer {
                         py*squareSide, squareSide, squareSide);
                 g2d.fill(circle);
                 g2d.setColor(Color.BLACK);
+                if (p instanceof KingPiece) {
+                    Ellipse2D.Double kingCircle = new Ellipse2D.Double(px*squareSide+5,
+                            py*squareSide, squareSide-10, squareSide-10);
+                    g2d.draw(kingCircle);
+                }
                 g2d.drawString(String.format("%d,%d", px+1, ((-py+7)%8)+1), px*squareSide+25, py*squareSide+35);
             }
         }

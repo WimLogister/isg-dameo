@@ -34,6 +34,21 @@ public class SingleCaptureMove extends Move {
         // Remove captured piece from opponent's piece set
         capturedPiece.removeFromSet();
     }
+    
+    /**
+     * Executes the move without removing captured piece from board.
+     * Used for finding multi-jumps.
+     * @param state 
+     */
+    public void mockExecute(State state) {
+        Piece capturingPiece = state.getBoard()[oldY][oldX];        
+        // Remove capturing piece from previous position on board
+        state.getBoard()[oldY][oldX] = null;
+        // Put capturing piece on new position on board
+        state.getBoard()[newY][newX] = capturingPiece;
+        // Update capturing piece's local information
+        capturingPiece.setCoords(newY, newX);
+    }
 
     @Override
     public String toString() {

@@ -75,7 +75,7 @@ public class DeepestMultiJumpFinder {
     
     private void recursiveFind(JumpNode n) {
         // Execute move stored in node n to advance state
-        n.captureMove.execute(n.state);
+        n.captureMove.mockExecute(n.state);
         // Add captured piece to captured piece list
         n.capturedPieces.add(new Point(n.captureMove.captX, n.captureMove.captY));
         
