@@ -46,7 +46,6 @@ public class KingPiece extends Piece {
         
         boolean pieceReached = false;
         
-        relativeY++;
         /* Check up */
         while(++relativeY <= color.getBoardTopEdge() && !pieceReached) {
             /* Check that square is empty */
@@ -82,7 +81,8 @@ public class KingPiece extends Piece {
         relativeY++;
         /*
         If we've reached an enemy piece, start iterating and adding
-        SingleCaptureMoves for each empty square.
+        SingleCaptureMoves for each empty square, unless the Piece had already
+        been captured before.
         */
         if (pieceReached && board[relativeY*dir][col].getColor().getValue() == color.getOpponent() &&
                 !Piece.listContainsPoint(capturedList, new Point(col, relativeY*dir))) {
