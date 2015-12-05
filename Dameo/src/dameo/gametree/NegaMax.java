@@ -71,7 +71,7 @@ public class NegaMax implements AIStrategy {
     
     @Override
     public Move searchBestMove(State s) {
-        Move m = alphaBeta(s, searchDepth, alpha, beta, negamaxColor).getMove();
+        Move m = alphaBeta(s, searchDepth, alpha, beta, 1).getMove();
         return m;
     }
     

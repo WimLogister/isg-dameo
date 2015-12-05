@@ -27,8 +27,6 @@ public class HumanPlayer extends Player {
     @Override
     public Move selectMove(State s) {
         MoveSelectFrame frame = new MoveSelectFrame();
-        frame.setSize(200,200);
-        frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Set<Move> moves = DameoEngine.generateLegalMoves(s);
         Move m = frame.getPlayerMoveInput(moves);
