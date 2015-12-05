@@ -8,6 +8,7 @@ import java.awt.Point;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import dameo.Piece;
 
 /**
  *
@@ -17,6 +18,10 @@ public class KingPiece extends Piece {
     
     public KingPiece(Piece p) {
         super(p);
+    }
+    
+    public KingPiece(int row, int col, Constants.PlayerColors color, Set<Piece> pieceSet) {
+        super(row, col, color, pieceSet);
     }
     
     @Override
@@ -54,7 +59,8 @@ public class KingPiece extends Piece {
         If we've reached an enemy piece, start iterating and adding
         SingleCaptureMoves for each empty square.
         */
-        if (pieceReached && board[relativeY*dir][col].getColor().getValue() == color.getOpponent()) {
+        if (pieceReached && board[relativeY*dir][col].getColor().getValue() == color.getOpponent() &&
+                !Piece.listContainsPoint(capturedList, new Point(col, relativeY*dir))){
             int captY = relativeY*dir;
             while (++relativeY <= color.getBoardTopEdge() &&
                     board[relativeY*dir][col] == null) {
@@ -77,7 +83,8 @@ public class KingPiece extends Piece {
         If we've reached an enemy piece, start iterating and adding
         SingleCaptureMoves for each empty square.
         */
-        if (pieceReached && board[relativeY*dir][col].getColor().getValue() == color.getOpponent()) {
+        if (pieceReached && board[relativeY*dir][col].getColor().getValue() == color.getOpponent() &&
+                !Piece.listContainsPoint(capturedList, new Point(col, relativeY*dir))) {
             int captY = relativeY*dir;
             while (--relativeY >= color.getBoardBottomEdge() &&
                     board[relativeY*dir][col] == null) {
@@ -99,7 +106,8 @@ public class KingPiece extends Piece {
         If we've reached an enemy piece, start iterating and adding
         SingleCaptureMoves for each empty square.
         */
-        if (pieceReached && board[row][relativeX*dir].getColor().getValue() == color.getOpponent()) {
+        if (pieceReached && board[row][relativeX*dir].getColor().getValue() == color.getOpponent() &&
+                !Piece.listContainsPoint(capturedList, new Point(relativeX*dir, row))) {
             int captX = relativeX*dir;
             while (--relativeX >= color.getBoardLeftEdge() &&
                     board[row][relativeX*dir] == null) {
@@ -121,7 +129,8 @@ public class KingPiece extends Piece {
         If we've reached an enemy piece, start iterating and adding
         SingleCaptureMoves for each empty square.
         */
-        if (pieceReached && board[row][relativeX*dir].getColor().getValue() == color.getOpponent()) {
+        if (pieceReached && board[row][relativeX*dir].getColor().getValue() == color.getOpponent() &&
+                !Piece.listContainsPoint(capturedList, new Point(relativeX*dir, row))) {
             int captX = relativeX*dir;
             while (++relativeX <= color.getBoardRightEdge() &&
                     board[row][relativeX*dir] == null) {
@@ -130,7 +139,11 @@ public class KingPiece extends Piece {
         }
         return moves;
     }
-
+    
+    public static void copyIntoSet(Piece origPiece, Set<Piece> newSet) {
+        newSet.add(new KingPiece(origPiece.getRow(), origPiece.getCol(), origPiece.getColor(), newSet));
+    }
+    
     @Override
     public Set<Move> generateSingleMoves(State s) {
         Piece[][] board = s.getBoard();

@@ -1,5 +1,6 @@
 package dameo.move;
 
+import dameo.KingPiece;
 import dameo.Piece;
 import dameo.gametree.State;
 import java.awt.Point;
@@ -82,6 +83,9 @@ public class DeepestMultiJumpFinder {
         final int x = n.captureMove.newX;
         final int y = n.captureMove.newY;
         Piece capturingPiece = n.state.getBoard()[y][x];
+        if (capturingPiece instanceof KingPiece) {
+            System.out.println("debug");
+        }
         Set<SingleCaptureMove> moves = capturingPiece.generateCapturingMoves(n.state, n.capturedPieces);
         
         // This is a terminal node: no more jumps can be made

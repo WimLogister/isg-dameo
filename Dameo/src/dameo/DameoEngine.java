@@ -200,7 +200,28 @@ public class DameoEngine {
         Player temp = currentPlayer;
         currentPlayer = currentOpponent;
         currentOpponent = temp;
+    }
+    
+    public static void createDebugState() {
+        Set<Piece> whitePieceSet = new HashSet<>();
+        Piece whiteKingPiece = new KingPiece(7, 5, Constants.PlayerColors.WHITE, whitePieceSet);
+        whitePieceSet.add(whiteKingPiece);
         
+        Set<Piece> blackPieceSet = new HashSet<>();
+        Piece blackPiece1 = new Piece(5, 5, Constants.PlayerColors.BLACK, blackPieceSet);
+        Piece blackPiece2 = new Piece(2, 5, Constants.PlayerColors.BLACK, blackPieceSet);
+        blackPieceSet.add(blackPiece1);
+        blackPieceSet.add(blackPiece2);
+        
+        Piece[][] board = new Piece[8][8];
+        board[whiteKingPiece.getRow()][whiteKingPiece.getCol()] = whiteKingPiece;
+        board[blackPiece1.getRow()][blackPiece1.getCol()] = blackPiece1;
+        board[blackPiece2.getRow()][blackPiece2.getCol()] = blackPiece2;
+        
+        State s = new State(whitePieceSet, blackPieceSet, board);
+        DeepestMultiJumpFinder finder = new DeepestMultiJumpFinder();
+        Set<Move> moves = finder.findDeepestNode(s);
+        System.out.println("debug");
     }
     
     /**
@@ -401,8 +422,10 @@ public class DameoEngine {
         System.out.printf("Win percentage: %f", DameoUtil.mean(values));
     }
     
+    
+    
     public static void main(String[] args) {
-        runTestGames(25);
+        DameoEngine.createDebugState();
     }
     
     
