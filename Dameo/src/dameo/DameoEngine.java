@@ -74,6 +74,15 @@ public class DameoEngine {
         return new DameoEngine(whitePlayer, blackPlayer);
     }
     
+    public static DameoEngine createInputPlayerGame(Player.PlayerTypes p1type,
+            Player.PlayerTypes p2type) {
+        Player whitePlayer = Player.generatePlayer(p1type.getValue(), Constants.PlayerColors.WHITE,
+                Piece.generatePieceSet(Constants.PlayerColors.WHITE));
+        Player blackPlayer = Player.generatePlayer(p2type.getValue(), Constants.PlayerColors.BLACK,
+                Piece.generatePieceSet(Constants.PlayerColors.BLACK));
+        return new DameoEngine(whitePlayer, blackPlayer);
+    }
+    
     private void init() {
         players.add(currentPlayer);
         players.add(currentOpponent);
