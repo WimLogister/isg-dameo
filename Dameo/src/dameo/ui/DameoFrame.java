@@ -162,7 +162,7 @@ public class DameoFrame extends JFrame implements Observer {
             Graphics2D g2d = (Graphics2D) g;
             for (Piece p : allPieces) {
                 int px = p.getCol();
-                int py = p.getRow();
+                int py = 7-p.getRow();
                 if (p.getColor() == Constants.PlayerColors.WHITE) {
                     g2d.setColor(white);
                 }
@@ -172,6 +172,8 @@ public class DameoFrame extends JFrame implements Observer {
                 Ellipse2D.Double circle = new Ellipse2D.Double(px*squareSide,
                         py*squareSide, squareSide, squareSide);
                 g2d.fill(circle);
+                g2d.setColor(Color.BLACK);
+                g2d.drawString(String.format("%d,%d", px+1, ((-py+7)%8)+1), px*squareSide+25, py*squareSide+35);
             }
         }
     }
