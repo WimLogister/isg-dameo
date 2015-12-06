@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import dameo.Piece;
+import dameo.move.MultiPieceMove;
 
 /**
  *
@@ -286,6 +287,13 @@ public class KingPiece extends Piece {
             /* Non-empty square reached, stop iterating in this direction */
             else {
                 pieceReached = true;
+            }
+        }
+        Set<Move> multiMoves = super.generateSingleMoves(s);
+        for (Move m : multiMoves) {
+            MultiPieceMove mul = (MultiPieceMove) m;
+            if (mul.getMoves().size() > 1) {
+                moves.add(m);
             }
         }
         return moves;

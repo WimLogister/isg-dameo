@@ -255,6 +255,31 @@ public class DameoEngine {
         System.out.println("debug");
     }
     
+    public static void createKingMultiPieceState() {
+        Set<Piece> whitePieceSet = new HashSet<>();
+        Piece whiteKingPiece = new KingPiece(1, 6, Constants.PlayerColors.WHITE, whitePieceSet);
+        Piece whitePiece = new Piece(0, 6, Constants.PlayerColors.WHITE, whitePieceSet);
+        whitePieceSet.add(whiteKingPiece);
+        whitePieceSet.add(whitePiece);
+        
+        Set<Piece> blackPieceSet = new HashSet<>();
+//        Piece blackPiece1 = new Piece(5, 5, Constants.PlayerColors.BLACK, blackPieceSet);
+//        Piece blackPiece2 = new Piece(2, 5, Constants.PlayerColors.BLACK, blackPieceSet);
+//        blackPieceSet.add(blackPiece1);
+//        blackPieceSet.add(blackPiece2);
+        
+        Piece[][] board = new Piece[8][8];
+        board[whiteKingPiece.getRow()][whiteKingPiece.getCol()] = whiteKingPiece;
+        board[whitePiece.getRow()][whitePiece.getCol()] = whitePiece;
+//        board[blackPiece1.getRow()][blackPiece1.getCol()] = blackPiece1;
+//        board[blackPiece2.getRow()][blackPiece2.getCol()] = blackPiece2;
+        
+        State s = new State(whitePieceSet, blackPieceSet, board);
+        Set<Move> kingMoves = whiteKingPiece.generateSingleMoves(s);
+        Set<Move> regularPieceMoves = whitePiece.generateSingleMoves(s);
+        System.out.println("debug");
+    }
+    
     /**
      * Run an initialized game.
      * @return The color of the winning player
@@ -298,144 +323,6 @@ public class DameoEngine {
         return players;
     }
     
-    /**
-     * Generate the list of legal moves in the given game state.
-     * Note: only returns legal moves for current player.
-     * @return Hashset of legal moves in the current game state.
-     */
-    public static Set<Move> oldgenerateLegalMoves(State state) {
-        
-        Set<Piece> currentPlayerPieceSet = state.getCurrentPlayerPieces();
-        
-        Piece[][] board = state.getBoard();
-        
-        Set<Move> moves = new HashSet<>();
-        
-        Iterator<Piece> it = currentPlayerPieceSet.iterator();
-        int dir = 0;
-        Constants.PlayerColors color = null;
-        if (it.hasNext()) {
-            color = it.next().getColor();
-            dir = color.getDirection();
-        }
-        boolean capturingMovesPresent = false;
-        
-        // Check for capturing moves
-        for (Piece p : currentPlayerPieceSet) {
-            
-            final int y = p.getRow();
-            final int x = p.getCol();
-            final int checkX = dir*x;
-            final int checkY = dir*y;
-            final int relativeForward = checkY + 1;
-            final int relativeLeft = checkX - 1;
-            final int relativeRight = checkX + 1;
-
-            final int absoluteForward = dir*relativeForward;
-            final int absoluteLeft = dir*relativeLeft;
-            final int absoluteRight = dir*relativeRight;
-            
-            /*
-            Check if we don't move off the right side of the board. This is for
-            right orthogonal moves.
-            */
-            if (relativeRight <= color.getBoardRightEdge()) {
-                // Check for right orthogonal capturing move
-                if (/* Check we don't move off the board */ relativeRight + 1 <= color.getBoardRightEdge() &&
-                        board[y][absoluteRight] != null &&
-                        /* Check for opponent's piece */ board[y][absoluteRight].getColor().getValue() == color.getOpponent()
-                        /* Check for empty square */ && board[y][absoluteRight+dir] == null) {
-                    moves.add(new SingleCaptureMove(absoluteRight+dir, y, x, y, absoluteRight, y));
-                    capturingMovesPresent = true;
-                }
-            }
-            
-            /*
-            Check for left orthogonal capturing move.
-            */
-            if (relativeLeft >= color.getBoardLeftEdge()) {
-                    // Check for left orthogonal capturing move
-                    if (/* Check we don't move off board*/ relativeLeft-1 >= color.getBoardLeftEdge()
-                            /* Check for opponent piece */ && board[y][absoluteLeft] != null &&
-                                    board[y][absoluteLeft].getColor().getValue() == color.getOpponent()
-                            /* Check for empty square behind opponent */ && board[y][absoluteLeft-dir] == null) {
-                        moves.add(new SingleCaptureMove(absoluteLeft-dir, y, x, y, absoluteLeft, y));
-                        capturingMovesPresent = true;
-                    }
-            }
-            
-            /*
-            Check for forward capturing move.
-            */
-            if (relativeForward <= color.getBoardTopEdge()) {
-                // Check for forward capture
-                if (board[absoluteForward][x] != null &&
-                        board[absoluteForward][x].getColor().getValue() == color.getOpponent()) {
-                        // Check if we don't end up jumping off the board and
-                        // square behind enemy piece is empty
-                        if (relativeForward + 1 <= color.getBoardTopEdge() && board[absoluteForward+dir][x] == null) {
-                            moves.add(new SingleCaptureMove(x, absoluteForward+dir, x, y, x, absoluteForward));
-                            capturingMovesPresent = true;
-                        }
-                }
-            }
-        }
-        
-        // If no capturing moves, check for non-capturing moves
-        if (!capturingMovesPresent) {
-            for (Piece p : currentPlayerPieceSet) {
-
-                final int y = p.getRow();
-                final int x = p.getCol();
-                final int checkX = dir*x;
-                final int checkY = dir*y;
-                final int relativeForward = checkY + 1;
-                final int relativeLeft = checkX - 1;
-                final int relativeRight = checkX + 1;
-
-                final int absoluteForward = dir*relativeForward;
-                final int absoluteLeft = dir*relativeLeft;
-                final int absoluteRight = dir*relativeRight;
-
-                /*
-                Check if don't move off the board if move forward. This is for
-                forward and diagonal moves.
-                */
-                if (relativeForward <= color.getBoardTopEdge()) {
-
-                    /*
-                    So now we know that we don't move off the board by moving
-                    forward.
-                    */
-
-                    // Check legality single left diagonal forward move
-                    if (relativeLeft >= color.getBoardLeftEdge()) {
-                        // Check for single left diagonal forward move
-                        if (board[absoluteForward][absoluteLeft] == null) {
-                            moves.add(new SingleMove(absoluteLeft, absoluteForward, x, y));
-                        }
-
-                    }
-                    // Check legality single orthogonal forward move
-                    if (board[absoluteForward][x] == null) {
-                        moves.add(new SingleMove(x, absoluteForward, x, y));
-                        // TODO: check for multi-moves
-                    }
-
-
-                    // Check legality single right diagonal forward move
-                    if (relativeRight <= color.getBoardRightEdge()) {
-                        // Check if not occupied by other piece
-                        if (board[absoluteForward][absoluteRight] == null) {
-                            moves.add(new SingleMove(absoluteRight, absoluteForward, x, y));
-                        }
-                    }
-                }
-            }
-        }
-        return moves;
-    }
-
     public State getCurrentState() {
         return currentState;
     }
@@ -456,7 +343,7 @@ public class DameoEngine {
     
     
     public static void main(String[] args) {
-        DameoEngine.createKingDebutState();
+        DameoEngine.createKingMultiPieceState();
     }
     
     

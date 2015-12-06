@@ -54,6 +54,9 @@ public class MultiPieceMove extends Move {
             return 1;
         }
     }
-    
+
+    public List<SingleMove> getMoves() {
+        return moves;
+    }
     
 }
