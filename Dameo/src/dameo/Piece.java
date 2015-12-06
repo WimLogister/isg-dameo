@@ -24,7 +24,7 @@ public class Piece {
     private int hashCode;
     protected int dir;
 
-    private Piece(int row, int col, Constants.PlayerColors color, Set<Piece> pieceSet) {
+    public Piece(int row, int col, Constants.PlayerColors color, Set<Piece> pieceSet) {
         this.row = row;
         this.col = col;
         this.color = color;
@@ -93,7 +93,7 @@ public class Piece {
         return newPieceSet;
     }
     
-    private static boolean listContainsPoint(List<Point> list, Point point) {
+    public static boolean listContainsPoint(List<Point> list, Point point) {
         boolean contains = false;
         for (Point listPoint : list) {
             if (listPoint.equals(point)) {

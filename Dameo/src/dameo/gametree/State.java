@@ -1,5 +1,6 @@
 package dameo.gametree;
 
+import dameo.KingPiece;
 import dameo.Piece;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,11 +33,21 @@ public class State {
     public State(State oldState) {
         this.currentPlayerPieces = new HashSet<>(oldState.currentPlayerPieces.size());
         for (Piece p : oldState.currentPlayerPieces) {
-           Piece.copyIntoSet(p, this.currentPlayerPieces);
+            if (p instanceof KingPiece) {
+                KingPiece.copyIntoSet(p, this.currentPlayerPieces);
+            }
+            else {
+                Piece.copyIntoSet(p, this.currentPlayerPieces);
+            }
         }
         this.opponentPieces = new HashSet<>(oldState.opponentPieces.size());
         for (Piece p : oldState.opponentPieces) {
-            Piece.copyIntoSet(p, this.opponentPieces);
+            if (p instanceof KingPiece) {
+                KingPiece.copyIntoSet(p, this.opponentPieces);
+            }
+            else {
+                Piece.copyIntoSet(p, this.opponentPieces); 
+            }
         }
         this.board = createBoardCopy(currentPlayerPieces, opponentPieces);
         

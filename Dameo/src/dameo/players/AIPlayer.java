@@ -14,6 +14,7 @@ import java.util.Set;
 public class AIPlayer extends Player {
     
     private AIStrategy strategy;
+    private PlayerTypes type;
 
     public AIPlayer(Constants.PlayerColors color, Set<Piece> pieces, AIStrategy strategy) {
         super(color, pieces);
@@ -27,6 +28,11 @@ public class AIPlayer extends Player {
     @Override
     public Move selectMove(State s) {
         return strategy.searchBestMove(s);
+    }
+
+    @Override
+    public PlayerTypes getPlayerType() {
+        return PlayerTypes.NEGAMAX;
     }
     
 }

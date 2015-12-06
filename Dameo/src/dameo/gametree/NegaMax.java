@@ -1,7 +1,7 @@
 package dameo.gametree;
 
 import dameo.Constants;
-import dameo.GameEngine;
+import dameo.DameoEngine;
 import dameo.evalfunction.CompositeEvaluator;
 import dameo.move.Move;
 import dameo.strategy.AIStrategy;
@@ -31,7 +31,7 @@ public class NegaMax implements AIStrategy {
 //        if (s.getCurrentPlayerPieces().size() == 1) {
 //            System.out.println("debug");
 //        }
-        Set<Move> moves = GameEngine.generateLegalMoves(s);
+        Set<Move> moves = DameoEngine.generateLegalMoves(s);
         Edge bestMove = null;
         
         // No more moves, game is lost
@@ -71,7 +71,7 @@ public class NegaMax implements AIStrategy {
     
     @Override
     public Move searchBestMove(State s) {
-        Move m = alphaBeta(s, searchDepth, alpha, beta, negamaxColor).getMove();
+        Move m = alphaBeta(s, searchDepth, alpha, beta, 1).getMove();
         return m;
     }
     

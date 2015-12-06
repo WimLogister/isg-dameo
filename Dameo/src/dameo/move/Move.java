@@ -11,7 +11,7 @@ import dameo.gametree.State;
  * position and any pieces that were jumped over in between.
  * @author Wim
  */
-public abstract class Move {
+public abstract class Move implements Comparable<Move> {
     
     final int newX, newY, oldX, oldY;
     

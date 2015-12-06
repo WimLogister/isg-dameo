@@ -2,8 +2,8 @@ package dameo.players;
 
 import dameo.Constants;
 import dameo.Piece;
-import dameo.DameoUtil;
-import dameo.GameEngine;
+import dameo.util.DameoUtil;
+import dameo.DameoEngine;
 import dameo.gametree.State;
 import dameo.move.Move;
 import java.util.Iterator;
@@ -14,6 +14,8 @@ import java.util.Set;
  * @author Wim
  */
 public class RandomPlayer extends Player {
+    
+    private PlayerTypes type;
 
     public RandomPlayer(Constants.PlayerColors color, Set<Piece> pieces) {
         super(color, pieces);
@@ -26,7 +28,7 @@ public class RandomPlayer extends Player {
      */
     @Override
     public Move selectMove(State s) {
-        Set<Move> moves = GameEngine.generateLegalMoves(s);
+        Set<Move> moves = DameoEngine.generateLegalMoves(s);
         int r = DameoUtil.getRandomIntFromTo(0, moves.size());
         int i = 0;
         Iterator<Move> it = moves.iterator();
@@ -35,6 +37,11 @@ public class RandomPlayer extends Player {
             selectedMove = it.next();
         }
         return selectedMove;
+    }
+
+    @Override
+    public PlayerTypes getPlayerType() {
+        return PlayerTypes.RANDOM;
     }
 
 }

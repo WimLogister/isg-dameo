@@ -12,7 +12,6 @@ import java.util.Stack;
  */
 public class MultiCaptureMove extends Move {
     
-    Stack<SingleCaptureMove> moves;
     List<Point> capturedPieces;
 
     public MultiCaptureMove(int newX, int newY, int oldX, int oldY) {
@@ -21,7 +20,6 @@ public class MultiCaptureMove extends Move {
 
     public MultiCaptureMove(Stack<SingleCaptureMove> moves) {
         super(0, 0, 0, 0);
-        this.moves = moves;
     }
     
     public MultiCaptureMove(int newX, int newY, int oldX, int oldY,
@@ -52,8 +50,34 @@ public class MultiCaptureMove extends Move {
         super.promotePiece(state);
     }
 
-    public Stack<SingleCaptureMove> getMoves() {
-        return moves;
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (Point p : capturedPieces) {
+            builder.append(String.format("(%d,%d)", (int)p.getX()+1,(int)p.getY()+1));
+        }
+        return String.format("Multi-capture <%d,%d>:<%d,%d>,Capturing:%s",oldX+1,oldY+1,newX+1,newY+1,builder.toString());
+    }
+
+    @Override
+    public int compareTo(Move o) {
+        if (this.oldX < o.oldX) {
+            return -1;
+        }
+        if (this.oldX == o.oldX) {
+            if (this.oldY < o.oldY) {
+                return -1;
+            }
+            if (this.oldY == o.oldY) {
+                return 0;
+            }
+            return 1;
+        }
+        else {
+            return 1;
+        }
     }
     
+    
+
 }
