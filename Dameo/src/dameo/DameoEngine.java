@@ -280,6 +280,31 @@ public class DameoEngine {
         System.out.println("debug");
     }
     
+    public static void createCapturePromotionMove() {
+        Set<Piece> whitePieceSet = new HashSet<>();
+        Piece whitePiece = new Piece(5, 7, Constants.PlayerColors.WHITE, whitePieceSet);
+        whitePieceSet.add(whitePiece);
+        
+        Set<Piece> blackPieceSet = new HashSet<>();
+        Piece blackPiece1 = new Piece(6, 7, Constants.PlayerColors.BLACK, blackPieceSet);
+        Piece blackPiece2 = new Piece(7, 6, Constants.PlayerColors.BLACK, blackPieceSet);
+        Piece blackPiece3 = new Piece(7, 3, Constants.PlayerColors.BLACK, blackPieceSet);
+        blackPieceSet.add(blackPiece1);
+        blackPieceSet.add(blackPiece2);
+        blackPieceSet.add(blackPiece3);
+        
+        Piece[][] board = new Piece[8][8];
+        board[whitePiece.getRow()][whitePiece.getCol()] = whitePiece;
+        board[blackPiece1.getRow()][blackPiece1.getCol()] = blackPiece1;
+        board[blackPiece2.getRow()][blackPiece2.getCol()] = blackPiece2;
+        board[blackPiece3.getRow()][blackPiece3.getCol()] = blackPiece3;
+        
+        State s = new State(whitePieceSet, blackPieceSet, board);
+        DeepestMultiJumpFinder finder = new DeepestMultiJumpFinder();
+        Set<Move> moves = finder.findDeepestNode(s);
+        System.out.println("debug");
+    }
+    
     /**
      * Run an initialized game.
      * @return The color of the winning player
@@ -343,7 +368,7 @@ public class DameoEngine {
     
     
     public static void main(String[] args) {
-        DameoEngine.createKingMultiPieceState();
+        DameoEngine.createCapturePromotionMove();
     }
     
     
