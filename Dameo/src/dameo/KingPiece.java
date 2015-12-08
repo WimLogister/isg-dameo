@@ -289,13 +289,6 @@ public class KingPiece extends Piece {
                 pieceReached = true;
             }
         }
-        Set<Move> multiMoves = super.generateSingleMoves(s);
-        for (Move m : multiMoves) {
-            MultiPieceMove mul = (MultiPieceMove) m;
-            if (mul.getMoves().size() > 1) {
-                moves.add(m);
-            }
-        }
         return moves;
     }
     

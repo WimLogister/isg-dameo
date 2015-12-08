@@ -12,25 +12,18 @@ import dameo.util.Observer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javafx.scene.control.RadioButton;
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 
 /**
  *
@@ -40,8 +33,6 @@ public class DameoFrame extends JFrame implements Observer {
     
     private JPanel boardPanel;
     private JPanel dashBoardPanel;
-    private JPanel controlPanel;
-    private JPanel inputPanel;
     private final DameoEngine engine;
     public static final int WIDTH = 900;
     public static final int HEIGHT = 900;
@@ -115,14 +106,6 @@ public class DameoFrame extends JFrame implements Observer {
         this.getContentPane().add(dashBoardPanel, BorderLayout.EAST);
     }
     
-    private void createControlPanel() {
-        
-    }
-    
-    private void createInputPanel() {
-        
-    }
-
     @Override
     public void update() {
         this.getContentPane().removeAll();
