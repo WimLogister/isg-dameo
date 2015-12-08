@@ -16,4 +16,14 @@ public class Junk {
 //                moves.add(m);
 //            }
 //        }
+
+//              From negamax
+//            // This player has no more moves: this negamax player loses
+//            if (color == negamaxColor) {
+//                bestMove = new Edge(null, Integer.MIN_VALUE);
+//            }
+//            // Opponent has no more moves: this negamax player wins
+//            else {
+//                bestMove = new Edge(null, Integer.MAX_VALUE);
+//            }
 }

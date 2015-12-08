@@ -33,18 +33,13 @@ public class NegaMax implements AIStrategy {
 //        }
         Set<Move> moves = DameoEngine.generateLegalMoves(s);
         Edge bestMove = null;
+        if (depth == searchDepth && moves.size() == 1) {
+            return new Edge(moves.iterator().next(),0);
+        }
         
         // No more moves, game is lost
         if (moves.isEmpty()) {
             bestMove = new Edge(null, color*Integer.MIN_VALUE);
-//            // This player has no more moves: this negamax player loses
-//            if (color == negamaxColor) {
-//                bestMove = new Edge(null, Integer.MIN_VALUE);
-//            }
-//            // Opponent has no more moves: this negamax player wins
-//            else {
-//                bestMove = new Edge(null, Integer.MAX_VALUE);
-//            }
         }
         else if (depth == 0) {
             bestMove = new Edge(null, color*evaluator.evaluate(s));
