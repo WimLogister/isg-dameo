@@ -36,7 +36,7 @@ public class CompositeEvaluator {
      */
     public static CompositeEvaluator createFullEvaluator(Constants.PlayerColors color) {
         List<EvaluationFunction> list = new ArrayList<>();
-        list.add(new MaterialDifferenceEvaluator());
+        list.add(new BasicMaterialDifferenceEvaluator());
         list.add(new MobilityEvalFun());
         return new CompositeEvaluator(list, color);
     }
