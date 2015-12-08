@@ -25,6 +25,7 @@ public class AdvancedMaterialDifferenceEvaluator extends EvaluationFunction {
             State copyState = new State(s);
             copyState.switchPlayers();
         }
+        return 0;
     }
     
 }
