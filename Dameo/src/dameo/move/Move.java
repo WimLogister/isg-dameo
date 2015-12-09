@@ -13,13 +13,15 @@ import dameo.gametree.State;
  */
 public abstract class Move implements Comparable<Move> {
     
-    final int newX, newY, oldX, oldY, value;
+    final int newX, newY, oldX, oldY;
+    private long value;
     
-    public Move(int newX, int newY, int oldX, int oldY) {
+    public Move(int newX, int newY, int oldX, int oldY, long value) {
         this.newX = newX;
         this.newY = newY;
         this.oldX = oldX;
         this.oldY = oldY;
+        this.value = value;
     }
     
     public abstract void execute(State state);
@@ -47,6 +49,17 @@ public abstract class Move implements Comparable<Move> {
             }
         }
     }
+
+    public long getValue() {
+        return value;
+    }
+    
+    
+
+    public void setValue(long value) {
+        this.value = value;
+    }
+    
     
     @Override
     public String toString() {

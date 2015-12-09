@@ -50,7 +50,7 @@ public class IDNegamax extends NegaMax {
     }
 
     @Override
-    protected void disposeOfRootMove(Edge move) {
+    protected void disposeOfRootMove(Move move) {
         rootChildren.add(move);
     }
     

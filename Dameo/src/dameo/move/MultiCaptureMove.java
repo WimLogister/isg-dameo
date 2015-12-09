@@ -15,16 +15,16 @@ public class MultiCaptureMove extends Move {
     List<Point> capturedPieces;
 
     public MultiCaptureMove(int newX, int newY, int oldX, int oldY) {
-        super(newX, newY, oldX, oldY);
+        super(newX, newY, oldX, oldY, 0);
     }
 
     public MultiCaptureMove(Stack<SingleCaptureMove> moves) {
-        super(0, 0, 0, 0);
+        super(0, 0, 0, 0, 0);
     }
     
-    public MultiCaptureMove(int newX, int newY, int oldX, int oldY,
+    public MultiCaptureMove(int newX, int newY, int oldX, int oldY, long value,
             List<Point> capturedPieces) {
-        super(newX, newY, oldX, oldY);
+        super(newX, newY, oldX, oldY, value);
         this.capturedPieces = capturedPieces;
     }
 

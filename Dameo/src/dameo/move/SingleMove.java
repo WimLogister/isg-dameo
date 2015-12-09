@@ -10,7 +10,7 @@ import dameo.gametree.State;
 public class SingleMove extends Move {
 
     public SingleMove(int newX, int newY, int oldX, int oldY) {
-        super(newX, newY, oldX, oldY);
+        super(newX, newY, oldX, oldY, 0);
     }
 
     public int getNewX() {

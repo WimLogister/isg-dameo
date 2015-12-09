@@ -68,7 +68,7 @@ public class DeepestMultiJumpFinder {
         if (currentDeepest.currentMaxDepth > 0) {
             for (JumpNode n : currentDeepest) {
                 moves.add(new MultiCaptureMove(n.captureMove.newX, n.captureMove.newY,
-                        n.ancestorX, n.ancestorY, n.capturedPieces));
+                        n.ancestorX, n.ancestorY, 0, n.capturedPieces));
             }
         }
         return moves;
