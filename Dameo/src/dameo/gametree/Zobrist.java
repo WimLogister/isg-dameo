@@ -31,7 +31,8 @@ public class Zobrist {
         final int NUM_BYTES = 8;
         byte[] randomBytes = new byte[NUM_BYTES];
         rand.nextBytes(randomBytes);
-        BitSet set = BitSet.valueOf(randomBytes);
+        BitSet set1 = BitSet.valueOf(randomBytes);
+        BitSet set2 = BitSet.valueOf(randomBytes);
         System.out.println(set.toString());
     }
     
