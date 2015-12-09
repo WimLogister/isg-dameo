@@ -15,7 +15,7 @@ public class MultiPieceMove extends Move {
     List<SingleMove> moves;
 
     public MultiPieceMove(List<SingleMove> moves) {
-        super(moves.get(0).newX, moves.get(0).newY, moves.get(moves.size()-1).oldX, moves.get(moves.size()-1).oldY);
+        super(moves.get(0).newX, moves.get(0).newY, moves.get(moves.size()-1).oldX, moves.get(moves.size()-1).oldY, 0);
         this.moves = moves;
     }
 
