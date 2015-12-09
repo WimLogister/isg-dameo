@@ -5,6 +5,7 @@ import dameo.DameoEngine;
 import dameo.evalfunction.CompositeEvaluator;
 import dameo.move.Move;
 import dameo.strategy.AIStrategy;
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -14,8 +15,8 @@ import java.util.Set;
 public class NegaMax implements AIStrategy {
     
     private final CompositeEvaluator evaluator;
-    private final long alpha, beta;
-    private final int searchDepth;
+    protected final long alpha, beta;
+    protected int searchDepth;
     private final int negamaxColor;
 
     public NegaMax(int searchDepth, Constants.PlayerColors color) {
@@ -26,30 +27,46 @@ public class NegaMax implements AIStrategy {
         this.negamaxColor = color.getNegamaxColor();
     }
     
-    private Edge alphaBeta(State s, int depth, long alpha, long beta, int color) {
+    protected Edge alphaBeta(State s, int depth, long alpha, long beta, int color) {
         long score = Integer.MIN_VALUE;
-//        if (s.getCurrentPlayerPieces().size() == 1) {
-//            System.out.println("debug");
-//        }
-        Set<Move> moves = DameoEngine.generateLegalMoves(s);
+        Collection<Move> moves = this.negamaxMoveGeneration(s, depth);
         Edge bestMove = null;
-        if (depth == searchDepth && moves.size() == 1) {
+        
+        // Don't perform search if there is only one legal move
+        if (depth == 0 && moves.size() == 1) {
             return new Edge(moves.iterator().next(),0);
         }
         
-        // No more moves, game is lost
+        // No legal moves in this state, current player loses game
         if (moves.isEmpty()) {
             bestMove = new Edge(null, color*Integer.MIN_VALUE);
         }
-        else if (depth == 0) {
+        
+        // Leaf node reached, return evaluation of current state
+        else if (depth == searchDepth) {
             bestMove = new Edge(null, color*evaluator.evaluate(s));
         }
         else {
             for (Move m : moves) {
+                /*
+                Move to next layer of tree by executing this move on copy of
+                current state and performing alpha-beta search on new state.
+                */
                 State copyState = new State(s);
                 m.execute(copyState);
                 copyState.switchPlayers();
-                Edge valueNode = alphaBeta(copyState, depth-1, -beta, -alpha, -color);
+                Edge valueNode = alphaBeta(copyState, depth+1, -beta, -alpha, -color);
+                
+                /*
+                For iterative deepening, save root moves for ordering in next
+                iteration.
+                */
+                if (depth == 0)
+                    this.disposeOfRootMove(valueNode);
+                
+                /*
+                Update bounds and perform cutoff.
+                */
                 if (-valueNode.getValue() > score) {
                     bestMove = new Edge(m, -valueNode.getValue());
                     score = -valueNode.getValue();
@@ -64,9 +81,30 @@ public class NegaMax implements AIStrategy {
         return bestMove;
     }
     
+    /**
+     * Abstract method used to process moves at the root node.
+     * Is meant primarily for move ordering at the root node for iterative
+     * deepening.
+     * @param move
+     * @param depth 
+     */
+    protected void disposeOfRootMove(Edge move) {}
+    
+    /**
+     * Encapsulates node expansion and move ordering.
+     * The returned collection of nodes should be traversed in the indicated
+     * order.
+     * @param s
+     * @param depth
+     * @return 
+     */
+    protected Collection<Move> negamaxMoveGeneration(State s, int depth) {
+        return DameoEngine.generateLegalMoves(s);
+    }
+    
     @Override
     public Move searchBestMove(State s) {
-        Move m = alphaBeta(s, searchDepth, alpha, beta, 1).getMove();
+        Move m = alphaBeta(s, 0, alpha, beta, 1).getMove();
         return m;
     }
     

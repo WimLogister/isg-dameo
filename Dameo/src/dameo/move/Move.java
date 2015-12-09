@@ -13,7 +13,7 @@ import dameo.gametree.State;
  */
 public abstract class Move implements Comparable<Move> {
     
-    final int newX, newY, oldX, oldY;
+    final int newX, newY, oldX, oldY, value;
     
     public Move(int newX, int newY, int oldX, int oldY) {
         this.newX = newX;
