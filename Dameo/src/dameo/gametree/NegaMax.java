@@ -60,13 +60,13 @@ public class NegaMax implements AIStrategy {
                 m.execute(copyState);
                 copyState.switchPlayers();
                 Move valueMove = alphaBeta(copyState, depth+1, -beta, -alpha, -color);
-                
+                m.setValue(-valueMove.getValue());
                 /*
                 For iterative deepening, save root moves for ordering in next
                 iteration.
                 */
                 if (depth == 0)
-                    this.disposeOfRootMove(valueMove);
+                    this.disposeOfRootMove(m);
                 
                 /*
                 Update bounds and perform cutoff.
@@ -74,8 +74,7 @@ public class NegaMax implements AIStrategy {
                 if (-valueMove.getValue() > score) {
 //                    bestMove = new Edge(m, -valueNode.getValue());
                     bestMove = m;
-                    /* Set value for this move in case it is returned */
-                    m.setValue(-valueMove.getValue());
+//                    m.setValue(-valueMove.getValue());
                     score = -valueMove.getValue();
                 }
                 if (score > alpha) alpha = score;

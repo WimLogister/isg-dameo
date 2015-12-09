@@ -17,9 +17,4 @@ public class NullMove extends Move {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public int compareTo(Move o) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
 }

@@ -4,6 +4,9 @@ import dameo.Constants;
 import dameo.KingPiece;
 import dameo.Piece;
 import dameo.gametree.State;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A move stores information about how the game board changes.
@@ -13,7 +16,7 @@ import dameo.gametree.State;
  */
 public abstract class Move implements Comparable<Move> {
     
-    final int newX, newY, oldX, oldY;
+    public final int newX, newY, oldX, oldY;
     private long value;
     
     public Move(int newX, int newY, int oldX, int oldY, long value) {
@@ -64,6 +67,33 @@ public abstract class Move implements Comparable<Move> {
     @Override
     public String toString() {
         return super.toString(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int compareTo(Move o) {
+        if (this.value > o.getValue()) {
+            return -1;
+        }
+        if (this.value < o.getValue()) {
+            return 1;
+        }
+        return 0;
+    }
+    
+    
+    public static void main(String[] args) {
+        Move m1 = new NullMove(500);
+        Move m2 = new NullMove(10);
+        List<Move> myList = new ArrayList<>();
+        myList.add(m2); myList.add(m1);
+        for (Move m : myList) {
+            System.out.printf("Value: %s\n",m.getValue());
+        }
+        Collections.sort(myList);
+        System.out.println();
+        for (Move m : myList) {
+            System.out.printf("Value: %s\n",m.getValue());
+        }
     }
     
     

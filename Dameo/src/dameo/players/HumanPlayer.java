@@ -6,6 +6,7 @@ import dameo.move.Move;
 import dameo.Piece;
 import dameo.util.DameoUtil;
 import dameo.gametree.State;
+import dameo.ui.FrameMove;
 import java.awt.HeadlessException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,11 +52,14 @@ public class HumanPlayer extends Player {
         }
         
         Move getPlayerMoveInput(Set<Move> moves) {
-            List<Move> moveList = new ArrayList<>(moves);
+            List<FrameMove> moveList = new ArrayList<>(moves.size());
+            for (Move m : moves) {
+                moveList.add(new FrameMove(m));
+            }
             Collections.sort(moveList);
             Object[] possibilities = new Object[moves.size()];
             int i = 0;
-            for (Move m : moveList) {
+            for (FrameMove m : moveList) {
                 possibilities[i++] = m.toString();
             }
             String s = (String)JOptionPane.showInputDialog(this, "Select move",
