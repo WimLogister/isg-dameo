@@ -42,6 +42,7 @@ public class NegaMax implements AIStrategy {
         
         // Don't perform search if there is only one legal move
         if (depth == 0 && moves.size() == 1) {
+            searchDepth = IDNegamax.maxSearchDepth;
             Move m = moves.iterator().next();
             return m;
         }
@@ -54,6 +55,7 @@ public class NegaMax implements AIStrategy {
         
         // Leaf node reached, return evaluation of current state
         if (depth == searchDepth) {
+            // De fout moet bijna zeker hier zitten
             return new NullMove(color*evaluator.evaluate(s));
 //            bestMove = new Edge(null, color*evaluator.evaluate(s));
         }
@@ -81,7 +83,6 @@ public class NegaMax implements AIStrategy {
                 if (-valueMove.getValue() > score) {
 //                    bestMove = new Edge(m, -valueNode.getValue());
                     bestMove = m;
-//                    m.setValue(-valueMove.getValue());
                     score = -valueMove.getValue();
                 }
                 if (score > alpha) alpha = score;

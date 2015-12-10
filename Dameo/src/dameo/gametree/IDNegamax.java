@@ -3,6 +3,7 @@ package dameo.gametree;
 import dameo.Constants;
 import dameo.DameoEngine;
 import dameo.move.Move;
+import dameo.move.NullMove;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,11 +16,11 @@ import java.util.List;
 public class IDNegamax extends NegaMax {
     
     private List<Move> rootChildren;
-    private int maxSearchDepth;
+    public static int maxSearchDepth;
 
     public IDNegamax(int maxSearchDepth, Constants.PlayerColors color) {
         super(1, color);
-        this.maxSearchDepth = maxSearchDepth;
+        IDNegamax.maxSearchDepth = maxSearchDepth;
     }
 
     @Override
@@ -36,6 +37,15 @@ public class IDNegamax extends NegaMax {
         Sort root moves to improve search efficiency on next iteration.
         */
         if (searchDepth > 1 && depth == 0) {
+            boolean nullMoveFound = false;
+            for (Move m : rootChildren) {
+                if (m instanceof NullMove) {
+                    nullMoveFound = true;
+                }
+            }
+            if (nullMoveFound) {
+                System.out.println("debug");
+            }
             Collections.sort(rootChildren);
             List<Move> copyList = new ArrayList<>(rootChildren);
             rootChildren.clear();
