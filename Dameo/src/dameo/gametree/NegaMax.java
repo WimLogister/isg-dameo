@@ -53,6 +53,11 @@ public class NegaMax implements AIStrategy {
 //            bestMove = new Edge(null, color*Integer.MIN_VALUE);
         }
         
+        // Opponent has no more moves, win for current player.
+        if (s.getOpponentPieces().isEmpty()) {
+            return new NullMove(color*Integer.MAX_VALUE);
+        }
+        
         // Leaf node reached, return evaluation of current state
         if (depth == searchDepth) {
             // De fout moet bijna zeker hier zitten
@@ -89,13 +94,13 @@ public class NegaMax implements AIStrategy {
                 if (score >= beta) break;
             }
         }
-        if (bestMove instanceof NullMove) {
+        if (bestMove instanceof NullMove || bestMove == null) {
             bestMove = moves.iterator().next();
             bestMove.setValue(color*Integer.MIN_VALUE);
 //            bestMove = new Edge(moves.iterator().next(), color*Integer.MIN_VALUE);
         }
-        if (depth == 0 && searchDepth == 5) {
-            System.out.println("Check best move value");
+        if (bestMove == null) {
+            System.out.println("debug");
         }
         return bestMove;
     }
