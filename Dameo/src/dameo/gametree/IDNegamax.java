@@ -55,6 +55,7 @@ public class IDNegamax extends NegaMax {
     
     @Override
     public Move searchBestMove(State s) {
+        nodesExpanded = 0;
         searchDepth = 1;
         Move m = null;
         while (searchDepth <= maxSearchDepth) {
@@ -62,6 +63,7 @@ public class IDNegamax extends NegaMax {
             m = alphaBeta(s, 0, alpha, beta, 1);
             searchDepth++;
         }
+        System.out.printf("Nodes expanded: %d\n",nodesExpanded);
         return m;
     }
     

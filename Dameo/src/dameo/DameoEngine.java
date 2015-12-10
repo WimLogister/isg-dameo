@@ -32,7 +32,7 @@ public class DameoEngine {
     private boolean printFlag;
     private static final String PRINT = "Y";
     
-    public static int DEBUG = 1;
+    public static int DEBUG = 0;
     
     private int moveCounter;
     

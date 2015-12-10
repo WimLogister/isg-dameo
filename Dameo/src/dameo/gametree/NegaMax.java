@@ -6,6 +6,9 @@ import dameo.evalfunction.CompositeEvaluator;
 import dameo.move.Move;
 import dameo.move.NullMove;
 import dameo.strategy.AIStrategy;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.Collection;
 import java.util.Set;
 
@@ -15,10 +18,13 @@ import java.util.Set;
  */
 public class NegaMax implements AIStrategy {
     
+    protected static int nodesExpanded;
     private final CompositeEvaluator evaluator;
     protected final long alpha, beta;
     protected int searchDepth;
     private final int negamaxColor;
+    public final int[] nodeLog = new int[100];
+    protected int logCounter = 0;
 
     public NegaMax(int searchDepth, Constants.PlayerColors color) {
         this.evaluator = CompositeEvaluator.createFullEvaluator(color);
@@ -31,6 +37,7 @@ public class NegaMax implements AIStrategy {
     protected Move alphaBeta(State s, int depth, long alpha, long beta, int color) {
         long score = Integer.MIN_VALUE;
         Collection<Move> moves = this.negamaxMoveGeneration(s, depth);
+        nodesExpanded++;
         Move bestMove = null;
         
         // Don't perform search if there is only one legal move
@@ -41,13 +48,13 @@ public class NegaMax implements AIStrategy {
         
         // No legal moves in this state, current player loses game
         if (moves.isEmpty()) {
-            bestMove = new NullMove(color*Integer.MIN_VALUE);
+            return new NullMove(color*Integer.MIN_VALUE);
 //            bestMove = new Edge(null, color*Integer.MIN_VALUE);
         }
         
         // Leaf node reached, return evaluation of current state
-        else if (depth == searchDepth) {
-            bestMove = new NullMove(color*evaluator.evaluate(s));
+        if (depth == searchDepth) {
+            return new NullMove(color*evaluator.evaluate(s));
 //            bestMove = new Edge(null, color*evaluator.evaluate(s));
         }
         else {
@@ -81,10 +88,13 @@ public class NegaMax implements AIStrategy {
                 if (score >= beta) break;
             }
         }
-        if (bestMove == null) {
+        if (bestMove instanceof NullMove) {
             bestMove = moves.iterator().next();
             bestMove.setValue(color*Integer.MIN_VALUE);
 //            bestMove = new Edge(moves.iterator().next(), color*Integer.MIN_VALUE);
+        }
+        if (depth == 0 && searchDepth == 5) {
+            System.out.println("Check best move value");
         }
         return bestMove;
     }
@@ -112,7 +122,26 @@ public class NegaMax implements AIStrategy {
     
     @Override
     public Move searchBestMove(State s) {
+        nodesExpanded = 0;
         Move m = alphaBeta(s, 0, alpha, beta, 1);
+        nodeLog[logCounter++] = nodesExpanded;
+        if (logCounter > 25) {
+            BufferedWriter writer = null;
+            try {
+                File logFile = new File("IDnegamax-nodes");
+                writer = new BufferedWriter(new FileWriter(logFile));
+                for (int i : nodeLog) {
+                    writer.write(String.format("%d\n", i));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            finally {
+                try {
+                    writer.close();
+                } catch (Exception e) {}
+            }
+        }
         return m;
     }
     
