@@ -15,16 +15,16 @@ public class MultiCaptureMove extends Move {
     List<Point> capturedPieces;
 
     public MultiCaptureMove(int newX, int newY, int oldX, int oldY) {
-        super(newX, newY, oldX, oldY);
+        super(newX, newY, oldX, oldY, 0);
     }
 
     public MultiCaptureMove(Stack<SingleCaptureMove> moves) {
-        super(0, 0, 0, 0);
+        super(0, 0, 0, 0, 0);
     }
     
-    public MultiCaptureMove(int newX, int newY, int oldX, int oldY,
+    public MultiCaptureMove(int newX, int newY, int oldX, int oldY, long value,
             List<Point> capturedPieces) {
-        super(newX, newY, oldX, oldY);
+        super(newX, newY, oldX, oldY, value);
         this.capturedPieces = capturedPieces;
     }
 
@@ -58,26 +58,5 @@ public class MultiCaptureMove extends Move {
         }
         return String.format("Multi-capture <%d,%d>:<%d,%d>,Capturing:%s",oldX+1,oldY+1,newX+1,newY+1,builder.toString());
     }
-
-    @Override
-    public int compareTo(Move o) {
-        if (this.oldX < o.oldX) {
-            return -1;
-        }
-        if (this.oldX == o.oldX) {
-            if (this.oldY < o.oldY) {
-                return -1;
-            }
-            if (this.oldY == o.oldY) {
-                return 0;
-            }
-            return 1;
-        }
-        else {
-            return 1;
-        }
-    }
-    
-    
 
 }

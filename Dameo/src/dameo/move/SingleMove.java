@@ -10,7 +10,7 @@ import dameo.gametree.State;
 public class SingleMove extends Move {
 
     public SingleMove(int newX, int newY, int oldX, int oldY) {
-        super(newX, newY, oldX, oldY);
+        super(newX, newY, oldX, oldY, 0);
     }
 
     public int getNewX() {
@@ -43,25 +43,6 @@ public class SingleMove extends Move {
     public String toString() {
         return String.format("Single move <%d,%d>:<%d,%d>", oldX+1,
                 oldY+1, newX+1, newY+1);
-    }
-
-    @Override
-    public int compareTo(Move o) {
-        if (this.oldX < o.oldX) {
-            return -1;
-        }
-        if (this.oldX == o.oldX) {
-            if (this.oldY < o.oldY) {
-                return -1;
-            }
-            if (this.oldY == o.oldY) {
-                return 0;
-            }
-            return 1;
-        }
-        else {
-            return 1;
-        }
     }
     
 }

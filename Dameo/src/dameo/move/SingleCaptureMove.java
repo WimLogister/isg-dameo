@@ -13,7 +13,7 @@ public class SingleCaptureMove extends Move {
     final int captY;
 
     public SingleCaptureMove(int newX, int newY, int oldX, int oldY, int captX, int captY) {
-        super(newX, newY, oldX, oldY);
+        super(newX, newY, oldX, oldY, 0);
         this.captX = captX;
         this.captY = captY;
     }
@@ -64,22 +64,4 @@ public class SingleCaptureMove extends Move {
         return captY;
     }
 
-    @Override
-    public int compareTo(Move o) {
-        if (this.oldX < o.oldX) {
-            return -1;
-        }
-        if (this.oldX == o.oldX) {
-            if (this.oldY < o.oldY) {
-                return -1;
-            }
-            if (this.oldY == o.oldY) {
-                return 0;
-            }
-            return 1;
-        }
-        else {
-            return 1;
-        }
-    }
 }

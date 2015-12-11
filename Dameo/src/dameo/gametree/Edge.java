@@ -7,7 +7,7 @@ import dameo.move.Move;
  * state that the move leads to.
  * @author Wim
  */
-public class Edge {
+public class Edge implements Comparable<Edge> {
     
     private final Move move;
     private final long value;
@@ -23,6 +23,17 @@ public class Edge {
 
     public Move getMove() {
         return move;
+    }
+
+    @Override
+    public int compareTo(Edge o) {
+        if (this.value < o.value) {
+            return -1;
+        }
+        if (this.value > o.value) {
+            return 1;
+        }
+        return 0;
     }
     
     

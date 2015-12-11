@@ -3,6 +3,7 @@ package dameo.players;
 import dameo.Constants;
 import dameo.move.Move;
 import dameo.Piece;
+import dameo.gametree.IDNegamax;
 import dameo.gametree.NegaMax;
 import dameo.gametree.State;
 import java.util.Iterator;
@@ -45,7 +46,8 @@ public abstract class Player {
             p = new RandomPlayer(color, pieceSet);
         }
         if (type == PlayerTypes.NEGAMAX.value) {
-            p = new AIPlayer(color, pieceSet, new NegaMax(5, color));
+//            p = new AIPlayer(color, pieceSet, new NegaMax(5, color));
+            p = new AIPlayer(color, pieceSet, new IDNegamax(5, color));
         }
         return p;
     }
