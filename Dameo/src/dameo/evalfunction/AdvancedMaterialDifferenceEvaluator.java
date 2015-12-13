@@ -13,19 +13,29 @@ public class AdvancedMaterialDifferenceEvaluator extends EvaluationFunction {
 
     @Override
     public long evaluatePosition(State s, Constants.PlayerColors color) {
-        if (s.getCurrentPlayerPieces().iterator().next().getColor() == color) {
-            int sum = 0;
-            for (Piece p : s.getCurrentPlayerPieces()) {
-                if (p instanceof KingPiece) {
-                    sum += 9;
-                }
+        State checkState = s;
+        if (s.getCurrentPlayerPieces().iterator().next().getColor() != color) {
+            checkState = new State(s);
+            checkState.switchPlayers();
+        }
+        int sum = 0;
+        for (Piece p : checkState.getCurrentPlayerPieces()) {
+            if (p instanceof KingPiece) {
+                sum += 9;
+            }
+            else {
+                sum += 1;
             }
         }
-        else {
-            State copyState = new State(s);
-            copyState.switchPlayers();
+        for (Piece p : checkState.getOpponentPieces()) {
+            if (p instanceof KingPiece) {
+                sum -= 9;
+            }
+            else {
+                sum -= 1;
+            }
         }
-        return 0;
+        return 500 * sum;
     }
     
 }

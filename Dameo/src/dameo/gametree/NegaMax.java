@@ -40,6 +40,9 @@ public class NegaMax implements AIStrategy {
         nodesExpanded++;
         Move bestMove = null;
         
+        if (depth == 5) {
+            int a = 5;
+        }
         // Don't perform search if there is only one legal move
         if (depth == 0 && moves.size() == 1) {
             searchDepth = IDNegamax.maxSearchDepth;

@@ -38,6 +38,7 @@ public class CompositeEvaluator {
         List<EvaluationFunction> list = new ArrayList<>();
         list.add(new BasicMaterialDifferenceEvaluator());
         list.add(new MobilityEvalFun());
+//        list.add(new MobilityEvalFun());
         return new CompositeEvaluator(list, color);
     }
 }
