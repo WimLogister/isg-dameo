@@ -71,7 +71,7 @@ public class IDNegamax extends NegaMax {
         while (searchDepth <= maxSearchDepth) {
             System.out.printf("Searching at depth %d\n", searchDepth);
             m = alphaBeta(s, 0, alpha, beta, 1);
-            searchDepth++;
+            searchDepth+=2;
         }
         System.out.printf("Nodes expanded: %d\n",nodesExpanded);
         return m;

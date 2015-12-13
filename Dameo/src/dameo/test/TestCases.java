@@ -1,5 +1,6 @@
 package dameo.test;
 
+import dameo.Board;
 import dameo.Constants;
 import dameo.KingPiece;
 import dameo.Piece;
@@ -15,6 +16,54 @@ import java.util.Set;
  * @author Wim
  */
 public class TestCases {
+    
+    public static void createRegularVSIDNegamax() {
+        Set<Piece> whitePieceSet = new HashSet<>();
+        Piece whitePiece1 = new Piece(4, 5, Constants.PlayerColors.WHITE, whitePieceSet);
+        Piece whitePiece2 = new Piece(3, 4, Constants.PlayerColors.WHITE, whitePieceSet);
+        Piece whitePiece3 = new Piece(3, 5, Constants.PlayerColors.WHITE, whitePieceSet);
+        Piece whitePiece4 = new Piece(0, 7, Constants.PlayerColors.WHITE, whitePieceSet);
+        whitePieceSet.add(whitePiece1);
+        whitePieceSet.add(whitePiece2);
+        whitePieceSet.add(whitePiece3);
+        whitePieceSet.add(whitePiece4);
+        
+        Set<Piece> blackPieceSet = new HashSet<>();
+        Piece blackPiece1 = new Piece(7, 4, Constants.PlayerColors.BLACK, blackPieceSet);
+        Piece blackPiece2 = new Piece(6, 4, Constants.PlayerColors.BLACK, blackPieceSet);
+        Piece blackPiece3 = new Piece(6, 5, Constants.PlayerColors.BLACK, blackPieceSet);
+        Piece blackPiece4 = new Piece(5, 4, Constants.PlayerColors.BLACK, blackPieceSet);
+        Piece blackPiece5 = new Piece(5, 5, Constants.PlayerColors.BLACK, blackPieceSet);
+        Piece blackPiece6 = new Piece(5, 6, Constants.PlayerColors.BLACK, blackPieceSet);
+        Piece blackPiece7 = new Piece(4, 3, Constants.PlayerColors.BLACK, blackPieceSet);
+        blackPieceSet.add(blackPiece1);
+        blackPieceSet.add(blackPiece2);
+        blackPieceSet.add(blackPiece3);
+        blackPieceSet.add(blackPiece4);
+        blackPieceSet.add(blackPiece5);
+        blackPieceSet.add(blackPiece6);
+        blackPieceSet.add(blackPiece7);
+        
+        Piece[][] board = new Piece[8][8];
+        
+        board[whitePiece1.getRow()][whitePiece1.getCol()] = whitePiece1;
+        board[whitePiece2.getRow()][whitePiece2.getCol()] = whitePiece2;
+        board[whitePiece3.getRow()][whitePiece3.getCol()] = whitePiece3;
+        board[whitePiece4.getRow()][whitePiece4.getCol()] = whitePiece4;
+        
+        board[blackPiece1.getRow()][blackPiece1.getCol()] = blackPiece1;
+        board[blackPiece2.getRow()][blackPiece2.getCol()] = blackPiece2;
+        board[blackPiece3.getRow()][blackPiece3.getCol()] = blackPiece3;
+        board[blackPiece4.getRow()][blackPiece4.getCol()] = blackPiece4;
+        board[blackPiece5.getRow()][blackPiece5.getCol()] = blackPiece5;
+        board[blackPiece6.getRow()][blackPiece6.getCol()] = blackPiece6;
+        board[blackPiece7.getRow()][blackPiece7.getCol()] = blackPiece7;
+        
+        State s = new State(blackPieceSet, whitePieceSet, board);
+        Player negamax = Player.generatePlayer(Player.PlayerTypes.NEGAMAX.getValue(), Constants.PlayerColors.BLACK, blackPieceSet);
+        Move m = negamax.selectMove(s);
+        int a = 5;
+    }
     
     public static void createIDNullMoveTestCase2() {
         Set<Piece> whitePieceSet = new HashSet<>();
@@ -325,7 +374,7 @@ public class TestCases {
     }
     
     public static void main(String[] args) {
-        createIDNullMoveTestCase2();
+        createRegularVSIDNegamax();
     }
     
 }
