@@ -22,6 +22,8 @@ import java.util.Set;
 public class DameoEngine {
     
     private State currentState;
+    private State previousState;
+    private State twoStatesBack;
     
     private Player currentPlayer;
     private Player currentOpponent;
@@ -106,6 +108,8 @@ public class DameoEngine {
         */
         Piece[][] board = Board.setupBoard(currentPlayer.getPieces(), currentOpponent.getPieces());
         
+        previousState = null;
+        twoStatesBack = null;
         currentState = new State(currentPlayer.getPieces(), currentOpponent.getPieces(), board);
         
         if (DEBUG > 0) {
@@ -177,6 +181,14 @@ public class DameoEngine {
             }
         }
         else {
+            /*
+            Store current state in order to allow undo move.
+            */
+            if (previousState != null) {
+                twoStatesBack = new State(previousState);
+            }
+            previousState = new State(currentState);
+            
             /*
             Execute move and change state
             */
