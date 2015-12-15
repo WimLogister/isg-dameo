@@ -6,6 +6,7 @@ import dameo.move.DeepestMultiJumpFinder;
 import dameo.move.Move;
 import dameo.move.SingleCaptureMove;
 import dameo.move.SingleMove;
+import dameo.move.UndoMove;
 import dameo.players.Player;
 import dameo.test.TestCases;
 import dameo.util.Observer;
@@ -14,6 +15,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 /**
  *
@@ -41,6 +43,8 @@ public class DameoEngine {
     private List<Observer> observers = new ArrayList<>();
     private List<Player> players = new ArrayList<>();
 
+    private Stack<State> stateStack;
+    
     private DameoEngine() {
         init();
     }
@@ -107,6 +111,8 @@ public class DameoEngine {
         Initialize and set up the game board
         */
         Piece[][] board = Board.setupBoard(currentPlayer.getPieces(), currentOpponent.getPieces());
+        
+        stateStack = new Stack<>();
         
         previousState = null;
         twoStatesBack = null;
@@ -180,15 +186,29 @@ public class DameoEngine {
                 System.out.printf("%s player wins.", currentOpponent.getColor());
             }
         }
-        else {
-            /*
-            Store current state in order to allow undo move.
-            */
-            if (previousState != null) {
-                twoStatesBack = new State(previousState);
+        else if (m instanceof UndoMove) {
+            if (stateStack.size() >= 2) {
+                stateStack.pop();
+                currentState = stateStack.pop();
+    //            /*
+    //            Change players
+    //            */
+                Player temp = currentPlayer;
+                currentPlayer = currentOpponent;
+                currentOpponent = temp;
             }
-            previousState = new State(currentState);
+//            if (stateStack.size() == 1) {
+//                currentState = stateStack.pop();
+//            }
+            else {
+                Player temp = currentPlayer;
+                currentPlayer = currentOpponent;
+                currentOpponent = temp;
+            }
+        }
+        else {
             
+            stateStack.push(new State(currentState));
             /*
             Execute move and change state
             */
@@ -214,6 +234,8 @@ public class DameoEngine {
         currentPlayer = currentOpponent;
         currentOpponent = temp;
     }
+    
+    
     
     
     /**
