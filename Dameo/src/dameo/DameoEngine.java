@@ -38,7 +38,7 @@ public class DameoEngine {
     
     public static int DEBUG = 0;
     
-    private int moveCounter;
+    public static int moveCounter;
     
     private List<Observer> observers = new ArrayList<>();
     private List<Player> players = new ArrayList<>();
@@ -169,7 +169,7 @@ public class DameoEngine {
      * executed and it becomes the next player's turn.
      */
     private void next() {
-
+        
         if (DEBUG > 0) {
             System.out.printf("%s player to move\n",currentPlayer.getColor());
             System.out.printf("Turn number %d\n",moveCounter++);
@@ -196,6 +196,7 @@ public class DameoEngine {
                 Player temp = currentPlayer;
                 currentPlayer = currentOpponent;
                 currentOpponent = temp;
+                moveCounter--;
             }
 //            if (stateStack.size() == 1) {
 //                currentState = stateStack.pop();
