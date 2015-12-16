@@ -23,6 +23,7 @@ public class Piece {
     private Set<Piece> pieceSet;
     private int hashCode;
     protected int dir;
+    protected int zobristValue;
 
     public Piece(int row, int col, Constants.PlayerColors color, Set<Piece> pieceSet) {
         this.row = row;
@@ -30,6 +31,7 @@ public class Piece {
         this.color = color;
         this.pieceSet = pieceSet;
         this.dir = color.getDirection();
+        this.zobristValue = color.getValue();
     }
     
     protected Piece(Piece p) {
@@ -38,6 +40,7 @@ public class Piece {
         this.color = p.getColor();
         this.pieceSet = p.getPieceSet();
         this.dir = p.getDir();
+        this.zobristValue = p.getZobristValue();
     }
 
     public static Piece findPiece(Set<Piece> pieceSet, int x, int y) {
@@ -83,6 +86,10 @@ public class Piece {
     
     public int getBoardValue() {
         return this.color.getValue();
+    }
+
+    public int getZobristValue() {
+        return zobristValue;
     }
     
     public static Set<Piece> copyPieceSet(Set<Piece> origPieceSet) throws CloneNotSupportedException {
@@ -409,6 +416,21 @@ public class Piece {
         System.out.println(p1.hashCode());
         System.out.println(p2.hashCode());
         System.out.println(p3.hashCode());
+    }
+    
+    public enum ZobristPieceTypeValues {
+        WHITE_MAN(1), BLACK_MAN(2), WHITE_KING(3), BLACK_KING(4);
+        
+        private final int value;
+
+        private ZobristPieceTypeValues(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+        
     }
 
     @Override

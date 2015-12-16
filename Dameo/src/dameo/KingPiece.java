@@ -19,10 +19,12 @@ public class KingPiece extends Piece {
     
     public KingPiece(Piece p) {
         super(p);
+        this.zobristValue = color.getValue() + 2;
     }
     
     public KingPiece(int row, int col, Constants.PlayerColors color, Set<Piece> pieceSet) {
         super(row, col, color, pieceSet);
+        this.zobristValue = color.getValue() + 2;
     }
     
     @Override
@@ -292,6 +294,16 @@ public class KingPiece extends Piece {
         return moves;
     }
     
-    
+    public static void main(String[] args) {
+        Set<Piece> pieceSet = new HashSet<>();
+        Piece p1 = new Piece(5, 6, Constants.PlayerColors.BLACK, pieceSet);
+        System.out.printf("Piece zobrist: %s\n",p1.getZobristValue());
+        
+        Piece p2 = new KingPiece(p1);
+        System.out.printf("King zobrist: %s\n",p2.getZobristValue());
+        
+        Piece p3 = new KingPiece(p2);
+        System.out.printf("King copy zobrist: %s\n",p3.getZobristValue());
+    }
     
 }

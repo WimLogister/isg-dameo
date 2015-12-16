@@ -4,6 +4,7 @@ import dameo.Constants;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.SecureRandom;
 import java.util.Random;
 
 /**
@@ -13,6 +14,7 @@ import java.util.Random;
 public class DameoUtil {
     
     public static final Random rng = new Random(Constants.RANDOM_SEED);
+    public static final SecureRandom SECURE_RANDOM = new SecureRandom();
     private static final BufferedReader br =
             new BufferedReader(new InputStreamReader(System.in));
     
