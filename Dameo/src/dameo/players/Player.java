@@ -46,8 +46,8 @@ public abstract class Player {
             p = new RandomPlayer(color, pieceSet);
         }
         if (type == PlayerTypes.NEGAMAX.value) {
-//            p = new AIPlayer(color, pieceSet, new NegaMax(7, color));
-            p = new AIPlayer(color, pieceSet, new IDNegamax(3, color));
+//            p = new AIPlayer(color, pieceSet, new NegaMax(5, color));
+            p = new AIPlayer(color, pieceSet, new IDNegamax(5, color));
         }
         return p;
     }
