@@ -193,19 +193,19 @@ public class DameoEngine {
     //            /*
     //            Change players
     //            */
-                Player temp = currentPlayer;
-                currentPlayer = currentOpponent;
-                currentOpponent = temp;
+//                Player temp = currentPlayer;
+//                currentPlayer = currentOpponent;
+//                currentOpponent = temp;
                 moveCounter--;
             }
 //            if (stateStack.size() == 1) {
 //                currentState = stateStack.pop();
 //            }
-            else {
-                Player temp = currentPlayer;
-                currentPlayer = currentOpponent;
-                currentOpponent = temp;
-            }
+//            else {
+//                Player temp = currentPlayer;
+//                currentPlayer = currentOpponent;
+//                currentOpponent = temp;
+//            }
         }
         else {
             
@@ -220,20 +220,21 @@ public class DameoEngine {
                 System.out.println("State after move...");
                 System.out.println(Board.getBoardString(currentState.getBoard()));
             }
+            /*
+            Change player's pieces in current state
+            */
+            currentState = new State(currentState.getOpponentPieces(),
+                    currentState.getCurrentPlayerPieces(), currentState.getBoard());
+
+            /*
+            Change players
+            */
+            Player temp = currentPlayer;
+            currentPlayer = currentOpponent;
+            currentOpponent = temp;
         }
         
-        /*
-        Change player's pieces in current state
-        */
-        currentState = new State(currentState.getOpponentPieces(),
-                currentState.getCurrentPlayerPieces(), currentState.getBoard());
         
-        /*
-        Change players
-        */
-        Player temp = currentPlayer;
-        currentPlayer = currentOpponent;
-        currentOpponent = temp;
     }
     
     
