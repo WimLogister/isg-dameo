@@ -36,6 +36,8 @@ public class NegaMax implements AIStrategy {
         this.searchDepth = searchDepth;
         this.negamaxColor = color.getNegamaxColor();
     }
+    // TODO: need two different search depth parameters: one for ID's total maximum
+    // search depth and one for ID's current search window.
     
     protected Move alphaBeta(State s, int depth, long alpha, long beta, int color) {
         long origAlpha = alpha;
@@ -43,7 +45,7 @@ public class NegaMax implements AIStrategy {
         if (ttentryflag == TranspositionTable.TableCheckResultTypes.VALID) {
             /* This value had already been stored in TT. Check searched depth */
             TableEntry storedEntry = tt.getCachedEntry();
-            if (storedEntry.getSearchDepth() >= depth) {
+            if (storedEntry.getSearchDepth() >= this.searchDepth) {
                 /*
                 Exact value for this state was stored in TT at an appropriate
                 search depth. Adapt current search bounds according to stored values.
@@ -143,7 +145,26 @@ public class NegaMax implements AIStrategy {
         }
         
         /* Store current node in transposition table */
+        TranspositionTable.TableValueFlagTypes entryFlag = null;
+        if (bestMove.getValue() <= origAlpha) {
+            entryFlag = TranspositionTable.TableValueFlagTypes.UPPER;
+        }
+        else if (bestMove.getValue() >= beta) {
+            entryFlag = TranspositionTable.TableValueFlagTypes.LOWER;
+        }
+        else {
+            entryFlag = TranspositionTable.TableValueFlagTypes.EXACT;
+        }
         
+        final int entryDepth = searchDepth - depth;
+        
+        /*
+        Need to distinguish between several cases.
+        1. No entry at all for given primary hash key. This corresponds to the case
+        where checkTable() returned EMPTY. Create an entire new table entry and
+        store it in the table.
+        2. An entry was found but it was not search as deeply as the current
+        */
         
         return bestMove;
     }
