@@ -24,7 +24,7 @@ public class IDNegamax extends NegaMax {
     }
 
     @Override
-    protected Collection<Move> negamaxMoveGeneration(State s, int depth) {
+    protected List<Move> negamaxMoveGeneration(State s, int depth) {
         /*
         During the first iteration of the algorithm in this turn, we have to
         generate a list of the root moves, which we will keep sorting during

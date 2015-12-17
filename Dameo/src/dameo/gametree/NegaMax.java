@@ -9,7 +9,9 @@ import dameo.strategy.AIStrategy;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -25,6 +27,7 @@ public class NegaMax implements AIStrategy {
     private final int negamaxColor;
     public final int[] nodeLog = new int[100];
     protected int logCounter = 0;
+    private final TranspositionTable tt = new TranspositionTable(20, 44);
 
     public NegaMax(int searchDepth, Constants.PlayerColors color) {
         this.evaluator = CompositeEvaluator.createFullEvaluator(color);
@@ -35,14 +38,53 @@ public class NegaMax implements AIStrategy {
     }
     
     protected Move alphaBeta(State s, int depth, long alpha, long beta, int color) {
+        long origAlpha = alpha;
+        TranspositionTable.TableCheckResultTypes ttentryflag = tt.checkTable(s);
+        if (ttentryflag == TranspositionTable.TableCheckResultTypes.VALID) {
+            /* This value had already been stored in TT. Check searched depth */
+            TableEntry storedEntry = tt.getCachedEntry();
+            if (storedEntry.getSearchDepth() >= depth) {
+                /*
+                Exact value for this state was stored in TT at an appropriate
+                search depth. Adapt current search bounds according to stored values.
+                */
+                if (storedEntry.getValueFlag()==TranspositionTable.TableValueFlagTypes.EXACT) {
+                    /* No need to adapt bounds: already have exact value for this state */
+                    return new NullMove(storedEntry.getStateValue());
+                }
+                else if (storedEntry.getValueFlag()==TranspositionTable.TableValueFlagTypes.LOWER) {
+                    /*
+                    Stored value is a lower bound and exceeds lower bound in this
+                    search line: adapt current alpha accordingly.
+                    */
+                    alpha = Math.max(alpha,storedEntry.getStateValue());
+                }
+                else if (storedEntry.getValueFlag()==TranspositionTable.TableValueFlagTypes.UPPER) {
+                    /*
+                    Stored value is an upper bound and is lower than upper bound
+                    in this search line: adapt current beta accordingly.
+                    */
+                    beta = Math.min(beta,storedEntry.getStateValue());
+                }
+                if (alpha >= beta) {
+                    /*
+                    By looking at the stored bounds for this nodes, we have
+                    determined an exact value for this node. Return this value.
+                    */
+                    return new NullMove(storedEntry.getStateValue());
+                }
+            }
+            /*
+            Can't use retrieved value directly: node in table has not been 
+            investigated as deeply as current search line. Need to search using current
+            parameters. However, can use stored best move as first try.
+            */
+        }
         long score = Integer.MIN_VALUE;
         Collection<Move> moves = this.negamaxMoveGeneration(s, depth);
         nodesExpanded++;
         Move bestMove = null;
         
-        if (depth == 5) {
-            int a = 5;
-        }
         // Don't perform search if there is only one legal move
         if (depth == 0 && moves.size() == 1) {
             searchDepth = IDNegamax.maxSearchDepth;
@@ -53,7 +95,6 @@ public class NegaMax implements AIStrategy {
         // No legal moves in this state, current player loses game
         if (moves.isEmpty()) {
             return new NullMove(color*Integer.MIN_VALUE);
-//            bestMove = new Edge(null, color*Integer.MIN_VALUE);
         }
         
         // Opponent has no more moves, win for current player.
@@ -63,9 +104,7 @@ public class NegaMax implements AIStrategy {
         
         // Leaf node reached, return evaluation of current state
         if (depth == searchDepth) {
-            // De fout moet bijna zeker hier zitten
             return new NullMove(color*evaluator.evaluate(s));
-//            bestMove = new Edge(null, color*evaluator.evaluate(s));
         }
         else {
             for (Move m : moves) {
@@ -97,14 +136,15 @@ public class NegaMax implements AIStrategy {
                 if (score >= beta) break;
             }
         }
+        /* TODO: need to check when this situation occurs */
         if (bestMove instanceof NullMove || bestMove == null) {
             bestMove = moves.iterator().next();
             bestMove.setValue(color*Integer.MIN_VALUE);
-//            bestMove = new Edge(moves.iterator().next(), color*Integer.MIN_VALUE);
         }
-        if (bestMove == null) {
-            System.out.println("debug");
-        }
+        
+        /* Store current node in transposition table */
+        
+        
         return bestMove;
     }
     
@@ -125,8 +165,8 @@ public class NegaMax implements AIStrategy {
      * @param depth
      * @return 
      */
-    protected Collection<Move> negamaxMoveGeneration(State s, int depth) {
-        return DameoEngine.generateLegalMoves(s);
+    protected List<Move> negamaxMoveGeneration(State s, int depth) {
+        return new ArrayList<>(DameoEngine.generateLegalMoves(s));
     }
     
     @Override
