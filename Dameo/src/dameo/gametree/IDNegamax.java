@@ -30,13 +30,13 @@ public class IDNegamax extends NegaMax {
         generate a list of the root moves, which we will keep sorting during
         subsequent iterations.
         */
-        if (searchDepth == 1 && depth == 0) {
+        if (iterationSearchDepth == 1 && depth == 0) {
             rootChildren = new ArrayList<>();
         }
         /*
         Sort root moves to improve search efficiency on next iteration.
         */
-        if (searchDepth > 1 && depth == 0) {
+        if (iterationSearchDepth > 1 && depth == 0) {
             boolean nullMoveFound = false;
             for (Move m : rootChildren) {
                 if (m instanceof NullMove) {
@@ -66,12 +66,12 @@ public class IDNegamax extends NegaMax {
     @Override
     public Move searchBestMove(State s) {
         nodesExpanded = 0;
-        searchDepth = 1;
+        iterationSearchDepth = 1;
         Move m = null;
-        while (searchDepth <= maxSearchDepth) {
-            System.out.printf("Searching at depth %d\n", searchDepth);
+        while (iterationSearchDepth <= maxSearchDepth) {
+            System.out.printf("Searching at depth %d\n", iterationSearchDepth);
             m = alphaBeta(s, 0, alpha, beta, 1);
-            searchDepth+=2;
+            iterationSearchDepth+=2;
         }
         System.out.printf("Nodes expanded: %d\n",nodesExpanded);
         return m;

@@ -23,18 +23,16 @@ public class NegaMax implements AIStrategy {
     protected static int nodesExpanded;
     private final CompositeEvaluator evaluator;
     protected final long alpha, beta;
-    protected int searchDepth;
-    private final int negamaxColor;
+    protected int iterationSearchDepth;
     public final int[] nodeLog = new int[100];
     protected int logCounter = 0;
     private final TranspositionTable tt = new TranspositionTable(20, 44);
 
-    public NegaMax(int searchDepth, Constants.PlayerColors color) {
+    public NegaMax(int iterationSearchDepth, Constants.PlayerColors color) {
         this.evaluator = CompositeEvaluator.createFullEvaluator(color);
         this.alpha = Integer.MIN_VALUE;
         this.beta = Integer.MAX_VALUE;
-        this.searchDepth = searchDepth;
-        this.negamaxColor = color.getNegamaxColor();
+        this.iterationSearchDepth = iterationSearchDepth;
     }
     // TODO: need two different search depth parameters: one for ID's total maximum
     // search depth and one for ID's current search window.
@@ -42,10 +40,13 @@ public class NegaMax implements AIStrategy {
     protected Move alphaBeta(State s, int depth, long alpha, long beta, int color) {
         long origAlpha = alpha;
         TranspositionTable.TableCheckResultTypes ttentryflag = tt.checkTable(s);
+        /* storedEntry is the entry returned by checking the transposition table.
+        If the primary hash key was not present in the table, storedEntry is a new
+        table entry with default values except for its hash code. */
+        TableEntry storedEntry = tt.getCachedEntry();
         if (ttentryflag == TranspositionTable.TableCheckResultTypes.VALID) {
             /* This value had already been stored in TT. Check searched depth */
-            TableEntry storedEntry = tt.getCachedEntry();
-            if (storedEntry.getSearchDepth() >= this.searchDepth) {
+            if (storedEntry.getSearchDepth() >= this.iterationSearchDepth) {
                 /*
                 Exact value for this state was stored in TT at an appropriate
                 search depth. Adapt current search bounds according to stored values.
@@ -89,7 +90,7 @@ public class NegaMax implements AIStrategy {
         
         // Don't perform search if there is only one legal move
         if (depth == 0 && moves.size() == 1) {
-            searchDepth = IDNegamax.maxSearchDepth;
+            iterationSearchDepth = IDNegamax.maxSearchDepth;
             Move m = moves.iterator().next();
             return m;
         }
@@ -105,7 +106,7 @@ public class NegaMax implements AIStrategy {
         }
         
         // Leaf node reached, return evaluation of current state
-        if (depth == searchDepth) {
+        if (depth == iterationSearchDepth) {
             return new NullMove(color*evaluator.evaluate(s));
         }
         else {
@@ -144,7 +145,7 @@ public class NegaMax implements AIStrategy {
             bestMove.setValue(color*Integer.MIN_VALUE);
         }
         
-        /* Store current node in transposition table */
+        /* Precompute some values to be stored in transposition table entry */
         TranspositionTable.TableValueFlagTypes entryFlag = null;
         if (bestMove.getValue() <= origAlpha) {
             entryFlag = TranspositionTable.TableValueFlagTypes.UPPER;
@@ -156,15 +157,12 @@ public class NegaMax implements AIStrategy {
             entryFlag = TranspositionTable.TableValueFlagTypes.EXACT;
         }
         
-        final int entryDepth = searchDepth - depth;
+        final int entryDepth = iterationSearchDepth - depth;
         
-        /*
-        Need to distinguish between several cases.
-        1. No entry at all for given primary hash key. This corresponds to the case
-        where checkTable() returned EMPTY. Create an entire new table entry and
-        store it in the table.
-        2. An entry was found but it was not search as deeply as the current
-        */
+        storedEntry.setStateValue(bestMove.getValue());
+        storedEntry.setValueType(entryFlag);
+        storedEntry.setSearchDepth(entryDepth);
+        storedEntry.setBestMove(bestMove);
         
         return bestMove;
     }

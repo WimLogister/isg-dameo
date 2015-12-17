@@ -8,20 +8,30 @@ import java.util.BitSet;
  * @author Wim
  */
 public class TableEntry {
-    private int stateValue;
-        private TranspositionTable.TableValueFlagTypes valueType;
-        private Move bestMove;
-        private int searchDepth;
-        private BitSet hashkey;
+    private long stateValue;
+    private TranspositionTable.TableValueFlagTypes valueType;
+    private Move bestMove;
+    private int searchDepth;
+    private BitSet hashkey;
 
-        public TableEntry() {
-        }
+    public TableEntry() {
+    }
+
+    public TableEntry(long stateValue, TranspositionTable.TableValueFlagTypes valueType, Move bestMove, int searchDepth, BitSet hashkey) {
+        this.stateValue = stateValue;
+        this.valueType = valueType;
+        this.bestMove = bestMove;
+        this.searchDepth = searchDepth;
+        this.hashkey = hashkey;
+    }
+        
+        
 
         public Move getBestMove() {
             return bestMove;
         }
 
-        public int getStateValue() {
+        public long getStateValue() {
             return stateValue;
         }
 
@@ -49,7 +59,7 @@ public class TableEntry {
             this.searchDepth = searchDepth;
         }
 
-        public void setStateValue(int stateValue) {
+        public void setStateValue(long stateValue) {
             this.stateValue = stateValue;
         }
 

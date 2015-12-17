@@ -55,15 +55,26 @@ public class TranspositionTable {
         BitSet hash = hash(s);
         /* Case: this entry does not exist in table yet */
         if (!table.containsKey(hash.get(0, primaryHashSize-1))) {
+            /*
+            Create and store a new entry that is returned by call to getCachedEntry
+            so the (secondary) hash key does not have to be computed twice.
+            */
+            cachedEntry = new TableEntry(0, TableValueFlagTypes.EXACT, null,
+                totalHashSize, hash);
+            table.put(hash.get(0, secondaryHashSize), cachedEntry);
             return TableCheckResultTypes.EMPTY;
         }
         cachedEntry = table.get(hash.get(0, primaryHashSize-1));
-        /* Case: identical entry (based on hash key) exists in table */
-        if (cachedEntry.getHashkey().get(primaryHashSize, totalHashSize-1).equals(
+        /* Case: identical entry (based on secondary hash code) exists in table */
+        if (!cachedEntry.getHashkey().get(primaryHashSize, totalHashSize-1).equals(
                 hash.get(primaryHashSize, totalHashSize))) {
             return TableCheckResultTypes.VALID;
         }
-        /* Case: entry exists with identical primary hash code but different hash key */
+        /* Case: entry exists with identical primary hash code but different hash key.
+        Since I use the "always take newest" replacement scheme, I return the old
+        table entry but with the new hash key. The other values such as value, depth
+        and flag will be adjusted in the alpha-beta code. */
+        cachedEntry.setHashkey(hash);
         return TableCheckResultTypes.COLLISION;
     }
     
