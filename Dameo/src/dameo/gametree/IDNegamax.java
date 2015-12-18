@@ -68,10 +68,15 @@ public class IDNegamax extends NegaMax {
         nodesExpanded = 0;
         iterationSearchDepth = 1;
         Move m = null;
-        while (iterationSearchDepth <= maxSearchDepth) {
+        int dynamicSearchDepth = maxSearchDepth;
+        if (DameoEngine.moveCounter < 5) {
+            dynamicSearchDepth -= 2;
+        }
+        while (iterationSearchDepth <= dynamicSearchDepth) {
             System.out.printf("Searching at depth %d\n", iterationSearchDepth);
             m = alphaBeta(s, 0, alpha, beta, 1);
-            iterationSearchDepth+=2;
+            System.out.printf("Best move value: %d\n",m.getValue());
+            iterationSearchDepth++;
         }
         System.out.printf("Nodes expanded: %d\n",nodesExpanded);
         return m;
