@@ -17,10 +17,12 @@ public class IDNegamax extends NegaMax {
     
     private List<Move> rootChildren;
     public static int maxSearchDepth;
+    private final double timeLimit;
 
-    public IDNegamax(int maxSearchDepth, Constants.PlayerColors color) {
+    public IDNegamax(int maxSearchDepth, Constants.PlayerColors color, double timeLimit) {
         super(1, color);
         IDNegamax.maxSearchDepth = maxSearchDepth;
+        this.timeLimit = timeLimit;
     }
 
     @Override
@@ -72,7 +74,8 @@ public class IDNegamax extends NegaMax {
 //        if (DameoEngine.moveCounter < 5) {
 //            dynamicSearchDepth -= 2;
 //        }
-        while (iterationSearchDepth <= maxSearchDepth) {
+        long start = System.currentTimeMillis();
+        while (((System.currentTimeMillis() - start)/1000.0 <= timeLimit) && iterationSearchDepth < maxSearchDepth) {
             System.out.printf("Searching at depth %d\n", iterationSearchDepth);
             m = alphaBeta(s, 0, alpha, beta, 1, 0);
             System.out.printf("Best move value: %d\n",m.getValue());

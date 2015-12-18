@@ -124,7 +124,7 @@ public class NegaMax implements AIStrategy {
                 
                 Move valueMove = null;
                 if (m instanceof MultiCaptureMove) {
-                    valueMove = alphaBeta(copyState, depth+0.5, -beta, -alpha, -color, actualDepth+1);
+                    valueMove = alphaBeta(copyState, depth+1, -beta, -alpha, -color, actualDepth+1);
                 }
                 else {
                     valueMove = alphaBeta(copyState, depth+1, -beta, -alpha, -color, actualDepth+1);
