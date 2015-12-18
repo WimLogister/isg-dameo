@@ -4,6 +4,7 @@ import dameo.Constants;
 import dameo.DameoEngine;
 import dameo.evalfunction.CompositeEvaluator;
 import dameo.move.Move;
+import dameo.move.MultiCaptureMove;
 import dameo.move.NullMove;
 import dameo.strategy.AIStrategy;
 import java.io.BufferedWriter;
@@ -27,6 +28,7 @@ public class NegaMax implements AIStrategy {
     public final int[] nodeLog = new int[100];
     protected int logCounter = 0;
     private final TranspositionTable tt = new TranspositionTable(20, 44);
+    protected int highestForcedSearchDepth = 0;
 
     public NegaMax(int iterationSearchDepth, Constants.PlayerColors color) {
         this.evaluator = CompositeEvaluator.createFullEvaluator(color);
@@ -37,7 +39,8 @@ public class NegaMax implements AIStrategy {
     // TODO: need two different search depth parameters: one for ID's total maximum
     // search depth and one for ID's current search window.
     
-    protected Move alphaBeta(State s, int depth, long alpha, long beta, int color) {
+    protected Move alphaBeta(State s, double depth, long alpha, long beta, int color, int actualDepth) {
+        highestForcedSearchDepth = Math.max(actualDepth, highestForcedSearchDepth);
         long origAlpha = alpha;
         TranspositionTable.TableCheckResultTypes ttentryflag = tt.checkTable(s);
         /* storedEntry is the entry returned by checking the transposition table.
@@ -106,7 +109,7 @@ public class NegaMax implements AIStrategy {
         }
         
         // Leaf node reached, return evaluation of current state
-        if (depth == iterationSearchDepth) {
+        if (depth >= iterationSearchDepth) {
             return new NullMove(color*evaluator.evaluate(s));
         }
         else {
@@ -118,7 +121,14 @@ public class NegaMax implements AIStrategy {
                 State copyState = new State(s);
                 m.execute(copyState);
                 copyState.switchPlayers();
-                Move valueMove = alphaBeta(copyState, depth+1, -beta, -alpha, -color);
+                
+                Move valueMove = null;
+                if (m instanceof MultiCaptureMove) {
+                    valueMove = alphaBeta(copyState, depth+0.5, -beta, -alpha, -color, actualDepth+1);
+                }
+                else {
+                    valueMove = alphaBeta(copyState, depth+1, -beta, -alpha, -color, actualDepth+1);
+                }
                 m.setValue(-valueMove.getValue());
                 /*
                 For iterative deepening, save root moves for ordering in next
@@ -157,7 +167,7 @@ public class NegaMax implements AIStrategy {
             entryFlag = TranspositionTable.TableValueFlagTypes.EXACT;
         }
         
-        final int entryDepth = iterationSearchDepth - depth;
+        final int entryDepth = iterationSearchDepth - actualDepth;
         
         storedEntry.setStateValue(bestMove.getValue());
         storedEntry.setValueType(entryFlag);
@@ -184,14 +194,20 @@ public class NegaMax implements AIStrategy {
      * @param depth
      * @return 
      */
-    protected List<Move> negamaxMoveGeneration(State s, int depth) {
+    protected List<Move> negamaxMoveGeneration(State s, double depth) {
         return new ArrayList<>(DameoEngine.generateLegalMoves(s));
     }
+
+    public int getHighestForcedSearchDepth() {
+        return highestForcedSearchDepth;
+    }
+    
+    
     
     @Override
     public Move searchBestMove(State s) {
         nodesExpanded = 0;
-        Move m = alphaBeta(s, 0, alpha, beta, 1);
+        Move m = alphaBeta(s, 0, alpha, beta, 1, 0);
         nodeLog[logCounter++] = nodesExpanded;
         if (logCounter > 25) {
             BufferedWriter writer = null;

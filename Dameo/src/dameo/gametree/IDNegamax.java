@@ -24,7 +24,7 @@ public class IDNegamax extends NegaMax {
     }
 
     @Override
-    protected List<Move> negamaxMoveGeneration(State s, int depth) {
+    protected List<Move> negamaxMoveGeneration(State s, double depth) {
         /*
         During the first iteration of the algorithm in this turn, we have to
         generate a list of the root moves, which we will keep sorting during
@@ -68,15 +68,16 @@ public class IDNegamax extends NegaMax {
         nodesExpanded = 0;
         iterationSearchDepth = 1;
         Move m = null;
-        int dynamicSearchDepth = maxSearchDepth;
-        if (DameoEngine.moveCounter < 5) {
-            dynamicSearchDepth -= 2;
-        }
-        while (iterationSearchDepth <= dynamicSearchDepth) {
+//        int dynamicSearchDepth = maxSearchDepth;
+//        if (DameoEngine.moveCounter < 5) {
+//            dynamicSearchDepth -= 2;
+//        }
+        while (iterationSearchDepth <= maxSearchDepth) {
             System.out.printf("Searching at depth %d\n", iterationSearchDepth);
-            m = alphaBeta(s, 0, alpha, beta, 1);
+            m = alphaBeta(s, 0, alpha, beta, 1, 0);
             System.out.printf("Best move value: %d\n",m.getValue());
             iterationSearchDepth++;
+            System.out.printf("Deepest forced line search depth: %d\n", this.getHighestForcedSearchDepth());
         }
         System.out.printf("Nodes expanded: %d\n",nodesExpanded);
         return m;

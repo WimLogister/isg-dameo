@@ -214,7 +214,7 @@ public class DameoEngine {
             Execute move and change state
             */
             m.execute(currentState);
-            if (DEBUG > 0) {
+            if (DEBUG > 1) {
                 System.out.println(m.getClass().toString());
                 
                 System.out.println("State after move...");
