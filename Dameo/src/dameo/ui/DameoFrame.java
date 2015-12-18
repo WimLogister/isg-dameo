@@ -130,10 +130,10 @@ public class DameoFrame extends JFrame implements Observer {
                     x = col * squareSide;
                     y = row * squareSide;
                     if (row % 2 == col % 2){
-                        g.setColor(green);
+                        g.setColor(khaki);
                     }
                     else {
-                        g.setColor(khaki);
+                        g.setColor(green);
                     }
                     g.fillRect(x, y, squareSide, squareSide);
                 }
