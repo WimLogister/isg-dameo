@@ -4,6 +4,7 @@ import dameo.Constants;
 import dameo.DameoEngine;
 import dameo.move.Move;
 import dameo.move.NullMove;
+import dameo.move.TimeOutMove;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -75,9 +76,12 @@ public class IDNegamax extends NegaMax {
 //            dynamicSearchDepth -= 2;
 //        }
         long start = System.currentTimeMillis();
-        while (((System.currentTimeMillis() - start)/1000.0 <= timeLimit) && iterationSearchDepth < maxSearchDepth) {
+        while (iterationSearchDepth < maxSearchDepth) {
             System.out.printf("Searching at depth %d\n", iterationSearchDepth);
-            m = alphaBeta(s, 0, alpha, beta, 1, 0);
+            Move temp = alphaBeta(s, 0, alpha, beta, 1, 0, start);
+            if (!(temp instanceof TimeOutMove)) {
+                m = temp;
+            }
             System.out.printf("Best move value: %d\n",m.getValue());
             iterationSearchDepth++;
             System.out.printf("Deepest forced line search depth: %d\n", this.getHighestForcedSearchDepth());

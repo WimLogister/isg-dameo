@@ -6,6 +6,7 @@ import dameo.evalfunction.CompositeEvaluator;
 import dameo.move.Move;
 import dameo.move.MultiCaptureMove;
 import dameo.move.NullMove;
+import dameo.move.TimeOutMove;
 import dameo.strategy.AIStrategy;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -39,7 +40,10 @@ public class NegaMax implements AIStrategy {
     // TODO: need two different search depth parameters: one for ID's total maximum
     // search depth and one for ID's current search window.
     
-    protected Move alphaBeta(State s, double depth, long alpha, long beta, int color, int actualDepth) {
+    protected Move alphaBeta(State s, double depth, long alpha, long beta, int color, int actualDepth, long startTime) {
+        if (System.currentTimeMillis() - startTime >= 5000) {
+            return new TimeOutMove();
+        }
         highestForcedSearchDepth = Math.max(actualDepth, highestForcedSearchDepth);
         long origAlpha = alpha;
         TranspositionTable.TableCheckResultTypes ttentryflag = tt.checkTable(s);
@@ -122,12 +126,9 @@ public class NegaMax implements AIStrategy {
                 m.execute(copyState);
                 copyState.switchPlayers();
                 
-                Move valueMove = null;
-                if (m instanceof MultiCaptureMove) {
-                    valueMove = alphaBeta(copyState, depth+1, -beta, -alpha, -color, actualDepth+1);
-                }
-                else {
-                    valueMove = alphaBeta(copyState, depth+1, -beta, -alpha, -color, actualDepth+1);
+                Move valueMove = alphaBeta(copyState, depth+1, -beta, -alpha, -color, actualDepth+1, startTime);
+                if (valueMove instanceof TimeOutMove) {
+                    return valueMove;
                 }
                 m.setValue(-valueMove.getValue());
                 /*
@@ -207,7 +208,7 @@ public class NegaMax implements AIStrategy {
     @Override
     public Move searchBestMove(State s) {
         nodesExpanded = 0;
-        Move m = alphaBeta(s, 0, alpha, beta, 1, 0);
+        Move m = alphaBeta(s, 0, alpha, beta, 1, 0, 0);
         nodeLog[logCounter++] = nodesExpanded;
         if (logCounter > 25) {
             BufferedWriter writer = null;
