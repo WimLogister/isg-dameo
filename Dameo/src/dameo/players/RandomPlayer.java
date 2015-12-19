@@ -7,6 +7,7 @@ import dameo.DameoEngine;
 import dameo.gametree.State;
 import dameo.move.Move;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,7 +29,7 @@ public class RandomPlayer extends Player {
      */
     @Override
     public Move selectMove(State s) {
-        Set<Move> moves = DameoEngine.generateLegalMoves(s);
+        List<Move> moves = DameoEngine.generateLegalMoves(s);
         int r = DameoUtil.getRandomIntFromTo(0, moves.size());
         int i = 0;
         Iterator<Move> it = moves.iterator();

@@ -408,7 +408,7 @@ public class Piece {
         }
         return hashCode;
     }
-    
+
     public static void hashCodeTest() {
         Piece p1 = new Piece(0, 0, Constants.PlayerColors.WHITE, null);
         Piece p2 = new Piece(8, 8, Constants.PlayerColors.BLACK, null);

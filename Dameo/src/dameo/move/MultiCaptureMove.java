@@ -12,7 +12,8 @@ import java.util.Stack;
  */
 public class MultiCaptureMove extends Move {
     
-    List<Point> capturedPieces;
+    private int hashCode;
+    private List<Point> capturedPieces;
 
     public MultiCaptureMove(int newX, int newY, int oldX, int oldY) {
         super(newX, newY, oldX, oldY, 0);
@@ -50,6 +51,48 @@ public class MultiCaptureMove extends Move {
         super.promotePiece(state);
     }
 
+    public List<Point> getCapturedPieces() {
+        return capturedPieces;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        MultiCaptureMove other;
+        if (obj instanceof MultiCaptureMove) {
+            other = (MultiCaptureMove) obj;
+            boolean equals = true;
+            /* Disprove that it's the same move */
+            if (!(this.newX == other.newX && this.newY == other.newY && this.oldX == other.oldX
+                    && this.oldY == other.oldY)) {
+                equals = false;
+            }
+            List<Point> otherCapt = other.getCapturedPieces();
+            for (Point p : otherCapt) {
+                
+            }
+            return false;
+        }
+        else return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = hashCode;
+        if (result == 0) {
+            result = 17;
+            result = 31 * result + newX;
+            result = 31 * result + newY;
+            result = 31 * result + oldX;
+            result = 31 * result + oldY;
+            for (Point p : capturedPieces) {
+                result = 31 * result + p.hashCode();
+            }
+        }
+        return result;
+    }
+    
+    
+    
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

@@ -8,6 +8,8 @@ import dameo.gametree.State;
  * @author Wim
  */
 public class SingleMove extends Move {
+    
+    private int hashCode;
 
     public SingleMove(int newX, int newY, int oldX, int oldY) {
         super(newX, newY, oldX, oldY, 0);
@@ -38,7 +40,19 @@ public class SingleMove extends Move {
         super.promotePiece(state);
     }
 
-
+    @Override
+    public int hashCode() {
+        int result = hashCode;
+        if (result == 0) {
+            result = 17;
+            result = 31 * result + newX;
+            result = 31 * result + newY;
+            result = 31 * result + oldX;
+            result = 31 * result + oldY;
+        }
+        return result;
+    }
+    
     @Override
     public String toString() {
         return String.format("Single move <%d,%d>:<%d,%d>", oldX+1,

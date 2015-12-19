@@ -44,8 +44,10 @@ public class NegaMax implements AIStrategy {
         if (System.currentTimeMillis() - startTime >= 5000) {
             return new TimeOutMove();
         }
+        boolean insufficientDepth = false;
         highestForcedSearchDepth = Math.max(actualDepth, highestForcedSearchDepth);
         long origAlpha = alpha;
+        Move ttMove = null;
         TranspositionTable.TableCheckResultTypes ttentryflag = tt.checkTable(s);
         /* storedEntry is the entry returned by checking the transposition table.
         If the primary hash key was not present in the table, storedEntry is a new
@@ -89,11 +91,23 @@ public class NegaMax implements AIStrategy {
             investigated as deeply as current search line. Need to search using current
             parameters. However, can use stored best move as first try.
             */
+            insufficientDepth = true;
+            ttMove = storedEntry.getBestMove();
         }
         long score = Integer.MIN_VALUE;
-        Collection<Move> moves = this.negamaxMoveGeneration(s, depth);
+        List<Move> moves = this.negamaxMoveGeneration(s, depth);
         nodesExpanded++;
         Move bestMove = null;
+        if (insufficientDepth) {
+            int removeIndex = 0;
+            for (int i = 0; i < moves.size(); i++) {
+                if (moves.get(i).hashCode() == ttMove.hashCode()) {
+                    removeIndex = i;
+                }
+            }
+            moves.remove(removeIndex);
+            moves.add(0, ttMove);
+        }
         
         // Don't perform search if there is only one legal move
         if (depth == 0 && moves.size() == 1) {

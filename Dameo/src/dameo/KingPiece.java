@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import dameo.Piece;
 import dameo.move.MultiPieceMove;
+import java.util.ArrayList;
 
 /**
  *
@@ -33,10 +34,10 @@ public class KingPiece extends Piece {
     }
 
     @Override
-    public Set<SingleCaptureMove> generateCapturingMoves(State s, List<Point> capturedList) {
+    public List<SingleCaptureMove> generateCapturingMoves(State s, List<Point> capturedList) {
         Piece[][] board = s.getBoard();
         
-        Set<SingleCaptureMove> moves = new HashSet<>();
+        List<SingleCaptureMove> moves = new ArrayList<>();
         
         /*
         Variable dir determines the directionality of movement of this piece
@@ -151,10 +152,10 @@ public class KingPiece extends Piece {
     }
     
     @Override
-    public Set<Move> generateSingleMoves(State s) {
+    public List<Move> generateSingleMoves(State s) {
         Piece[][] board = s.getBoard();
         
-        Set<Move> moves = new HashSet<>();
+        List<Move> moves = new ArrayList<>();
         
         /*
         Variable dir determines the directionality of movement of this piece
