@@ -55,7 +55,7 @@ public class NegaMax implements AIStrategy {
         TableEntry storedEntry = tt.getCachedEntry();
         if (ttentryflag == TranspositionTable.TableCheckResultTypes.VALID) {
             /* This value had already been stored in TT. Check searched depth */
-            if (storedEntry.getSearchDepth() >= this.iterationSearchDepth) {
+            if (storedEntry.getSearchDepth() >= this.iterationSearchDepth-depth) {
                 /*
                 Exact value for this state was stored in TT at an appropriate
                 search depth. Adapt current search bounds according to stored values.
