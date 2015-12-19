@@ -251,9 +251,9 @@ public class DameoEngine {
      */
     public Constants.PlayerColors start() {
         while (!end) {
-            if (DEBUG > 0) {
-                DameoUtil.getConsoleInput();
-            }
+//            if (DEBUG > 0) {
+//                DameoUtil.getConsoleInput();
+//            }
             next();
             for (Observer o : observers) {
                 o.update();
@@ -267,11 +267,11 @@ public class DameoEngine {
      * @param s
      * @return 
      */
-    public static Set<Move> generateLegalMoves(State s) {
+    public static List<Move> generateLegalMoves(State s) {
         Set<Piece> currentPlayerPieceSet = s.getCurrentPlayerPieces();
-        Set<Move> moveSet = new HashSet();
+        List<Move> moveSet = new ArrayList<>();
         DeepestMultiJumpFinder finder = new DeepestMultiJumpFinder();
-        Set<Move> jumpMoves = finder.findDeepestNode(s);
+        List<Move> jumpMoves = finder.findDeepestNode(s);
         /*
         The player must play jump moves if there are any. If there are none,
         he can play any non-jumping move.

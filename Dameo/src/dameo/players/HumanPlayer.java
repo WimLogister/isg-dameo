@@ -33,7 +33,7 @@ public class HumanPlayer extends Player {
     public Move selectMove(State s) {
         MoveSelectFrame frame = new MoveSelectFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Set<Move> moves = DameoEngine.generateLegalMoves(s);
+        List<Move> moves = DameoEngine.generateLegalMoves(s);
         Move m = frame.getPlayerMoveInput(moves);
         return m;
     }
@@ -52,7 +52,7 @@ public class HumanPlayer extends Player {
         public MoveSelectFrame() throws HeadlessException {
         }
         
-        Move getPlayerMoveInput(Set<Move> moves) {
+        Move getPlayerMoveInput(List<Move> moves) {
             List<FrameMove> moveList = new ArrayList<>(moves.size());
             for (Move m : moves) {
                 moveList.add(new FrameMove(m));

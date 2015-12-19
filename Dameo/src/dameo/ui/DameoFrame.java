@@ -170,7 +170,6 @@ public class DameoFrame extends JFrame implements Observer {
     public static void main(String[] args) {
         DameoFrame frame = new DameoFrame();
         frame.setSize(WIDTH, HEIGHT);
-//        frame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.start();

@@ -196,7 +196,7 @@ public class NegaMax implements AIStrategy {
      * @return 
      */
     protected List<Move> negamaxMoveGeneration(State s, double depth) {
-        return new ArrayList<>(DameoEngine.generateLegalMoves(s));
+        return DameoEngine.generateLegalMoves(s);
     }
 
     public int getHighestForcedSearchDepth() {

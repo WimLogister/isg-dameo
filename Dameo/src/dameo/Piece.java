@@ -110,11 +110,11 @@ public class Piece {
         return contains;
     }
     
-    public Set<SingleCaptureMove> generateCapturingMoves(State s, List<Point> capturedList) {
+    public List<SingleCaptureMove> generateCapturingMoves(State s, List<Point> capturedList) {
         
         Piece[][] board = s.getBoard();
         
-        Set<SingleCaptureMove> moves = new HashSet<>();
+        List<SingleCaptureMove> moves = new ArrayList<>();
         
         final int checkX = dir*col;
         final int checkY = dir*row;
@@ -200,11 +200,11 @@ public class Piece {
      * this piece to generate all of its legal moves.
      * @return 
      */
-    public Set<Move> generateSingleMoves(State s) {
+    public List<Move> generateSingleMoves(State s) {
         
         Piece[][] board = s.getBoard();
         
-        Set<Move> moves = new HashSet<>();
+        List<Move> moves = new ArrayList<>();
         
         /*
         Convert this piece's coordinates to relative coordinates, which allows us

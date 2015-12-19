@@ -22,7 +22,7 @@ public class DeepestMultiJumpFinder {
     public DeepestMultiJumpFinder() {
     }
     
-    public Set<Move> findDeepestNode(State state) {
+    public List<Move> findDeepestNode(State state) {
         this.root = new JumpNode(null, state, 0, null, new ArrayList<>(), 0, 0);
         currentDeepest.add(root);
         currentDeepest.setCurrentMaxDepth(root.depth);
@@ -34,7 +34,7 @@ public class DeepestMultiJumpFinder {
         first level of the tree.
         */
         for (Piece p : root.state.getCurrentPlayerPieces()) {
-            Set<SingleCaptureMove> captureMoves = p.generateCapturingMoves(root.state, new ArrayList<>());
+            List<SingleCaptureMove> captureMoves = p.generateCapturingMoves(root.state, new ArrayList<>());
             for (SingleCaptureMove m : captureMoves) {
                 // Need to create a copy of root's list so nodes in other
                 // branches don't modify it.
@@ -60,11 +60,11 @@ public class DeepestMultiJumpFinder {
      * Construct a set of multi-jump moves from the list of all deepest nodes.
      * @return 
      */
-    private Set<Move> constructMultiMove() {
+    private List<Move> constructMultiMove() {
         // In fact we don't need the entire stack, just the deepest nodes, since
         // we only need the original and final location of the jumping piece and
         // the list of captured pieces and those are all stored in the nodes.
-        Set<Move> moves = new HashSet<>();
+        List<Move> moves = new ArrayList<>();
         if (currentDeepest.currentMaxDepth > 0) {
             for (JumpNode n : currentDeepest) {
                 moves.add(new MultiCaptureMove(n.captureMove.newX, n.captureMove.newY,
@@ -83,7 +83,7 @@ public class DeepestMultiJumpFinder {
         final int x = n.captureMove.newX;
         final int y = n.captureMove.newY;
         Piece capturingPiece = n.state.getBoard()[y][x];
-        Set<SingleCaptureMove> moves = capturingPiece.generateCapturingMoves(n.state, n.capturedPieces);
+        List<SingleCaptureMove> moves = capturingPiece.generateCapturingMoves(n.state, n.capturedPieces);
         
         // This is a terminal node: no more jumps can be made
         if (moves.isEmpty()) {
