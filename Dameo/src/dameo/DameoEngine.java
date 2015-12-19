@@ -10,6 +10,10 @@ import dameo.move.UndoMove;
 import dameo.players.Player;
 import dameo.test.TestCases;
 import dameo.util.Observer;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,8 +28,6 @@ import java.util.Stack;
 public class DameoEngine {
     
     private State currentState;
-    private State previousState;
-    private State twoStatesBack;
     
     private Player currentPlayer;
     private Player currentOpponent;
@@ -44,6 +46,8 @@ public class DameoEngine {
     private List<Player> players = new ArrayList<>();
 
     private Stack<State> stateStack;
+    
+    private double branchingFactor;
     
     private DameoEngine() {
         init();
@@ -114,8 +118,6 @@ public class DameoEngine {
         
         stateStack = new Stack<>();
         
-        previousState = null;
-        twoStatesBack = null;
         currentState = new State(currentPlayer.getPieces(), currentOpponent.getPieces(), board);
         
         if (DEBUG > 0) {
@@ -170,9 +172,12 @@ public class DameoEngine {
      */
     private void next() {
         
+        branchingFactor += generateLegalMoves(currentState).size();
+        moveCounter++;
+        
         if (DEBUG > 0) {
             System.out.printf("%s player to move\n",currentPlayer.getColor());
-            System.out.printf("Turn number %d\n",moveCounter++);
+            System.out.printf("Turn number %d\n",moveCounter);
         }
         
         /*
@@ -246,8 +251,9 @@ public class DameoEngine {
      */
     public Constants.PlayerColors start() {
         while (!end) {
-            if (DEBUG > 0)
-//                DameoUtil.getConsoleInput();
+            if (DEBUG > 0) {
+                DameoUtil.getConsoleInput();
+            }
             next();
             for (Observer o : observers) {
                 o.update();
@@ -286,6 +292,10 @@ public class DameoEngine {
     public State getCurrentState() {
         return currentState;
     }
+
+    public double getBranchingFactor() {
+        return branchingFactor;
+    }
     
     public static void runTestGames(int numRuns) {
         DameoEngine.DEBUG = 0;
@@ -300,10 +310,42 @@ public class DameoEngine {
         System.out.printf("Win percentage: %f", DameoUtil.mean(values));
     }
     
+    public static void branchingFactorTest(int numRuns) throws IOException {
+        DameoEngine.DEBUG = 0;
+        double[] possibleMoves = new double[numRuns];
+        double[] movesPlayed = new double[numRuns];
+        for (int i = 0; i < numRuns; i++) {
+            DameoEngine eng = DameoEngine.createTestEngine();
+            DameoEngine.moveCounter = 0;
+            System.out.printf("Now starting game %d\n",i+1);
+            eng.init();
+            eng.start();
+            possibleMoves[i] = eng.getBranchingFactor();
+            movesPlayed[i] = DameoEngine.moveCounter;
+        }
+        File branchingFile = new File("branching_factors.txt");
+        FileWriter fw = new FileWriter(branchingFile);
+        BufferedWriter bw = new BufferedWriter(fw);
+        
+        for (int i = 0; i < possibleMoves.length; i++) {
+            bw.write(String.format("%f", possibleMoves[i]/movesPlayed[i]));
+            bw.newLine();
+        }
+        bw.close();
+        
+        File moveFile = new File("num_of_moves.txt");
+        FileWriter fw1 = new FileWriter(moveFile);
+        BufferedWriter bw1 = new BufferedWriter(fw1);
+        
+        for (int i = 0; i < possibleMoves.length; i++) {
+            bw1.write(String.format("%f", possibleMoves[i]/movesPlayed[i]));
+            bw1.newLine();
+        }
+        bw1.close();
+    }
     
-    
-    public static void main(String[] args) {
-        TestCases.createCapturePromotionMove();
+    public static void main(String[] args) throws IOException {
+        DameoEngine.branchingFactorTest(100);
     }
     
     

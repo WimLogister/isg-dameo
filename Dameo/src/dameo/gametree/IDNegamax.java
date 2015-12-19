@@ -77,16 +77,16 @@ public class IDNegamax extends NegaMax {
 //        }
         long start = System.currentTimeMillis();
         while (iterationSearchDepth < maxSearchDepth) {
-            System.out.printf("Searching at depth %d\n", iterationSearchDepth);
+//            System.out.printf("Searching at depth %d\n", iterationSearchDepth);
             Move temp = alphaBeta(s, 0, alpha, beta, 1, 0, start);
             if (!(temp instanceof TimeOutMove)) {
                 m = temp;
             }
-            System.out.printf("Best move value: %d\n",m.getValue());
+//            System.out.printf("Best move value: %d\n",m.getValue());
             iterationSearchDepth++;
-            System.out.printf("Deepest forced line search depth: %d\n", this.getHighestForcedSearchDepth());
+//            System.out.printf("Deepest forced line search depth: %d\n", this.getHighestForcedSearchDepth());
         }
-        System.out.printf("Nodes expanded: %d\n",nodesExpanded);
+//        System.out.printf("Nodes expanded: %d\n",nodesExpanded);
         return m;
     }
     
