@@ -159,7 +159,7 @@ public class DameoFrame extends JFrame implements Observer {
                 g2d.setColor(Color.BLACK);
                 if (p instanceof KingPiece) {
                     Ellipse2D.Double kingCircle = new Ellipse2D.Double(px*squareSide+5,
-                            py*squareSide, squareSide-10, squareSide-10);
+                            (py*squareSide)+5, squareSide-10, squareSide-10);
                     g2d.draw(kingCircle);
                 }
                 g2d.drawString(String.format("%d,%d", px+1, ((-py+7)%8)+1), px*squareSide+25, py*squareSide+35);
