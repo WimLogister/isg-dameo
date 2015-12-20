@@ -55,7 +55,12 @@ public class SingleMove extends Move {
     
     @Override
     public String toString() {
-        return String.format("Single move <%d,%d>:<%d,%d>", oldX+1,
+//        boolean kingMove = false;
+//        String prefix = ""
+//        if (Math.abs(oldX - newX) > 1 || Math.abs(oldY - newY) > 1) {
+//            kingMove = true;
+//        }
+        return String.format("King move <%d,%d>:<%d,%d>", oldX+1,
                 oldY+1, newX+1, newY+1);
     }
     

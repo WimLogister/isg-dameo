@@ -99,7 +99,7 @@ public class MultiCaptureMove extends Move {
         for (Point p : capturedPieces) {
             builder.append(String.format("(%d,%d)", (int)p.getX()+1,(int)p.getY()+1));
         }
-        return String.format("Multi-capture <%d,%d>:<%d,%d>,Capturing:%s",oldX+1,oldY+1,newX+1,newY+1,builder.toString());
+        return String.format("%d-capture <%d,%d>:<%d,%d>,Capturing:%s",capturedPieces.size(),oldX+1,oldY+1,newX+1,newY+1,builder.toString());
     }
 
 }
