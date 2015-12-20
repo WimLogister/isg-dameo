@@ -4,7 +4,7 @@ import dameo.move.Move;
 import java.util.BitSet;
 
 /**
- *
+ * Class encapsulating an entry in a transposition table.
  * @author Wim
  */
 public class TableEntry {
@@ -24,8 +24,6 @@ public class TableEntry {
         this.searchDepth = searchDepth;
         this.hashkey = hashkey;
     }
-        
-        
 
         public Move getBestMove() {
             return bestMove;
@@ -66,7 +64,5 @@ public class TableEntry {
         public void setValueType(TranspositionTable.TableValueFlagTypes valueType) {
             this.valueType = valueType;
         }
-        
-        
         
 }

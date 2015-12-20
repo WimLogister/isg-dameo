@@ -55,6 +55,11 @@ public class Piece {
         return p;
     }
     
+    /**
+     * Puts a copy of the parameter piece into parameter set.
+     * @param origPiece
+     * @param newSet 
+     */
     public static void copyIntoSet(Piece origPiece, Set<Piece> newSet) {
         newSet.add(new Piece(origPiece.getRow(), origPiece.getCol(), origPiece.getColor(), newSet));
     }
@@ -110,6 +115,12 @@ public class Piece {
         return contains;
     }
     
+    /**
+     * Generate a list of all capturing moves for this piece.
+     * @param s
+     * @param capturedList
+     * @return 
+     */
     public List<SingleCaptureMove> generateCapturingMoves(State s, List<Point> capturedList) {
         
         Piece[][] board = s.getBoard();
@@ -389,6 +400,11 @@ public class Piece {
         return color;
     }
     
+    /**
+     * Generate a set of 18 pieces of parameter color.
+     * @param color
+     * @return 
+     */
     public static Set<Piece> generatePieceSet(Constants.PlayerColors color) {
         Set<Piece> pieceSet = new HashSet<>(Constants.PIECES_PER_PLAYER);
         for (int i = 0; i < Constants.PIECES_PER_PLAYER; i++)  {
@@ -436,16 +452,6 @@ public class Piece {
     @Override
     public String toString() {
         return String.format("<%s,%s>", row,col);
-    }
-    
-    public static void main(String[] args) {
-        List<Point> pointList = new ArrayList<>();
-        pointList.add(new Point(5, 10));
-        pointList.add(new Point(7, 9));
-        pointList.add(new Point(3, 1));
-        
-        System.out.println(Piece.listContainsPoint(pointList, new Point(7, 8)));
-//        System.out.println(new Point(5, 10).equals(new Point(5, 10)));
     }
     
 }

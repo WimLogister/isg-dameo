@@ -4,20 +4,16 @@ import dameo.Constants;
 import dameo.DameoEngine;
 import dameo.evalfunction.CompositeEvaluator;
 import dameo.move.Move;
-import dameo.move.MultiCaptureMove;
 import dameo.move.NullMove;
 import dameo.move.TimeOutMove;
 import dameo.strategy.AIStrategy;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
- *
+ * Class implementing negamax with alpha-beta pruning.
  * @author Wim
  */
 public class NegaMax implements AIStrategy {
@@ -30,25 +26,39 @@ public class NegaMax implements AIStrategy {
     protected int logCounter = 0;
     private final TranspositionTable tt = new TranspositionTable(20, 44);
     protected int highestForcedSearchDepth = 0;
+    protected final long timeLimit;
 
-    public NegaMax(int iterationSearchDepth, Constants.PlayerColors color) {
+    public NegaMax(int iterationSearchDepth, Constants.PlayerColors color, long timeLimit) {
         this.evaluator = CompositeEvaluator.createFullEvaluator(color);
         this.alpha = Integer.MIN_VALUE;
         this.beta = Integer.MAX_VALUE;
         this.iterationSearchDepth = iterationSearchDepth;
+        this.timeLimit = timeLimit;
     }
-    // TODO: need two different search depth parameters: one for ID's total maximum
-    // search depth and one for ID's current search window.
-    
-    protected Move alphaBeta(State s, double depth, long alpha, long beta, int color, int actualDepth, long startTime) {
-        if (System.currentTimeMillis() - startTime >= 5000) {
+
+    /**
+     * Negamax algorithm with alpha-beta pruning.
+     * @param s the root of this subtree
+     * @param depth the depth to which the subtree below this node will be searched
+     * @param alpha alpha (lower) bound
+     * @param beta beta (upper) bound
+     * @param color the negamax "color", signifying which player's turn it is
+     * @param startTime system time at which the iterative deepening cycle started
+     * @return 
+     */
+    protected Move alphaBeta(State s, int depth, long alpha, long beta, int color, long startTime) {
+        /*
+        Iterative deepening time limit has run out
+        */
+        if (System.currentTimeMillis() - startTime >= timeLimit*1000) {
             return new TimeOutMove();
         }
         boolean insufficientDepth = false;
-        highestForcedSearchDepth = Math.max(actualDepth, highestForcedSearchDepth);
+        highestForcedSearchDepth = Math.max(depth, highestForcedSearchDepth);
         long origAlpha = alpha;
         Move ttMove = null;
         TranspositionTable.TableCheckResultTypes ttentryflag = tt.checkTable(s);
+        
         /* storedEntry is the entry returned by checking the transposition table.
         If the primary hash key was not present in the table, storedEntry is a new
         table entry with default values except for its hash code. */
@@ -140,7 +150,7 @@ public class NegaMax implements AIStrategy {
                 m.execute(copyState);
                 copyState.switchPlayers();
                 
-                Move valueMove = alphaBeta(copyState, depth+1, -beta, -alpha, -color, actualDepth+1, startTime);
+                Move valueMove = alphaBeta(copyState, depth+1, -beta, -alpha, -color, startTime);
                 if (valueMove instanceof TimeOutMove) {
                     return valueMove;
                 }
@@ -156,7 +166,6 @@ public class NegaMax implements AIStrategy {
                 Update bounds and perform cutoff.
                 */
                 if (-valueMove.getValue() > score) {
-//                    bestMove = new Edge(m, -valueNode.getValue());
                     bestMove = m;
                     score = -valueMove.getValue();
                 }
@@ -182,7 +191,7 @@ public class NegaMax implements AIStrategy {
             entryFlag = TranspositionTable.TableValueFlagTypes.EXACT;
         }
         
-        final int entryDepth = iterationSearchDepth - actualDepth;
+        final int entryDepth = iterationSearchDepth - depth;
         
         storedEntry.setStateValue(bestMove.getValue());
         storedEntry.setValueType(entryFlag);
@@ -217,12 +226,10 @@ public class NegaMax implements AIStrategy {
         return highestForcedSearchDepth;
     }
     
-    
-    
     @Override
     public Move searchBestMove(State s) {
         nodesExpanded = 0;
-        Move m = alphaBeta(s, 0, alpha, beta, 1, 0, 0);
+        Move m = alphaBeta(s, 0, alpha, beta, 1, 0);
         nodeLog[logCounter++] = nodesExpanded;
         if (logCounter > 25) {
             BufferedWriter writer = null;

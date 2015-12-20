@@ -4,7 +4,6 @@ import dameo.Constants;
 import dameo.DameoEngine;
 import dameo.move.Move;
 import dameo.Piece;
-import dameo.util.DameoUtil;
 import dameo.gametree.State;
 import dameo.move.UndoMove;
 import dameo.ui.FrameMove;
@@ -18,7 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * Class encapsulating a human player.
  * @author Wim
  */
 public class HumanPlayer extends Player {

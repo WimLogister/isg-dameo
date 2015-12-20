@@ -1,31 +1,33 @@
 package dameo.gametree;
 
 import dameo.Constants;
-import dameo.DameoEngine;
 import dameo.move.Move;
-import dameo.move.NullMove;
 import dameo.move.TimeOutMove;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 /**
- *
+ * Class wrapping iterative deepening around a negamax algorithm with alpha-beta
+ * pruning.
  * @author Wim
  */
 public class IDNegamax extends NegaMax {
     
     private List<Move> rootChildren;
     public static int maxSearchDepth;
-    private final double timeLimit;
 
-    public IDNegamax(int maxSearchDepth, Constants.PlayerColors color, double timeLimit) {
-        super(1, color);
+    public IDNegamax(int maxSearchDepth, Constants.PlayerColors color, long timeLimit) {
+        super(1, color, timeLimit);
         IDNegamax.maxSearchDepth = maxSearchDepth;
-        this.timeLimit = timeLimit;
     }
 
+    /**
+     * Takes care of move generation and ordering used by iterative deepening.
+     * @param s
+     * @param depth
+     * @return 
+     */
     @Override
     protected List<Move> negamaxMoveGeneration(State s, double depth) {
         /*
@@ -40,12 +42,6 @@ public class IDNegamax extends NegaMax {
         Sort root moves to improve search efficiency on next iteration.
         */
         if (iterationSearchDepth > 1 && depth == 0) {
-            boolean nullMoveFound = false;
-            for (Move m : rootChildren) {
-                if (m instanceof NullMove) {
-                    nullMoveFound = true;
-                }
-            }
             Collections.sort(rootChildren);
             List<Move> copyList = new ArrayList<>(rootChildren);
             rootChildren.clear();
@@ -57,6 +53,11 @@ public class IDNegamax extends NegaMax {
         else return super.negamaxMoveGeneration(s, depth);
     }
 
+    /**
+     * Add parameter move to the children of the root node so move ordering can
+     * be applied later.
+     * @param move 
+     */
     @Override
     protected void disposeOfRootMove(Move move) {
         rootChildren.add(move);
@@ -68,22 +69,15 @@ public class IDNegamax extends NegaMax {
         nodesExpanded = 0;
         iterationSearchDepth = 1;
         Move m = null;
-//        int dynamicSearchDepth = maxSearchDepth;
-//        if (DameoEngine.moveCounter < 5) {
-//            dynamicSearchDepth -= 2;
-//        }
         long start = System.currentTimeMillis();
         while (iterationSearchDepth < maxSearchDepth) {
-            System.out.printf("Searching at depth %d\n", iterationSearchDepth);
-            Move temp = alphaBeta(s, 0, alpha, beta, 1, 0, start);
+            Move temp = alphaBeta(s, 0, alpha, beta, 1, start);
             if (!(temp instanceof TimeOutMove)) {
                 m = temp;
             }
             System.out.printf("Best move value: %d\n",m.getValue());
             iterationSearchDepth++;
-//            System.out.printf("Deepest forced line search depth: %d\n", this.getHighestForcedSearchDepth());
         }
-//        System.out.printf("Nodes expanded: %d\n",nodesExpanded);
         return m;
     }
     

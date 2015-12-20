@@ -6,7 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * Class encapsulating game state.
+ * Stores a game board and lists of player's piece sets.
  * @author Wim
  */
 public class State {
@@ -83,17 +84,5 @@ public class State {
         Set<Piece> temp = this.currentPlayerPieces;
         this.currentPlayerPieces = this.opponentPieces;
         this.opponentPieces = temp;
-    }
-    
-    private static Piece[][] putPiecesOnNewBoard(Set<Piece> currentPlayerPieces,
-            Set<Piece> opponentPieces) {
-        Piece[][] newBoard = new Piece[8][8];
-        for (Piece p : currentPlayerPieces) {
-            newBoard[p.getRow()][p.getCol()] = p;
-        }
-        for (Piece p : opponentPieces) {
-            newBoard[p.getRow()][p.getCol()] = p;
-        }
-        return newBoard;
     }
 }

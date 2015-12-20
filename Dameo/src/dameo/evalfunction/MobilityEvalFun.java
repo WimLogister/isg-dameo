@@ -5,7 +5,8 @@ import dameo.DameoEngine;
 import dameo.gametree.State;
 
 /**
- *
+ * Evaluation feature that takes into account the mobility of the parameter player,
+ * that is, the number of legal moves for this player.
  * @author Wim
  */
 public class MobilityEvalFun extends EvaluationFunction {

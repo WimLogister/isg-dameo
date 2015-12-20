@@ -4,7 +4,7 @@ import dameo.Constants;
 import dameo.gametree.State;
 
 /**
- *
+ * Interface that is implemented classes that model evaluation features.
  * @author Wim
  */
 public abstract class EvaluationFunction {

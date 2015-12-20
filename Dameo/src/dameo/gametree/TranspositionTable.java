@@ -3,13 +3,10 @@ package dameo.gametree;
 import dameo.Constants;
 import dameo.KingPiece;
 import dameo.Piece;
-import dameo.move.Move;
 import dameo.util.DameoUtil;
-import java.security.SecureRandom;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -109,45 +106,6 @@ public class TranspositionTable {
 
     public TableEntry getCachedEntry() {
         return cachedEntry;
-    }
-    
-    /**
-     * Did some basic test cases on entire and primary hash key. Seems to be working.
-     */
-    public static void testHashFunction() {
-        Set<Piece> whitePieces = new HashSet<>();
-        Piece wp1 = new Piece(5, 5, Constants.PlayerColors.WHITE, whitePieces);
-        Piece wp2 = new Piece(7, 7, Constants.PlayerColors.WHITE, whitePieces);
-        whitePieces.add(wp1); whitePieces.add(wp2);
-        
-        Set<Piece> blackPieces = new HashSet<>();
-        Piece bp1 = new KingPiece(2, 3, Constants.PlayerColors.BLACK, blackPieces);
-        blackPieces.add(bp1);
-        
-        Piece[][] board = new Piece[8][8];
-        board[wp1.getRow()][wp1.getCol()] = wp1;
-        board[wp2.getRow()][wp2.getCol()] = wp2;
-        board[bp1.getRow()][bp1.getCol()] = wp1;
-        
-        State s1 = new State(whitePieces, blackPieces, board);
-        State s2 = new State(s1);
-        s2.switchPlayers();
-//        Piece extraPiece = new Piece(4, 4, Constants.PlayerColors.WHITE, s2.getCurrentPlayerPieces());
-//        s2.getCurrentPlayerPieces().add(extraPiece);
-//        s2.getBoard()[extraPiece.getRow()][extraPiece.getCol()] = extraPiece;
-        
-        TranspositionTable hasher = new TranspositionTable(20, 44);
-        BitSet hash1 = hasher.hash(s1);
-        BitSet hash2 = hasher.hash(s2);
-        
-        final int from = 0; final int to = 19;
-        BitSet primaryHash1 = hash1.get(from, to);
-        BitSet primaryHash2 = hash2.get(from, to);
-        System.out.printf("States have equal hash codes: %b\n",primaryHash1.equals(primaryHash2));
-    }
-    
-    public static void main(String[] args) {
-        testHashFunction();
     }
     
     /**

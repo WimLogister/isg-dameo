@@ -1,13 +1,13 @@
 package dameo.evalfunction;
 
 import dameo.Constants;
-import dameo.DameoEngine;
 import dameo.gametree.State;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Encapsulates an evaluation function.
+ * Takes a list of evaluation features and executes them on a parameter state.
  * @author Wim
  */
 public class CompositeEvaluator {
@@ -20,6 +20,12 @@ public class CompositeEvaluator {
         this.color = color;
     }
     
+    /**
+     * Evaluate parameter state using the list of evaluators/features passed to the
+     * constructor of this instance.
+     * @param state
+     * @return 
+     */
     public long evaluate(State state) {
         long sum = 0;
         for (EvaluationFunction f : evaluators) {
@@ -37,7 +43,6 @@ public class CompositeEvaluator {
     public static CompositeEvaluator createFullEvaluator(Constants.PlayerColors color) {
         List<EvaluationFunction> list = new ArrayList<>();
         list.add(new BasicMaterialDifferenceEvaluator());
-//        list.add(new MobilityEvalFun());
         return new CompositeEvaluator(list, color);
     }
 }

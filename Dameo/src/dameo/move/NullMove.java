@@ -3,7 +3,7 @@ package dameo.move;
 import dameo.gametree.State;
 
 /**
- *
+ * Class used in negamax to store values of nodes deeper than root's direct children.
  * @author Wim
  */
 public class NullMove extends Move {

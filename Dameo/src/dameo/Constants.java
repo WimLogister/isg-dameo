@@ -1,7 +1,8 @@
 package dameo;
 
 /**
- *
+ * Class housing constants used throughout the program, such as player colors, number
+ * of pieces, etc.
  * @author Wim
  */
 public class Constants {

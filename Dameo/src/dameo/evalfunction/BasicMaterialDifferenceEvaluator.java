@@ -4,7 +4,8 @@ import dameo.Constants;
 import dameo.gametree.State;
 
 /**
- *
+ * Evaluation feature that counts the material difference between the two players.
+ * The player who is doing the search (MAX player) is passed as parameter color.
  * @author Wim
  */
 public class BasicMaterialDifferenceEvaluator extends EvaluationFunction {

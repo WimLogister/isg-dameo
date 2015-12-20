@@ -3,7 +3,8 @@ package dameo.move;
 import dameo.gametree.State;
 
 /**
- *
+ * Move type used to terminate negamax once the iterative deepening time limit runs
+ * out.
  * @author Wim
  */
 public class TimeOutMove extends Move{

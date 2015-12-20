@@ -4,7 +4,8 @@ import dameo.Piece;
 import dameo.gametree.State;
 
 /**
- * Single, non-jumping piece move
+ * Single, non-jumping piece move.
+ * Now only used for non-jumping king movement.
  * @author Wim
  */
 public class SingleMove extends Move {

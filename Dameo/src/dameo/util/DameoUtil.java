@@ -8,7 +8,7 @@ import java.security.SecureRandom;
 import java.util.Random;
 
 /**
- *
+ * Houses some utility methods used through the program.
  * @author Wim
  */
 public class DameoUtil {
@@ -41,6 +41,11 @@ public class DameoUtil {
         return s;
     }
     
+    /**
+     * Calculates the mean value of parameter array.
+     * @param values
+     * @return 
+     */
     public static double mean(double[] values) {
         double sum = 0;
         for (int i = 0; i < values.length; i++) {

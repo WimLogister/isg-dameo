@@ -4,25 +4,20 @@ import dameo.util.DameoUtil;
 import dameo.gametree.State;
 import dameo.move.DeepestMultiJumpFinder;
 import dameo.move.Move;
-import dameo.move.SingleCaptureMove;
-import dameo.move.SingleMove;
 import dameo.move.UndoMove;
 import dameo.players.Player;
-import dameo.test.TestCases;
 import dameo.util.Observer;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
 /**
- *
+ * The game engine: coordinates setting up the board and players, advancing turns, etc.
  * @author Wim
  */
 public class DameoEngine {
@@ -94,6 +89,9 @@ public class DameoEngine {
         return new DameoEngine(whitePlayer, blackPlayer);
     }
     
+    /**
+     * Initialize the game. Players must have been set up properly.
+     */
     private void init() {
         players.add(currentPlayer);
         players.add(currentOpponent);
@@ -195,22 +193,11 @@ public class DameoEngine {
             if (stateStack.size() >= 2) {
                 stateStack.pop();
                 currentState = stateStack.pop();
-    //            /*
-    //            Change players
-    //            */
-//                Player temp = currentPlayer;
-//                currentPlayer = currentOpponent;
-//                currentOpponent = temp;
+                /*
+                Change players
+                */
                 moveCounter--;
             }
-//            if (stateStack.size() == 1) {
-//                currentState = stateStack.pop();
-//            }
-//            else {
-//                Player temp = currentPlayer;
-//                currentPlayer = currentOpponent;
-//                currentOpponent = temp;
-//            }
         }
         else {
             
@@ -242,18 +229,12 @@ public class DameoEngine {
         
     }
     
-    
-    
-    
     /**
      * Run an initialized game.
      * @return The color of the winning player
      */
     public Constants.PlayerColors start() {
         while (!end) {
-//            if (DEBUG > 0) {
-//                DameoUtil.getConsoleInput();
-//            }
             next();
             for (Observer o : observers) {
                 o.update();
@@ -343,10 +324,5 @@ public class DameoEngine {
         }
         bw1.close();
     }
-    
-    public static void main(String[] args) throws IOException {
-        DameoEngine.branchingFactorTest(100);
-    }
-    
     
 }

@@ -2,12 +2,10 @@ package dameo.move;
 
 import dameo.DameoEngine;
 import dameo.gametree.State;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 /**
- *
+ * Class encapsulating single or multi-piece movement.
  * @author Wim
  */
 public class MultiPieceMove extends Move {

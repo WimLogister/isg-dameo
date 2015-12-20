@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Class used to generate output to file for some basic experiments.
  * @author Wim
  */
 public class Output {

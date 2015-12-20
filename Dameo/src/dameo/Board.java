@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- *
+ * Class with some convenience methods regarding board creation and representation.
  * @author Wim
  */
 public class Board {

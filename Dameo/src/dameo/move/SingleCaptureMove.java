@@ -4,7 +4,7 @@ import dameo.Piece;
 import dameo.gametree.State;
 
 /**
- *
+ * Instances of this class are put into a list to construct multi-jumps.
  * @author Wim
  */
 public class SingleCaptureMove extends Move {

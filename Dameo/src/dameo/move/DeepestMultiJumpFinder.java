@@ -1,17 +1,15 @@
 package dameo.move;
 
-import dameo.KingPiece;
 import dameo.Piece;
 import dameo.gametree.State;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Stack;
 
 /**
- *
+ * Class used to recursively find the deepest multi-jump move for a given game
+ * state.
  * @author Wim
  */
 public class DeepestMultiJumpFinder {
@@ -74,6 +72,10 @@ public class DeepestMultiJumpFinder {
         return moves;
     }
     
+    /**
+     * Method that is used to recursively find the longest multi-jump.
+     * @param n 
+     */
     private void recursiveFind(JumpNode n) {
         // Execute move stored in node n to advance state
         n.captureMove.mockExecute(n.state);

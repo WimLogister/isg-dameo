@@ -8,12 +8,10 @@ import java.awt.Point;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import dameo.Piece;
-import dameo.move.MultiPieceMove;
 import java.util.ArrayList;
 
 /**
- *
+ * Class encapsulating Dameo king piece.
  * @author Wim
  */
 public class KingPiece extends Piece {
@@ -33,6 +31,14 @@ public class KingPiece extends Piece {
         return super.getBoardValue() * 3;
     }
 
+    /**
+     * Generate all capturing moves for this king in the parameter state.
+     * Parameter list is used to keep track of which pieces have been captured in
+     * recursive calls to this method.
+     * @param s
+     * @param capturedList
+     * @return 
+     */
     @Override
     public List<SingleCaptureMove> generateCapturingMoves(State s, List<Point> capturedList) {
         Piece[][] board = s.getBoard();
@@ -151,6 +157,12 @@ public class KingPiece extends Piece {
         newSet.add(new KingPiece(origPiece.getRow(), origPiece.getCol(), origPiece.getColor(), newSet));
     }
     
+    /**
+     * Generate and return all single moves for this king piece in the parameter 
+     * state.
+     * @param s
+     * @return 
+     */
     @Override
     public List<Move> generateSingleMoves(State s) {
         Piece[][] board = s.getBoard();
@@ -293,18 +305,6 @@ public class KingPiece extends Piece {
             }
         }
         return moves;
-    }
-    
-    public static void main(String[] args) {
-        Set<Piece> pieceSet = new HashSet<>();
-        Piece p1 = new Piece(5, 6, Constants.PlayerColors.BLACK, pieceSet);
-        System.out.printf("Piece zobrist: %s\n",p1.getZobristValue());
-        
-        Piece p2 = new KingPiece(p1);
-        System.out.printf("King zobrist: %s\n",p2.getZobristValue());
-        
-        Piece p3 = new KingPiece(p2);
-        System.out.printf("King copy zobrist: %s\n",p3.getZobristValue());
     }
     
 }

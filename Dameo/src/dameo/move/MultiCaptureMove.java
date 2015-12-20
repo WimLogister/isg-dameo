@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- *
+ * Class encapsulting a capturing move, either single or multi-jump.
  * @author Wim
  */
 public class MultiCaptureMove extends Move {
@@ -31,7 +31,6 @@ public class MultiCaptureMove extends Move {
 
     @Override
     public void execute(State state) {
-//        throw new UnsupportedOperationException("Not supported yet.");
         Piece [][] board = state.getBoard();
         Piece capturingPiece = board[oldY][oldX];
         // Remove capturing piece from previous position on board

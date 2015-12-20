@@ -26,7 +26,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
- *
+ * Displays the game board, accepts player move input.
+ * Is notified by game engine of changes in board state.
  * @author Wim
  */
 public class DameoFrame extends JFrame implements Observer {
@@ -54,7 +55,6 @@ public class DameoFrame extends JFrame implements Observer {
         DameoEngine.DEBUG = 1;
         engine.setObserver(this);
         engine.start();
-        
     }
    
     
@@ -165,14 +165,6 @@ public class DameoFrame extends JFrame implements Observer {
                 g2d.drawString(String.format("%d,%d", px+1, ((-py+7)%8)+1), px*squareSide+25, py*squareSide+35);
             }
         }
-    }
-    
-    public static void main(String[] args) {
-        DameoFrame frame = new DameoFrame();
-        frame.setSize(WIDTH, HEIGHT);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.start();
     }
     
 }

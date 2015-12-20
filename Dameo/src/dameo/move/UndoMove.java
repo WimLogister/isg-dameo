@@ -3,7 +3,7 @@ package dameo.move;
 import dameo.gametree.State;
 
 /**
- *
+ * Move type used by UI to allow undoing of moves.
  * @author Wim
  */
 public class UndoMove extends Move {

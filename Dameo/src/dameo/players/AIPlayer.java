@@ -8,7 +8,7 @@ import dameo.strategy.AIStrategy;
 import java.util.Set;
 
 /**
- *
+ * Abstract class encapsulating an AI player.
  * @author Wim
  */
 public class AIPlayer extends Player {

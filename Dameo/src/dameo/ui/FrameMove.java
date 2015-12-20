@@ -3,7 +3,8 @@ package dameo.ui;
 import dameo.move.Move;
 
 /**
- *
+ * Move class used to show moves in player move input list.
+ * Implements comparable so moves can be ordered by coordinates.
  * @author Wim
  */
 public class FrameMove implements Comparable<FrameMove> {

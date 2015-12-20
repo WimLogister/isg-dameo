@@ -1,6 +1,5 @@
 package dameo.test;
 
-import dameo.Board;
 import dameo.Constants;
 import dameo.KingPiece;
 import dameo.Piece;
@@ -12,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * Some static methods used for debugging.
  * @author Wim
  */
 public class TestCases {
