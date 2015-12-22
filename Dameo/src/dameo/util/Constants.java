@@ -1,4 +1,4 @@
-package dameo;
+package dameo.util;
 
 /**
  * Class housing constants used throughout the program, such as player colors, number

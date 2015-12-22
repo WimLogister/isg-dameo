@@ -1,9 +1,9 @@
 package dameo.players;
 
-import dameo.Constants;
-import dameo.Piece;
+import dameo.util.Constants;
+import dameo.gameboard.Piece;
 import dameo.util.DameoUtil;
-import dameo.DameoEngine;
+import dameo.gameboard.DameoEngine;
 import dameo.gametree.State;
 import dameo.move.Move;
 import java.util.Iterator;

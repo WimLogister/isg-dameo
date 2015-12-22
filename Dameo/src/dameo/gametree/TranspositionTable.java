@@ -1,8 +1,8 @@
 package dameo.gametree;
 
-import dameo.Constants;
-import dameo.KingPiece;
-import dameo.Piece;
+import dameo.util.Constants;
+import dameo.gameboard.KingPiece;
+import dameo.gameboard.Piece;
 import dameo.util.DameoUtil;
 import java.util.BitSet;
 import java.util.HashMap;

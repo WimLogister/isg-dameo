@@ -1,8 +1,8 @@
 package dameo.players;
 
-import dameo.Constants;
+import dameo.util.Constants;
 import dameo.move.Move;
-import dameo.Piece;
+import dameo.gameboard.Piece;
 import dameo.gametree.IDNegamax;
 import dameo.gametree.State;
 import java.util.Set;

@@ -1,6 +1,6 @@
 package dameo.gametree;
 
-import dameo.Constants;
+import dameo.util.Constants;
 import dameo.move.Move;
 import dameo.move.TimeOutMove;
 import java.util.ArrayList;

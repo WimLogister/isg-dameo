@@ -1,8 +1,8 @@
 package dameo.move;
 
-import dameo.Constants;
-import dameo.KingPiece;
-import dameo.Piece;
+import dameo.util.Constants;
+import dameo.gameboard.KingPiece;
+import dameo.gameboard.Piece;
 import dameo.gametree.State;
 import java.util.ArrayList;
 import java.util.Collections;

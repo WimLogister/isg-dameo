@@ -1,5 +1,6 @@
-package dameo;
+package dameo.gameboard;
 
+import dameo.util.Constants;
 import dameo.util.DameoUtil;
 import dameo.gametree.State;
 import dameo.move.DeepestMultiJumpFinder;

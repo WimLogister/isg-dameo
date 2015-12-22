@@ -1,6 +1,6 @@
 package dameo.move;
 
-import dameo.Piece;
+import dameo.gameboard.Piece;
 import dameo.gametree.State;
 import java.awt.Point;
 import java.util.ArrayList;

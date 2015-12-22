@@ -1,6 +1,6 @@
 package dameo.move;
 
-import dameo.DameoEngine;
+import dameo.gameboard.DameoEngine;
 import dameo.gametree.State;
 import java.util.List;
 

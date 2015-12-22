@@ -1,5 +1,6 @@
-package dameo;
+package dameo.gameboard;
 
+import dameo.util.Constants;
 import dameo.gametree.State;
 import dameo.move.Move;
 import dameo.move.MultiPieceMove;

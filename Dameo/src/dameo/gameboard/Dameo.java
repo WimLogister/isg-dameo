@@ -1,4 +1,4 @@
-package dameo;
+package dameo.gameboard;
 
 import dameo.ui.DameoFrame;
 import static dameo.ui.DameoFrame.HEIGHT;

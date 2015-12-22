@@ -1,7 +1,7 @@
 package dameo.gametree;
 
-import dameo.Constants;
-import dameo.DameoEngine;
+import dameo.util.Constants;
+import dameo.gameboard.DameoEngine;
 import dameo.evalfunction.CompositeEvaluator;
 import dameo.move.Move;
 import dameo.move.NullMove;

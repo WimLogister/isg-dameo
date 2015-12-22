@@ -1,9 +1,9 @@
 package dameo.ui;
 
-import dameo.Constants;
-import dameo.DameoEngine;
-import dameo.KingPiece;
-import dameo.Piece;
+import dameo.util.Constants;
+import dameo.gameboard.DameoEngine;
+import dameo.gameboard.KingPiece;
+import dameo.gameboard.Piece;
 import dameo.gametree.State;
 import dameo.move.Move;
 import dameo.players.Player;

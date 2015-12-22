@@ -1,7 +1,7 @@
 package dameo.gametree;
 
-import dameo.KingPiece;
-import dameo.Piece;
+import dameo.gameboard.KingPiece;
+import dameo.gameboard.Piece;
 import java.util.HashSet;
 import java.util.Set;
 

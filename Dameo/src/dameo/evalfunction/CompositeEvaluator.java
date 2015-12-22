@@ -1,6 +1,6 @@
 package dameo.evalfunction;
 
-import dameo.Constants;
+import dameo.util.Constants;
 import dameo.gametree.State;
 import java.util.ArrayList;
 import java.util.List;

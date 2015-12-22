@@ -1,7 +1,7 @@
 package dameo.players;
 
-import dameo.Constants;
-import dameo.Piece;
+import dameo.util.Constants;
+import dameo.gameboard.Piece;
 import dameo.gametree.State;
 import dameo.move.Move;
 import dameo.strategy.AIStrategy;
