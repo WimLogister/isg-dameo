@@ -1,16 +1,17 @@
 package dameo.move;
 
-import dameo.Piece;
+import dameo.gameboard.Piece;
 import dameo.gametree.State;
 
 /**
- *
+ * Instances of this class are put into a list to construct multi-jumps.
  * @author Wim
  */
 public class SingleCaptureMove extends Move {
     
     final int captX;
     final int captY;
+    private int hashCode;
 
     public SingleCaptureMove(int newX, int newY, int oldX, int oldY, int captX, int captY) {
         super(newX, newY, oldX, oldY, 0);
@@ -56,6 +57,21 @@ public class SingleCaptureMove extends Move {
                 oldY+1, newX+1, newY+1, captX+1, captY+1);
     }
 
+    @Override
+    public int hashCode() {
+        int result = hashCode;
+        if (result == 0) {
+            result = 17;
+            result = 31 * result + newX;
+            result = 31 * result + newY;
+            result = 31 * result + oldX;
+            result = 31 * result + oldY;
+            result = 31 * result + captX;
+            result = 31 * result + captY;
+        }
+        return result;
+    }
+    
     public int getCaptX() {
         return captX;
     }

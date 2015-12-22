@@ -1,16 +1,14 @@
 package dameo.players;
 
-import dameo.Constants;
+import dameo.util.Constants;
 import dameo.move.Move;
-import dameo.Piece;
+import dameo.gameboard.Piece;
 import dameo.gametree.IDNegamax;
-import dameo.gametree.NegaMax;
 import dameo.gametree.State;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
- *
+ * Abstract class encapsulating any type of player.
  * @author Wim
  */
 public abstract class Player {
@@ -26,6 +24,12 @@ public abstract class Player {
         this.pieces = pieces;
     }
     
+    /**
+     * Abstract method that encapsulates the notion of selecting the best move for
+     * a given game state. Is implemented by human, AI and random players.
+     * @param s
+     * @return 
+     */
     public abstract Move selectMove(State s);
     
     public abstract PlayerTypes getPlayerType();
@@ -46,8 +50,7 @@ public abstract class Player {
             p = new RandomPlayer(color, pieceSet);
         }
         if (type == PlayerTypes.NEGAMAX.value) {
-//            p = new AIPlayer(color, pieceSet, new NegaMax(7, color));
-            p = new AIPlayer(color, pieceSet, new IDNegamax(5, color));
+            p = new AIPlayer(color, pieceSet, new IDNegamax(20, color, 5));
         }
         return p;
     }

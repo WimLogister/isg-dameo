@@ -3,18 +3,20 @@ package dameo.move;
 import dameo.gametree.State;
 
 /**
- * Class used in negamax to store values of nodes deeper than root's direct children.
+ * Move type used to terminate negamax once the iterative deepening time limit runs
+ * out.
  * @author Wim
  */
-public class NullMove extends Move {
+public class TimeOutMove extends Move{
 
-    public NullMove(long value) {
-        super(0, 0, 0, 0, value);
+    public TimeOutMove() {
+        super(0, 0, 0, 0, 0);
     }
+
 
     @Override
     public void execute(State state) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    
 }

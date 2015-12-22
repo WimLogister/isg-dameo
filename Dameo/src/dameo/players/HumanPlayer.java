@@ -1,11 +1,11 @@
 package dameo.players;
 
-import dameo.Constants;
-import dameo.DameoEngine;
+import dameo.util.Constants;
+import dameo.gameboard.DameoEngine;
 import dameo.move.Move;
-import dameo.Piece;
-import dameo.util.DameoUtil;
+import dameo.gameboard.Piece;
 import dameo.gametree.State;
+import dameo.move.UndoMove;
 import dameo.ui.FrameMove;
 import java.awt.HeadlessException;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * Class encapsulating a human player.
  * @author Wim
  */
 public class HumanPlayer extends Player {
@@ -32,7 +32,7 @@ public class HumanPlayer extends Player {
     public Move selectMove(State s) {
         MoveSelectFrame frame = new MoveSelectFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Set<Move> moves = DameoEngine.generateLegalMoves(s);
+        List<Move> moves = DameoEngine.generateLegalMoves(s);
         Move m = frame.getPlayerMoveInput(moves);
         return m;
     }
@@ -51,13 +51,15 @@ public class HumanPlayer extends Player {
         public MoveSelectFrame() throws HeadlessException {
         }
         
-        Move getPlayerMoveInput(Set<Move> moves) {
+        Move getPlayerMoveInput(List<Move> moves) {
             List<FrameMove> moveList = new ArrayList<>(moves.size());
             for (Move m : moves) {
                 moveList.add(new FrameMove(m));
             }
+            UndoMove undoMove = new UndoMove();
             Collections.sort(moveList);
-            Object[] possibilities = new Object[moves.size()];
+            moveList.add(0, new FrameMove(undoMove));
+            Object[] possibilities = new Object[moveList.size()];
             int i = 0;
             for (FrameMove m : moveList) {
                 possibilities[i++] = m.toString();
@@ -65,6 +67,9 @@ public class HumanPlayer extends Player {
             String s = (String)JOptionPane.showInputDialog(this, "Select move",
                     "Get player move", JOptionPane.QUESTION_MESSAGE, null,
                     possibilities, possibilities[0]);
+            if (s.equals(undoMove.toString())) {
+                return undoMove;
+            }
             boolean moveFound = false;
             Iterator<Move> it = moves.iterator();
             Move returnMove = null;

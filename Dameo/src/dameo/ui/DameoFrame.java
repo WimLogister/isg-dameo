@@ -1,9 +1,9 @@
 package dameo.ui;
 
-import dameo.Constants;
-import dameo.DameoEngine;
-import dameo.KingPiece;
-import dameo.Piece;
+import dameo.util.Constants;
+import dameo.gameboard.DameoEngine;
+import dameo.gameboard.KingPiece;
+import dameo.gameboard.Piece;
 import dameo.gametree.State;
 import dameo.move.Move;
 import dameo.players.Player;
@@ -26,7 +26,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
- *
+ * Displays the game board, accepts player move input.
+ * Is notified by game engine of changes in board state.
  * @author Wim
  */
 public class DameoFrame extends JFrame implements Observer {
@@ -54,7 +55,6 @@ public class DameoFrame extends JFrame implements Observer {
         DameoEngine.DEBUG = 1;
         engine.setObserver(this);
         engine.start();
-        
     }
    
     
@@ -130,10 +130,10 @@ public class DameoFrame extends JFrame implements Observer {
                     x = col * squareSide;
                     y = row * squareSide;
                     if (row % 2 == col % 2){
-                        g.setColor(green);
+                        g.setColor(khaki);
                     }
                     else {
-                        g.setColor(khaki);
+                        g.setColor(green);
                     }
                     g.fillRect(x, y, squareSide, squareSide);
                 }
@@ -159,21 +159,12 @@ public class DameoFrame extends JFrame implements Observer {
                 g2d.setColor(Color.BLACK);
                 if (p instanceof KingPiece) {
                     Ellipse2D.Double kingCircle = new Ellipse2D.Double(px*squareSide+5,
-                            py*squareSide, squareSide-10, squareSide-10);
+                            (py*squareSide)+5, squareSide-10, squareSide-10);
                     g2d.draw(kingCircle);
                 }
                 g2d.drawString(String.format("%d,%d", px+1, ((-py+7)%8)+1), px*squareSide+25, py*squareSide+35);
             }
         }
-    }
-    
-    public static void main(String[] args) {
-        DameoFrame frame = new DameoFrame();
-        frame.setSize(WIDTH, HEIGHT);
-//        frame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.start();
     }
     
 }

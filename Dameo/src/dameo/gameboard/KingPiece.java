@@ -1,5 +1,6 @@
-package dameo;
+package dameo.gameboard;
 
+import dameo.util.Constants;
 import dameo.gametree.State;
 import dameo.move.Move;
 import dameo.move.SingleCaptureMove;
@@ -8,21 +9,22 @@ import java.awt.Point;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import dameo.Piece;
-import dameo.move.MultiPieceMove;
+import java.util.ArrayList;
 
 /**
- *
+ * Class encapsulating Dameo king piece.
  * @author Wim
  */
 public class KingPiece extends Piece {
     
     public KingPiece(Piece p) {
         super(p);
+        this.zobristValue = color.getValue() + 2;
     }
     
     public KingPiece(int row, int col, Constants.PlayerColors color, Set<Piece> pieceSet) {
         super(row, col, color, pieceSet);
+        this.zobristValue = color.getValue() + 2;
     }
     
     @Override
@@ -30,11 +32,19 @@ public class KingPiece extends Piece {
         return super.getBoardValue() * 3;
     }
 
+    /**
+     * Generate all capturing moves for this king in the parameter state.
+     * Parameter list is used to keep track of which pieces have been captured in
+     * recursive calls to this method.
+     * @param s
+     * @param capturedList
+     * @return 
+     */
     @Override
-    public Set<SingleCaptureMove> generateCapturingMoves(State s, List<Point> capturedList) {
+    public List<SingleCaptureMove> generateCapturingMoves(State s, List<Point> capturedList) {
         Piece[][] board = s.getBoard();
         
-        Set<SingleCaptureMove> moves = new HashSet<>();
+        List<SingleCaptureMove> moves = new ArrayList<>();
         
         /*
         Variable dir determines the directionality of movement of this piece
@@ -148,11 +158,17 @@ public class KingPiece extends Piece {
         newSet.add(new KingPiece(origPiece.getRow(), origPiece.getCol(), origPiece.getColor(), newSet));
     }
     
+    /**
+     * Generate and return all single moves for this king piece in the parameter 
+     * state.
+     * @param s
+     * @return 
+     */
     @Override
-    public Set<Move> generateSingleMoves(State s) {
+    public List<Move> generateSingleMoves(State s) {
         Piece[][] board = s.getBoard();
         
-        Set<Move> moves = new HashSet<>();
+        List<Move> moves = new ArrayList<>();
         
         /*
         Variable dir determines the directionality of movement of this piece
@@ -291,7 +307,5 @@ public class KingPiece extends Piece {
         }
         return moves;
     }
-    
-    
     
 }

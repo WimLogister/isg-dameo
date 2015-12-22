@@ -1,17 +1,15 @@
 package dameo.move;
 
-import dameo.KingPiece;
-import dameo.Piece;
+import dameo.gameboard.Piece;
 import dameo.gametree.State;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Stack;
 
 /**
- *
+ * Class used to recursively find the deepest multi-jump move for a given game
+ * state.
  * @author Wim
  */
 public class DeepestMultiJumpFinder {
@@ -22,7 +20,7 @@ public class DeepestMultiJumpFinder {
     public DeepestMultiJumpFinder() {
     }
     
-    public Set<Move> findDeepestNode(State state) {
+    public List<Move> findDeepestNode(State state) {
         this.root = new JumpNode(null, state, 0, null, new ArrayList<>(), 0, 0);
         currentDeepest.add(root);
         currentDeepest.setCurrentMaxDepth(root.depth);
@@ -34,7 +32,7 @@ public class DeepestMultiJumpFinder {
         first level of the tree.
         */
         for (Piece p : root.state.getCurrentPlayerPieces()) {
-            Set<SingleCaptureMove> captureMoves = p.generateCapturingMoves(root.state, new ArrayList<>());
+            List<SingleCaptureMove> captureMoves = p.generateCapturingMoves(root.state, new ArrayList<>());
             for (SingleCaptureMove m : captureMoves) {
                 // Need to create a copy of root's list so nodes in other
                 // branches don't modify it.
@@ -60,11 +58,11 @@ public class DeepestMultiJumpFinder {
      * Construct a set of multi-jump moves from the list of all deepest nodes.
      * @return 
      */
-    private Set<Move> constructMultiMove() {
+    private List<Move> constructMultiMove() {
         // In fact we don't need the entire stack, just the deepest nodes, since
         // we only need the original and final location of the jumping piece and
         // the list of captured pieces and those are all stored in the nodes.
-        Set<Move> moves = new HashSet<>();
+        List<Move> moves = new ArrayList<>();
         if (currentDeepest.currentMaxDepth > 0) {
             for (JumpNode n : currentDeepest) {
                 moves.add(new MultiCaptureMove(n.captureMove.newX, n.captureMove.newY,
@@ -74,6 +72,10 @@ public class DeepestMultiJumpFinder {
         return moves;
     }
     
+    /**
+     * Method that is used to recursively find the longest multi-jump.
+     * @param n 
+     */
     private void recursiveFind(JumpNode n) {
         // Execute move stored in node n to advance state
         n.captureMove.mockExecute(n.state);
@@ -83,7 +85,7 @@ public class DeepestMultiJumpFinder {
         final int x = n.captureMove.newX;
         final int y = n.captureMove.newY;
         Piece capturingPiece = n.state.getBoard()[y][x];
-        Set<SingleCaptureMove> moves = capturingPiece.generateCapturingMoves(n.state, n.capturedPieces);
+        List<SingleCaptureMove> moves = capturingPiece.generateCapturingMoves(n.state, n.capturedPieces);
         
         // This is a terminal node: no more jumps can be made
         if (moves.isEmpty()) {

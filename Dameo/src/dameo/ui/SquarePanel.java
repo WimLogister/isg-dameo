@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 /**
- *
+ * Displays a checker square on the Dameo game board.
  * @author Wim
  */
 public class SquarePanel extends JPanel {

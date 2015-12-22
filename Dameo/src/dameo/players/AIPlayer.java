@@ -1,14 +1,14 @@
 package dameo.players;
 
-import dameo.Constants;
-import dameo.Piece;
+import dameo.util.Constants;
+import dameo.gameboard.Piece;
 import dameo.gametree.State;
 import dameo.move.Move;
 import dameo.strategy.AIStrategy;
 import java.util.Set;
 
 /**
- *
+ * Abstract class encapsulating an AI player.
  * @author Wim
  */
 public class AIPlayer extends Player {

@@ -1,8 +1,8 @@
 package dameo.move;
 
-import dameo.Constants;
-import dameo.KingPiece;
-import dameo.Piece;
+import dameo.util.Constants;
+import dameo.gameboard.KingPiece;
+import dameo.gameboard.Piece;
 import dameo.gametree.State;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,22 +79,5 @@ public abstract class Move implements Comparable<Move> {
         }
         return 0;
     }
-    
-    
-    public static void main(String[] args) {
-        Move m1 = new NullMove(500);
-        Move m2 = new NullMove(10);
-        List<Move> myList = new ArrayList<>();
-        myList.add(m2); myList.add(m1);
-        for (Move m : myList) {
-            System.out.printf("Value: %s\n",m.getValue());
-        }
-        Collections.sort(myList);
-        System.out.println();
-        for (Move m : myList) {
-            System.out.printf("Value: %s\n",m.getValue());
-        }
-    }
-    
     
 }

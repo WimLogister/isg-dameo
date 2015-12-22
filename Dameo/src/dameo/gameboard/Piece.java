@@ -1,5 +1,6 @@
-package dameo;
+package dameo.gameboard;
 
+import dameo.util.Constants;
 import dameo.gametree.State;
 import dameo.move.Move;
 import dameo.move.MultiPieceMove;
@@ -23,6 +24,7 @@ public class Piece {
     private Set<Piece> pieceSet;
     private int hashCode;
     protected int dir;
+    protected int zobristValue;
 
     public Piece(int row, int col, Constants.PlayerColors color, Set<Piece> pieceSet) {
         this.row = row;
@@ -30,6 +32,7 @@ public class Piece {
         this.color = color;
         this.pieceSet = pieceSet;
         this.dir = color.getDirection();
+        this.zobristValue = color.getValue();
     }
     
     protected Piece(Piece p) {
@@ -38,6 +41,7 @@ public class Piece {
         this.color = p.getColor();
         this.pieceSet = p.getPieceSet();
         this.dir = p.getDir();
+        this.zobristValue = p.getZobristValue();
     }
 
     public static Piece findPiece(Set<Piece> pieceSet, int x, int y) {
@@ -52,6 +56,11 @@ public class Piece {
         return p;
     }
     
+    /**
+     * Puts a copy of the parameter piece into parameter set.
+     * @param origPiece
+     * @param newSet 
+     */
     public static void copyIntoSet(Piece origPiece, Set<Piece> newSet) {
         newSet.add(new Piece(origPiece.getRow(), origPiece.getCol(), origPiece.getColor(), newSet));
     }
@@ -84,6 +93,10 @@ public class Piece {
     public int getBoardValue() {
         return this.color.getValue();
     }
+
+    public int getZobristValue() {
+        return zobristValue;
+    }
     
     public static Set<Piece> copyPieceSet(Set<Piece> origPieceSet) throws CloneNotSupportedException {
         Set<Piece> newPieceSet = new HashSet<>(origPieceSet.size());
@@ -103,11 +116,17 @@ public class Piece {
         return contains;
     }
     
-    public Set<SingleCaptureMove> generateCapturingMoves(State s, List<Point> capturedList) {
+    /**
+     * Generate a list of all capturing moves for this piece.
+     * @param s
+     * @param capturedList
+     * @return 
+     */
+    public List<SingleCaptureMove> generateCapturingMoves(State s, List<Point> capturedList) {
         
         Piece[][] board = s.getBoard();
         
-        Set<SingleCaptureMove> moves = new HashSet<>();
+        List<SingleCaptureMove> moves = new ArrayList<>();
         
         final int checkX = dir*col;
         final int checkY = dir*row;
@@ -193,11 +212,11 @@ public class Piece {
      * this piece to generate all of its legal moves.
      * @return 
      */
-    public Set<Move> generateSingleMoves(State s) {
+    public List<Move> generateSingleMoves(State s) {
         
         Piece[][] board = s.getBoard();
         
-        Set<Move> moves = new HashSet<>();
+        List<Move> moves = new ArrayList<>();
         
         /*
         Convert this piece's coordinates to relative coordinates, which allows us
@@ -382,6 +401,11 @@ public class Piece {
         return color;
     }
     
+    /**
+     * Generate a set of 18 pieces of parameter color.
+     * @param color
+     * @return 
+     */
     public static Set<Piece> generatePieceSet(Constants.PlayerColors color) {
         Set<Piece> pieceSet = new HashSet<>(Constants.PIECES_PER_PLAYER);
         for (int i = 0; i < Constants.PIECES_PER_PLAYER; i++)  {
@@ -401,7 +425,7 @@ public class Piece {
         }
         return hashCode;
     }
-    
+
     public static void hashCodeTest() {
         Piece p1 = new Piece(0, 0, Constants.PlayerColors.WHITE, null);
         Piece p2 = new Piece(8, 8, Constants.PlayerColors.BLACK, null);
@@ -410,20 +434,25 @@ public class Piece {
         System.out.println(p2.hashCode());
         System.out.println(p3.hashCode());
     }
+    
+    public enum ZobristPieceTypeValues {
+        WHITE_MAN(1), BLACK_MAN(2), WHITE_KING(3), BLACK_KING(4);
+        
+        private final int value;
+
+        private ZobristPieceTypeValues(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+        
+    }
 
     @Override
     public String toString() {
         return String.format("<%s,%s>", row,col);
-    }
-    
-    public static void main(String[] args) {
-        List<Point> pointList = new ArrayList<>();
-        pointList.add(new Point(5, 10));
-        pointList.add(new Point(7, 9));
-        pointList.add(new Point(3, 1));
-        
-        System.out.println(Piece.listContainsPoint(pointList, new Point(7, 8)));
-//        System.out.println(new Point(5, 10).equals(new Point(5, 10)));
     }
     
 }

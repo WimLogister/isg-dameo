@@ -1,18 +1,19 @@
 package dameo.util;
 
-import dameo.Constants;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.SecureRandom;
 import java.util.Random;
 
 /**
- *
+ * Houses some utility methods used through the program.
  * @author Wim
  */
 public class DameoUtil {
     
     public static final Random rng = new Random(Constants.RANDOM_SEED);
+    public static final SecureRandom SECURE_RANDOM = new SecureRandom();
     private static final BufferedReader br =
             new BufferedReader(new InputStreamReader(System.in));
     
@@ -39,6 +40,11 @@ public class DameoUtil {
         return s;
     }
     
+    /**
+     * Calculates the mean value of parameter array.
+     * @param values
+     * @return 
+     */
     public static double mean(double[] values) {
         double sum = 0;
         for (int i = 0; i < values.length; i++) {
